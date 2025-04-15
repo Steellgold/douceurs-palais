@@ -1,0 +1,65 @@
+{% set variantClasses = {
+  'primary': 'bg-[#EDA239] text-black hover:bg-[#EFAF7D]',
+  'secondary': 'bg-[#FEFDFB] text-[#121212] border border-[#EDA239] hover:bg-[#FFF7EB]',
+  'dark': 'bg-[#121212] text-white hover:bg-[#333333]',
+  'cream': 'bg-[#F8ECD9] text-[#121212] hover:bg-[#FFF7EB]',
+
+  'destructive': 'bg-red-600 text-white hover:bg-red-700',
+  'success': 'bg-green-600 text-white hover:bg-green-700',
+  'ghost': 'bg-transparent text-gray-700 hover:bg-gray-100',
+  'link': 'bg-transparent text-blue-600 hover:underline p-0',
+  'muted': 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+} %}
+
+{% set sizeClasses = {
+  'xs': 'px-2 py-1 text-xs',
+  'sm': 'px-3 py-1 text-sm',
+  'md': 'px-4 py-2',
+  'lg': 'px-6 py-3 text-lg',
+  'xl': 'px-8 py-4 text-xl'
+} %}
+
+{% set baseClasses = 'rounded-md font-medium transition duration-300 ease-in-out' %}
+{% set fullWidthClass = fullWidth is defined ? (fullWidth ? 'w-full' : '') : '' %}
+{% set disabledClass = disabled is defined ? (disabled ? 'opacity-50 cursor-not-allowed' : '') : '' %}
+{% set extraClasses = class is defined ? class : '' %}
+
+{% set variantValue = variant is defined ? variant : 'primary' %}
+{% set sizeValue = size is defined ? size : 'md' %}
+
+{% set buttonClasses = [
+  variantClasses[variantValue]|default(variantClasses.primary),
+  sizeClasses[sizeValue]|default(sizeClasses.md),
+  baseClasses,
+  fullWidthClass,
+  disabledClass,
+  extraClasses,
+  'flex items-center justify-center'
+]|join(' ')|trim %}
+
+{% if href is defined and href is not null %}
+  <a 
+    href="{{ href }}" 
+    class="{{ buttonClasses }}"
+    {% if disabled is defined and disabled %}aria-disabled="true"{% endif %}
+    {% if target is defined %}target="{{ target }}"{% endif %}
+    {% if rel is defined %}rel="{{ rel }}"{% endif %}
+  >
+    {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4.5 mr-2"></i>{% endif %}
+    {{ label is defined ? label : 'Button' }}
+    {% if iconRight is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4.5"></i>{% endif %}
+  </a>
+{% else %}
+  <button 
+    type="{{ type is defined ? type : 'button' }}" 
+    class="{{ buttonClasses }}"
+    {% if disabled is defined and disabled %}disabled{% endif %}
+    {% if onClick is defined %}onclick="{{ onClick }}"{% endif %}
+    {% if title is defined %}title="{{ title }}"{% endif %}
+    {% if ariaLabel is defined %}aria-label="{{ ariaLabel }}"{% endif %}
+  >
+    {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4.5 mr-2"></i>{% endif %}
+    {{ label is defined ? label : 'Button' }}
+    {% if iconRight is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4.5"></i>{% endif %}
+  </button>
+{% endif %}
