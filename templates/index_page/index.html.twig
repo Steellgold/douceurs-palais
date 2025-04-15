@@ -13,9 +13,11 @@
       <p class="text-lg text-[#FEFDFB] mt-1 text-center">Des pains et pâtisseries artisanaux livrés directement chez vous</p>
 
       <div class="mt-4">
-        <a class="bg-[#EDA239] text-black px-4 py-2 rounded-md font-medium hover:bg-[#EFAF7D] transition duration-300 ease-in-out">
-          Découvrir nos produits
-        </a>
+        {{ component('button', {
+            label: 'Découvrir nos produits',
+            variant: 'primary',
+            href: '/produits'
+        }) }}
       </div>
     </div>
   </div>
