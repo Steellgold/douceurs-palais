@@ -1,12 +1,28 @@
-<nav class="flex flex-row items-center justify-between">
-  <div class="flex flex-row items-center">
-    <a href="/" class="text-gray-800">Nos boutiques</a>
-    <a href="/" class="text-gray-800">Articles cœurs</a>
+{% set links = [
+  { 'name': 'Nos boutiques', 'url': '/' },
+  { 'name': 'Articles cœurs', 'url': '/' }
+] %}
 
+<nav class="relative flex flex-row items-center bg-[#FBFBFB] p-4 shadow-md">
+  <div class="flex flex-row items-center gap-6">
+    {% for link in links %}
+      <a href="{{ link.url }}" class="text-gray-800 extra hover:text-gray-600 transition duration-300 ease-in-out hover:border-b-1 hover:border-black">
+        {{ link.name }}
+      </a>
+    {% endfor %}
+  </div>
+  
+  <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <img src="https://boulangerie.gaetanhus.fr/icon-title.png" alt="Logo" height="190px" width="190px" />
+  </div>
 
-    <button class="p-32">
+  <div class="ml-auto flex flex-row items-center gap-2">
+    <div class="rounded-full p-2 flex items-center justify-center cursor-pointer">
+      <i data-lucide="shopping-bag"></i>
+    </div>
+
+    <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="/login">
       Se connecter
-    </button>
+    </a>
   </div>
 </nav>
