@@ -2,192 +2,71 @@
   { 'name': 'Nos boutiques', 'url': '/' },
   { 'name': 'Articles cœurs', 'url': '/' }
 ] %}
-
-<nav class="navbar">
-  <div class="mobile-menu-button">
-    <button id="mobile-menu-button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-      </svg>
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="close-icon hidden">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
+<nav class="relative flex flex-col md:flex-row md:justify-between bg-[#FBFBFB] p-4 shadow-md">
+  <!-- Mobile layout -->
+  <div class="w-full md:hidden flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div>
+        <button id="mobile-menu-button" class="flex items-center justify-center p-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="close-icon hidden">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <img src="https://boulangerie.gaetanhus.fr/icon-title.png" alt="Logo" height="140px" width="140px" />
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="rounded-full p-2 flex items-center justify-center cursor-pointer">
+        <i data-lucide="shopping-bag"></i>
+      </div>
+      <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="/login">
+        Se connecter
+      </a>
+    </div>
   </div>
   
-  <div class="logo-container">
-    <img src="https://boulangerie.gaetanhus.fr/icon-title.png" alt="Logo" height="190px" width="190px" />
-  </div>
-  
-  <div id="mobile-menu" class="mobile-menu hidden">
-    <div class="mobile-menu-links">
+  <div id="mobile-menu" class="hidden w-full md:hidden">
+    <div class="flex flex-col w-full py-4">
       {% for link in links %}
-        <a href="{{ link.url }}" class="mobile-menu-link">
+        <a href="{{ link.url }}" class="text-gray-800 py-3 px-4 hover:text-gray-600 transition duration-300 ease-in-out border-b border-gray-200">
           {{ link.name }}
         </a>
       {% endfor %}
     </div>
   </div>
   
-  <div class="desktop-links">
-    {% for link in links %}
-      <a href="{{ link.url }}" class="nav-link">
-        {{ link.name }}
-      </a>
-    {% endfor %}
+  <!-- Desktop layout -->
+  <div class="hidden md:flex items-center">
+    <div class="flex items-center gap-6">
+      {% for link in links %}
+        <a href="{{ link.url }}" class="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out hover:border-b-2 hover:border-black">
+          {{ link.name }}
+        </a>
+      {% endfor %}
+    </div>
   </div>
-
-  <div class="nav-actions">
-    <div class="cart-icon">
+  
+  <div class="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <img src="https://boulangerie.gaetanhus.fr/icon-title.png" alt="Logo" height="190px" width="190px" />
+  </div>
+  
+  <div class="hidden md:flex items-center gap-4">
+    <div class="rounded-full p-2 flex items-center justify-center cursor-pointer">
       <i data-lucide="shopping-bag"></i>
     </div>
-
-    <a class="login-button" href="/login">
+    <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="/login">
       Se connecter
     </a>
   </div>
 </nav>
-
-<style>
-  .navbar {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    background-color: #FBFBFB;
-    padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .logo-container {
-    order: 1;
-    margin-right: auto;
-  }
-  
-  .logo {
-    height: 80px;
-    width: 80px;
-  }
-  
-  .nav-actions {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    order: 3;
-  }
-  
-  .cart-icon {
-    border-radius: 9999px;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  .login-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
-    height: 2.5rem;
-    color: white;
-    background-color: black;
-    border-radius: 9999px;
-    text-decoration: none;
-  }
-  
-  .mobile-menu-button {
-    order: 0;
-    margin-right: 1rem;
-  }
-  
-  #mobile-menu-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .mobile-menu {
-    width: 100%;
-    order: 4;
-  }
-  
-  .mobile-menu-links {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 1rem 0;
-  }
-  
-  .mobile-menu-link {
-    color: #1f2937;
-    padding: 0.75rem 1rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .mobile-menu-link:hover {
-    color: #4b5563;
-  }
-  
-  .desktop-links {
-    display: none;
-    order: 2;
-  }
-  
-  .nav-link {
-    color: #1f2937;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    margin: 0 0.75rem;
-  }
-  
-  .nav-link:hover {
-    color: #4b5563;
-    border-bottom: 2px solid black;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  @media (min-width: 768px) {
-    .mobile-menu-button {
-      display: none;
-    }
-    
-    .desktop-links {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      flex-grow: 1;
-      justify-content: center;
-      margin: 0 2rem;
-    }
-    
-    .logo {
-      height: 100px;
-      width: 100px;
-    }
-  }
-  
-  @media (min-width: 1024px) {
-    .logo {
-      height: 120px;
-      width: 120px;
-    }
-  }
-</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -195,7 +74,6 @@
     const mobileMenu = document.getElementById('mobile-menu');
     const menuIcon = document.querySelector('.menu-icon');
     const closeIcon = document.querySelector('.close-icon');
-    
     if (mobileMenuButton && mobileMenu) {
       mobileMenuButton.addEventListener('click', function() {
         mobileMenu.classList.toggle('hidden');
