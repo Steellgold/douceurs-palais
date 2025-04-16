@@ -1,0 +1,98 @@
+<div class="mt-8 relative w-full overflow-hidden py-8">
+  <div class="flex overflow-x-hidden w-full">
+    <div class="flex gap-4 px-4">
+      <twig:ReviewCard
+        name="Marie Dupont"
+        date="12/09/2023"
+        rating="5"
+        review="La meilleure boulangerie de la ville ! Le pain est toujours frais et délicieux. Je recommande vivement."
+      />
+
+      <twig:ReviewCard
+        name="Jean Martin"
+        date="10/09/2023"
+        rating="4"
+        review="Les viennoiseries sont incroyables, mais j'aimerais voir plus de choix de pains spéciaux."
+      />
+
+      <twig:ReviewCard
+        name="Sophie Bernard"
+        date="08/09/2023"
+        rating="5"
+        review="Un service impeccable et des produits de qualité. Je suis une cliente fidèle depuis des années."
+      />
+
+      <twig:ReviewCard
+        name="Lucas Lefevre"
+        date="05/09/2023"
+        rating="4.5"
+        review="Les pâtisseries sont délicieuses, mais le prix est un peu élevé."
+      />
+
+      <twig:ReviewCard
+        name="Emma Dubois"
+        date="03/09/2023"
+        rating="5"
+        review="Une expérience gustative exceptionnelle ! Chaque bouchée est un régal. Bravo à l'équipe !"
+      />
+
+      <twig:ReviewCard
+        name="Paul Moreau"
+        date="01/09/2023"
+        rating="4.5"
+        review="Le pain est toujours croustillant et frais. J'adore l'ambiance de la boulangerie."
+      />
+
+      <twig:ReviewCard
+        name="Chloé Petit"
+        date="28/08/2023"
+        rating="5"
+        review="Une boulangerie artisanale qui mérite d'être connue. Les produits sont faits avec passion."
+      />
+
+      <twig:ReviewCard
+        name="Girard Piqué"
+        date="25/08/2023"
+        rating="4"
+        review="Les produits sont bons, mais j'aimerais voir plus de choix pour les personnes allergiques."
+      />
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const scrollContainer = document.getElementById('reviews-scroll-container');
+    const contentContainer = document.getElementById('reviews-content');
+        
+    const cloneElements = () => {
+      const contentWidth = contentContainer.offsetWidth;
+      const containerWidth = scrollContainer.offsetWidth;
+            
+      if (contentWidth < containerWidth * 2) {
+        const reviewCards = contentContainer.children;
+
+        for (let i = 0; i < reviewCards.length; i++) {
+          const clone = reviewCards[i].cloneNode(true);
+          contentContainer.appendChild(clone);
+        }
+                
+        cloneElements();
+      }
+    }
+
+    cloneElements();
+        
+    const animateScroll = () => {
+      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
+        scrollContainer.scrollLeft = 0;
+      } else {
+        scrollContainer.scrollLeft += 1;
+      }
+            
+      requestAnimationFrame(animateScroll);
+    }
+        
+    requestAnimationFrame(animateScroll);
+  });
+</script>
