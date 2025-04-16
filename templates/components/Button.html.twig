@@ -45,9 +45,9 @@
     {% if target is defined %}target="{{ target }}"{% endif %}
     {% if rel is defined %}rel="{{ rel }}"{% endif %}
   >
-    {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4.5 mr-2"></i>{% endif %}
+    {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4 mr-2"></i>{% endif %}
     {{ label is defined ? label : 'Button' }}
-    {% if iconRight is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4.5"></i>{% endif %}
+    {% if iconRight is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4"></i>{% endif %}
   </a>
 {% else %}
   <button 
@@ -58,8 +58,8 @@
     {% if title is defined %}title="{{ title }}"{% endif %}
     {% if ariaLabel is defined %}aria-label="{{ ariaLabel }}"{% endif %}
   >
-    {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4.5 mr-2"></i>{% endif %}
+    {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4 mr-2"></i>{% endif %}
     {{ label is defined ? label : 'Button' }}
-    {% if iconRight is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4.5"></i>{% endif %}
+    {% if iconRight is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4"></i>{% endif %}
   </button>
 {% endif %}
