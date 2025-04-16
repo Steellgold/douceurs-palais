@@ -1,11 +1,12 @@
 import './bootstrap.js';
 
-import { createIcons, ShoppingBag, User, Star, Truck, Clock, BookImage } from 'lucide';
+import { createIcons, ShoppingBag, User, Star, StarHalf, Truck, Clock, BookImage } from 'lucide';
 
 import './styles/app.css';
 
 createIcons({
   icons: {
-    ShoppingBag, User, Star, Truck, Clock, BookImage
+    Star, StarHalf,
+    ShoppingBag, User, Truck, Clock, BookImage
   }
 });
