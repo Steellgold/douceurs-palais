@@ -1,5 +1,3 @@
-import './bootstrap.js';
-
 import { createIcons, ShoppingBag, User, Star, StarHalf, Truck, Clock, BookImage } from 'lucide';
 
 import './styles/app.css';
