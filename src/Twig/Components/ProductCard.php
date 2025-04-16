@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Component;
+namespace App\Twig\Components;
 
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
-#[AsTwigComponent('product-card')]
+#[AsTwigComponent('ProductCard')]
 class ProductCard {
 
 }
