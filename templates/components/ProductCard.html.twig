@@ -1,36 +1,38 @@
-<div class="bg-[#FEFDFB] rounded-lg p-6 w-[25rem] flex flex-col shadow-lg">
+<div class="bg-[#FEFDFB] rounded-lg p-4 w-[25rem] flex flex-col shadow-lg h-[32rem]">
   <img
     src="{{ imageUrl }}"
     alt="Product Image"
-    class="w-full h-auto object-cover rounded-lg mb-4"
+    class="w-full h-64 object-cover rounded-lg mb-4"
   />
 
-  <span class="text-sm font-normal text-gray-800">{{ category }}</span>
+  <div class="flex flex-col flex-grow">
+    <span class="text-sm font-normal text-gray-800">{{ category }}</span>
 
-  <div class="w-full flex flex-row items-center justify-between">
-    <p class="font-semibold text-xl font-playfair">{{ name }}</p>
-    <span class="text-sm font-semibold text-gray-800 px-2 py-0.5 rounded-full bg-[#EDA23930]">{{ price }}€</span>
-  </div>
+    <div class="w-full flex flex-row items-center justify-between">
+      <p class="font-semibold text-xl font-playfair">{{ name }}</p>
+      <span class="text-sm font-semibold text-gray-800 px-2 py-0.5 rounded-full bg-[#EDA23930]">{{ price }}€</span>
+    </div>
 
-  <p class="text-gray-600 mt-2 text-sm">{{ description }}</p>
+    <p class="text-gray-600 mt-2 text-sm flex-grow">{{ description }}</p>
 
-  <div class="w-full flex flex-row gap-2 mt-4">
-    <twig:Button
-      label="Ajouter au Panier"
-      variant="primary"
-      href="#"
-      fullWidth
-      iconLeft="shopping-bag"
-      size="sm"
-    />
+    <div class="w-full flex flex-row gap-2 mt-4">
+      <twig:Button
+        label="Ajouter au Panier"
+        variant="primary"
+        href="#"
+        fullWidth
+        iconLeft="shopping-bag"
+        size="sm"
+      />
 
-    <twig:Button
-      label="Détails"
-      variant="dark"
-      href="#"
-      fullWidth
-      iconLeft="book-image"
-      size="sm"
-    />
+      <twig:Button
+        label="Détails"
+        variant="dark"
+        href="#"
+        fullWidth
+        iconLeft="book-image"
+        size="sm"
+      />
+    </div>
   </div>
 </div>
