@@ -53,4 +53,19 @@
   </div>
 
   {# ------------------------------------------------ #}
+
+  <div class="w-full py-24 bg-[#FFFFFF]">
+    <h1 class="text-5xl text-center font-playfair">Nos Produits Populaires</h1>
+    <p class="text-lg mt-1 text-center">Découvrez nos créations les plus appréciées par nos clients</p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-2 md:gap-4">      
+      <twig:ProductCard
+        imageUrl="https://boulangerie.gaetanhus.fr/products/f9878fc8-a103-49b4-9e2b-1ef3f1757b98.webp"
+        price="1.10"
+        category="Pains"
+        name="La Mie Dorée"
+        description="Pain artisanal à croûte dorée et craquante. Mie aérée et moelleuse aux notes de céréales. Fermentation lente pour un goût authentique. Parfait pour tous vos repas."
+      />
+    </div>
+  </div>
 {% endblock %}
