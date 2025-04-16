@@ -3,9 +3,9 @@
     <div class="flex flex-row items-center mt-2">
       {% for i in 1..5 %}
         {% if i <= rating %}
-          <i data-lucide="star" class="text-yellow-500 fill-yellow-500"></i>
+          <i data-lucide="star" class="text-yellow-500 fill-yellow-500 size-5"></i>
         {% elseif i == rating + 0.5 %}
-          <i data-lucide="star-half" class="text-yellow-500 fill-yellow-500"></i>
+          <i data-lucide="star-half" class="text-yellow-500 fill-yellow-500 size-5"></i>
         {% endif %}
       {% endfor %}
     </div>
