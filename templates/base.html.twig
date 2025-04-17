@@ -11,6 +11,21 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#fefdfb">
 
+    {% block meta %}
+      <meta property="og:type" content="product">
+      <meta property="og:title" content="{{ product.name }}">
+      <meta property="og:description" content="{{ product.description }}">
+      <meta property="og:image" content="{{ product.images[0] }}">
+      <meta property="og:url" content="{{ app.request.uri }}">
+      <meta property="og:site_name" content="Douceurs du Palais">
+
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="{{ product.name }}">
+      <meta name="twitter:description" content="{{ product.description }}">
+      <meta name="twitter:image" content="{{ product.images[0] }}">
+      <meta name="twitter:url" content="{{ app.request.uri }}">
+    {% endblock %}
+
     {% block stylesheets %}
       {{ encore_entry_link_tags('app') }}
     {% endblock %}
