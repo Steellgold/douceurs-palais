@@ -1,5 +1,23 @@
 {% extends 'base.html.twig' %}
 
+{% block meta %}
+  <title>{{ product.name }} - Douceurs du Palais</title>
+  <meta name="description" content="{{ product.description }}">
+
+  <meta property="og:type" content="product">
+  <meta property="og:title" content="{{ product.name }}">
+  <meta property="og:description" content="{{ product.description }}">
+  <meta property="og:image" content="{{ product.images[0] }}">
+  <meta property="og:url" content="{{ app.request.uri }}">
+  <meta property="og:site_name" content="Douceurs du Palais">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ product.name }}">
+  <meta name="twitter:description" content="{{ product.description }}">
+  <meta name="twitter:image" content="{{ product.images[0] }}">
+  <meta name="twitter:url" content="{{ app.request.uri }}">
+{% endblock %}
+
 {% block body %}
   <div class="max-w-3xl mx-auto px-4 py-8">
     <div class="text-center mb-6">
