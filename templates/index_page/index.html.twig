@@ -13,7 +13,7 @@
       <p class="text-lg text-[#FEFDFB] mt-1 text-center">Des pains et pâtisseries artisanaux livrés directement chez vous</p>
 
       <div class="mt-4">
-        {{ component('button', {
+        {{ component('Button', {
             label: 'Découvrir nos produits',
             variant: 'primary',
             href: '/produits'
@@ -29,21 +29,21 @@
     <p class="text-lg mt-1 text-center">Nous combinons tradition et innovation pour vous offrir une expérience gustative exceptionnelle</p>
 
     <div class="mt-8 flex flex-wrap justify-center gap-2 md:gap-4">
-      {{ component('card', {
+      {{ component('Card', {
         label: 'Qualité Artisanale',
         description: 'Tous nos produits sont préparés à la main avec des ingrédients soigneusement sélectionnés.',
         icon: 'star',
         variant: 'big'
       }) }}
         
-      {{ component('card', {
+      {{ component('Card', {
         label: 'Livraison à Domicile',
         description: 'Profitez de nos délices livrés directement chez vous, frais et à l\'heure.',
         icon: 'truck',
         variant: 'big'
       }) }}
 
-      {{ component('card', {
+      {{ component('Card', {
         label: 'Fraîcheur Garantie',
         description: 'Nos produits sont préparés quotidiennement pour garantir une fraîcheur incomparable.',
         icon: 'clock',
