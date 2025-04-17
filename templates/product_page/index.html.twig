@@ -39,14 +39,16 @@
     </div>
 
     <div class="grid grid-cols-3 gap-2 mb-4">
-      <div class="col-span-2">
+      <div class="{{ product.images|length >= 2 ? 'col-span-2' : 'col-span-3' }}">
         <img src="{{ product.images[0] }}" alt="{{ product.name }}" class="w-full h-auto object-cover rounded-lg" />
       </div>
-      <div class="flex flex-col gap-2">
-        {% for img in product.images|slice(1) %}
-          <img src="{{ img }}" alt="{{ product.name }}" class="w-full h-full object-cover rounded-lg" />
-        {% endfor %}
-      </div>
+      {% if product.images|length >= 2 %}
+        <div class="flex flex-col gap-2">
+          {% for img in product.images|slice(1) %}
+        <img src="{{ img }}" alt="{{ product.name }}" class="w-full h-full object-cover rounded-lg" />
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
 
     <div class="flex justify-end gap-2 mb-8">
