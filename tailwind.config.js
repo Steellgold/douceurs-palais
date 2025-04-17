@@ -9,7 +9,10 @@ module.exports = {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         playfair: ["Playfair Display", "serif"]
-      }
+      },
+      container: {
+        center: true,
+      },
     },
   },
   plugins: []

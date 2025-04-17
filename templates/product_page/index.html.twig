@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="max-w-3xl mx-auto px-4 py-8">
+    <div class="text-center mb-6">
+      <h1 class="text-4xl font-playfair">{{ product.name }} · {{ product.price|number_format(2, '.', ',') }}€</h1>
+      <p class="mt-4 mb-6 mx-auto max-w-md text-center">{{ product.description }}</p>
+
+      <div class="flex justify-center mb-8">
+        <div class="flex">
+          <twig:Button
+            label="Ajouter au panier"
+            variant="primary"
+            href="#"
+            fullWidth
+            iconLeft="shopping-bag"
+            class="w-full"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2 mb-4">
+      <div class="col-span-2">
+        <img src="{{ product.images[0] }}" alt="{{ product.name }}" class="w-full h-auto object-cover rounded-lg" />
+      </div>
+      <div class="flex flex-col gap-2">
+        {% for img in product.images|slice(1) %}
+          <img src="{{ img }}" alt="{{ product.name }}" class="w-full h-full object-cover rounded-lg" />
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mb-8">
+      <a href="https://twitter.com/intent/tweet?url={{ app.request.uri }}&text={{ product.name }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-black flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+      </a>
+
+      <a href="https://www.facebook.com/sharer/sharer.php?u={{ app.request.uri }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg>
+      </a>
+
+      <a href="https://pinterest.com/pin/create/button/?url={{ app.request.uri }}&media={{ product.images[0] }}&description={{ product.description }}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" fill-rule="evenodd" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="border-t border-gray-200 mb-2">
+      <div class="flex overflow-x-auto no-scrollbar gap-4 py-4" id="tabs">
+        <button class="tab-button active text-lg font-playfair font-medium border-b-2 border-[#EDA239] pb-2" data-tab="details">Détails</button>
+        <button class="tab-button text-lg font-playfair text-gray-500 pb-2" data-tab="nutritions">Nutritions</button>
+        <button class="tab-button text-lg font-playfair text-gray-500 pb-2" data-tab="conservation">Conservation</button>
+        <button class="tab-button text-lg font-playfair text-gray-500 pb-2" data-tab="accompagnements">Accompagnements</button>
+      </div>
+
+      <div class="py-2">
+        <div id="details" class="tab-content">
+          <h2 class="text-2xl font-playfair mb-4">Ingrédients</h2>
+          <div class="bg-[#F8F8F1] p-4 rounded-md mb-8">
+            <ul class="list-disc pl-5 space-y-1">
+              {% for ingredient in product.ingredients %}
+                <li>{{ ingredient }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <h2 class="text-2xl font-playfair mb-4">Allergènes</h2>
+          <div class="bg-red-500/10 border border-red-500/20 p-4 rounded-md mb-8">
+            <ul class="list-disc pl-5 space-y-1">
+              {% for allergene in product.allergenes %}
+                <li>{{ allergene }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <div id="nutritions" class="tab-content hidden">
+          <div class="flex items-center mb-8">
+            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold mr-4">
+              {{ product.nutriscore }}
+            </div>
+            <div class="flex flex-col">
+              <p class="font-medium">Nutri-Score</p>
+              <p class="text-sm text-gray-600">
+                {% if product.nutriscore == 'A' %}
+                  On ne peut pas faire mieux !
+                {% elseif product.nutriscore == 'B' %}
+                  C'est un bon choix !
+                {% elseif product.nutriscore == 'C' %}
+                  C'est un choix moyen.
+                {% elseif product.nutriscore == 'D' %}
+                  À consommer avec modération.
+                {% else %}
+                  Pas de Nutri-Score disponible.
+                {% endif %}
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-[#F8F8F1] p-4 rounded-md mb-6">
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Calories :</strong> {{ product.nutritional_values.calories }} kcal</li>
+              <li><strong>Matières grasses :</strong> {{ product.nutritional_values.fat }} g</li>
+              <li><strong>Glucides :</strong> {{ product.nutritional_values.carbohydrates }} g</li>
+              <li><strong>Protéines :</strong> {{ product.nutritional_values.proteins }} g</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="conservation" class="tab-content hidden">
+          <div class="bg-[#F8F8F1] p-4 rounded-md mb-6">
+            <p class="text-sm text-gray-600">{{ product.conservation }}</p>
+          </div>
+        </div>
+
+        <div id="accompagnements" class="tab-content hidden">
+          <div class="bg-[#F8F8F1] p-4 rounded-md mb-6">
+            <ul class="list-disc pl-5 space-y-2">
+              {% for pairing in product.pairings %}
+                <li>{{ pairing }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const buttons = document.querySelectorAll('.tab-button');
+      const tabs = document.querySelectorAll('.tab-content');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          const target = button.getAttribute('data-tab');
+
+          buttons.forEach(btn => btn.classList.remove('active', 'border-b-2', 'border-[#EDA239]', 'font-medium', 'text-black'));
+          tabs.forEach(tab => tab.classList.add('hidden'));
+
+          button.classList.add('active', 'border-b-2', 'border-[#EDA239]', 'font-medium', 'text-black');
+          document.getElementById(target).classList.remove('hidden');
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .tab-button.active {
+      color: black;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none; /* Internet Explorer */
+      scrollbar-width: none; /* Firefox */
+    }
+  </style>
+{% endblock %}
