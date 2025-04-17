@@ -150,5 +150,41 @@
       ]
     }) }}
   </div>
+
+  {# ------------------------------------------------ #}
+
+  <div class="w-full py-24 bg-[#FFFFFF]">
+    <h1 class="text-5xl text-center font-playfair">Qui sommes nous ?</h1>
+    <p class="text-lg mt-1 text-center">Découvrez nos partenaires locaux pour une livraison de qualité à domicile</p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-2 md:gap-4">
+      {{ component('BakeryCard', {
+        imageUrl: 'https://boulangerie.gaetanhus.fr/bakeries/0873a16d-948d-47c8-9959-dfe9a2e0163b.webp',
+        location: 'Mulhouse',
+        name: 'Le Fournil Doré',
+        description: 'Boulangerie artisanale au cœur de Mulhouse, réputée pour ses pains croustillants et viennoiseries maison.',
+        address: '12 Rue des Artisans',
+        note: 4.8
+      }) }}
+      
+      {{ component('BakeryCard', {
+        imageUrl: 'https://boulangerie.gaetanhus.fr/bakeries/6c853937-3167-4a9d-a1ca-ec44b8b155c2.webp',
+        location: 'Mulhouse',
+        name: 'La Baguette Magique',
+        description: 'Située à Dornach, cette boulangerie propose des pains frais et pâtisseries authentiques grâce à une fermentation lente.',
+        address: '24 Avenue de la Gare',
+        note: 4.3
+      }) }}
+
+      {{ component('BakeryCard', {
+        imageUrl: 'https://boulangerie.gaetanhus.fr/bakeries/2859a58e-52e8-4d3b-9fcb-dffa2e14f345.webp',
+        location: 'Bourtzwiller',
+        name: 'Le Pain Quotidien',
+        description: 'À Bourtzwiller, découvrez une variété de pains et snacks frais, préparés quotidiennement avec soin et passion.',
+        address: '36 Boulevard des Boulangers',
+        note: 4.8
+      }) }}
+    </div>
+  </div>
 </div>
 {% endblock %}
