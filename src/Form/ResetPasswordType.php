@@ -11,42 +11,37 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class ResetPasswordType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'mapped' => false,
-                'first_options' => [
-                    'label' => 'Nouveau mot de passe',
-                    'constraints' => [
-                        new NotBlank([
-                            'message' => 'Veuillez entrer un nouveau mot de passe',
-                        ]),
-                        new Length([
-                            'min' => 8,
-                            'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
-                        ]),
-                        new Regex([
-                            'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-                            'message' => 'Votre mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
-                        ]),
-                    ],
-                ],
-                'second_options' => [
-                    'label' => 'Confirmer le mot de passe',
-                ],
-                'invalid_message' => 'Les mots de passe ne correspondent pas',
-            ])
-        ;
-    }
+class ResetPasswordType extends AbstractType {
+  public function buildForm(FormBuilderInterface $builder, array $options): void {
+    $builder
+      ->add('plainPassword', RepeatedType::class, [
+        'type' => PasswordType::class,
+        'mapped' => false,
+        'first_options' => [
+          'label' => 'New password',
+          'constraints' => [
+            new NotBlank([
+              'message' => 'Please enter a new password',
+            ]),
+            new Length([
+              'min' => 8,
+              'minMessage' => 'Your password must contain at least {{ limit }} characters',
+            ]),
+            new Regex([
+              'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
+              'message' => 'Your password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
+            ]),
+          ],
+        ],
+        'second_options' => [
+          'label' => 'Confirm password',
+        ],
+        'invalid_message' => 'Passwords do not match',
+      ])
+    ;
+  }
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            // Configure your form options here
-        ]);
-    }
+  public function configureOptions(OptionsResolver $resolver): void {
+    $resolver->setDefaults([]);
+  }
 }

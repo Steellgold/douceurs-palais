@@ -34,50 +34,45 @@ class SecurityController extends AbstractController {
 
   #[Route('/logout', name: 'app_logout')]
   public function logout(): void {
-    throw new \LogicException('');
+    throw new \LogicException('Intercepted by the logout key on your firewall.');
   }
 
   #[Route('/register', name: 'app_register')]
   public function register(
-    Request $request, 
+    Request $request,
     UserPasswordHasherInterface $passwordHasher,
     EntityManagerInterface $entityManager
-  ): Response
-  {
+  ): Response {
     if ($this->getUser()) {
       return $this->redirectToRoute('app_account');
     }
-  
+
     $user = new User();
     $form = $this->createForm(RegistrationType::class, $user);
     $form->handleRequest($request);
-  
+
     if ($form->isSubmitted() && $form->isValid()) {
-      // Hash the password
-      $hashedPassword = $passwordHasher->hashPassword(
-        $user,
-        $form->get('plainPassword')->getData()
-      );
+      $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
+
       $user->setPassword($hashedPassword);
-      
-      // Handle address if provided
+
       $address = $form->get('address')->getData();
       if ($address instanceof Address && $address->getStreet() && $address->getPostalCode() && $address->getCity()) {
         $address->setIsPrimary(true);
         if (!$address->getLabel()) {
-          $address->setLabel('Adresse principale');
+          $address->setLabel('Main address');
         }
         $user->addAddress($address);
       }
-      
+
       $entityManager->persist($user);
       $entityManager->flush();
-      
-      $this->addFlash('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');
-      
+
+      $this->addFlash('success', 'Your account has been successfully created! You can now log in.');
+
       return $this->redirectToRoute('app_login');
     }
-  
+
     return $this->render('security/register.html.twig', [
       'registrationForm' => $form->createView(),
     ]);
@@ -85,49 +80,43 @@ class SecurityController extends AbstractController {
 
   #[Route('/forgot-password', name: 'app_forgot_password')]
   public function forgotPassword(
-    Request $request, 
+    Request $request,
     UserRepository $userRepository,
     EntityManagerInterface $entityManager
-  ): Response
-  {
+  ): Response {
     if ($this->getUser()) {
       return $this->redirectToRoute('app_account');
     }
-    
+
     $error = null;
-    
+
     if ($request->isMethod('POST')) {
       $email = $request->request->get('email');
       $user = $userRepository->findOneBy(['email' => $email]);
-      
+
       if ($user) {
-        // Generate a token
         $token = ByteString::fromRandom(32)->toString();
         $expiresAt = new \DateTimeImmutable('+1 hour');
-        
+
         $user->setResetToken($token);
         $user->setResetTokenExpiresAt($expiresAt);
-        
+
+        // SEND A EMAIL
+
         $entityManager->flush();
-        
-        // Here you would send an email with the reset link
-        // For now, we'll just redirect to the check-email page
       }
-      
-      // We always redirect to check-email, even if the email doesn't exist
-      // This prevents user enumeration
+
       return $this->redirectToRoute('app_check_email');
     }
-    
-    return $this->render('security/forgot-password.html.twig', [
+
+    return $this->render('security/forgot_password.html.twig', [
       'error' => $error
     ]);
   }
 
   #[Route('/check-email', name: 'app_check_email')]
-  public function checkEmail(): Response
-  {
-    return $this->render('security/check-email.html.twig');
+  public function checkEmail(): Response {
+    return $this->render('security/check_email.html.twig');
   }
 
   #[Route('/reset-password/{token}', name: 'app_reset_password')]
@@ -137,38 +126,32 @@ class SecurityController extends AbstractController {
     UserRepository $userRepository,
     UserPasswordHasherInterface $passwordHasher,
     EntityManagerInterface $entityManager
-  ): Response
-  {
+  ): Response {
     $user = $userRepository->findByResetToken($token);
-    
+
     if (!$user) {
-      $this->addFlash('error', 'Le lien de réinitialisation est invalide ou a expiré.');
+      $this->addFlash('error', 'The reset link is invalid or has expired.');
       return $this->redirectToRoute('app_forgot_password');
     }
-    
+
     $form = $this->createForm(ResetPasswordType::class);
     $form->handleRequest($request);
-    
+
     if ($form->isSubmitted() && $form->isValid()) {
-      // Reset the token
       $user->setResetToken(null);
       $user->setResetTokenExpiresAt(null);
-      
-      // Hash the new password
-      $hashedPassword = $passwordHasher->hashPassword(
-        $user,
-        $form->get('plainPassword')->getData()
-      );
+
+      $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
       $user->setPassword($hashedPassword);
-      
+
       $entityManager->flush();
-      
-      $this->addFlash('success', 'Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter.');
-      
+
+      $this->addFlash('success', 'Your password has been successfully reset. You can now log in.');
+
       return $this->redirectToRoute('app_login');
     }
-    
-    return $this->render('security/reset-password.html.twig', [
+
+    return $this->render('security/reset_password.html.twig', [
       'resetForm' => $form->createView(),
     ]);
   }

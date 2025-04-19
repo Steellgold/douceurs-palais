@@ -12,55 +12,52 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class AccountType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('firstName', TextType::class, [
-                'label' => 'Prénom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre prénom',
-                    ]),
-                ],
-            ])
-            ->add('lastName', TextType::class, [
-                'label' => 'Nom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre nom',
-                    ]),
-                ],
-            ])
-            ->add('email', EmailType::class, [
-                'label' => 'Email',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer votre email',
-                    ]),
-                    new Email([
-                        'message' => 'Cet email n\'est pas valide',
-                    ]),
-                ],
-            ])
-            ->add('phone', TextType::class, [
-                'label' => 'Téléphone',
-                'required' => false,
-                'constraints' => [
-                    new Regex([
-                        'pattern' => '/^\+?[0-9]{10,15}$/',
-                        'message' => 'Ce numéro de téléphone n\'est pas valide',
-                    ]),
-                ],
-            ])
-        ;
-    }
+class AccountType extends AbstractType {
+  public function buildForm(FormBuilderInterface $builder, array $options): void {
+    $builder
+      ->add('firstName', TextType::class, [
+        'label' => 'First name',
+        'constraints' => [
+          new NotBlank([
+            'message' => 'Please enter your first name',
+          ]),
+        ],
+      ])
+      ->add('lastName', TextType::class, [
+        'label' => 'Last name',
+        'constraints' => [
+          new NotBlank([
+            'message' => 'Please enter your last name',
+          ]),
+        ],
+      ])
+      ->add('email', EmailType::class, [
+        'label' => 'Email',
+        'constraints' => [
+          new NotBlank([
+            'message' => 'Please enter your email',
+          ]),
+          new Email([
+            'message' => 'This email is not valid',
+          ]),
+        ],
+      ])
+      ->add('phone', TextType::class, [
+        'label' => 'Phone',
+        'required' => false,
+        'constraints' => [
+          new Regex([
+            'pattern' => '/^\+?[0-9]{10,15}$/',
+            'message' => 'This phone number is not valid',
+          ]),
+        ],
+      ])
+    ;
+  }
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
-    }
+  public function configureOptions(OptionsResolver $resolver): void {
+    $resolver->setDefaults([
+      'data_class' => User::class,
+    ]);
+  }
 }

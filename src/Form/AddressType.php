@@ -12,73 +12,70 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class AddressType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('label', TextType::class, [
-                'label' => 'Libellé',
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Ex: Domicile, Bureau, etc.',
-                ],
-            ])
-            ->add('street', TextType::class, [
-                'label' => 'Adresse',
-                'attr' => [
-                    'placeholder' => 'Numéro et nom de rue',
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer une adresse',
-                    ]),
-                ],
-            ])
-            ->add('complement', TextType::class, [
-                'label' => 'Complément d\'adresse',
-                'required' => false,
-                'attr' => [
-                    'placeholder' => 'Appartement, étage, etc.',
-                ],
-            ])
-            ->add('postalCode', TextType::class, [
-                'label' => 'Code postal',
-                'attr' => [
-                    'placeholder' => 'Code postal',
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un code postal',
-                    ]),
-                    new Regex([
-                        'pattern' => '/^[0-9]{5}$/',
-                        'message' => 'Ce code postal n\'est pas valide',
-                    ]),
-                ],
-            ])
-            ->add('city', TextType::class, [
-                'label' => 'Ville',
-                'attr' => [
-                    'placeholder' => 'Ville',
-                ],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer une ville',
-                    ]),
-                ],
-            ])
-            ->add('isPrimary', CheckboxType::class, [
-                'label' => 'Définir comme adresse principale',
-                'required' => false,
-            ])
-        ;
-    }
+class AddressType extends AbstractType {
+  public function buildForm(FormBuilderInterface $builder, array $options): void {
+    $builder
+      ->add('label', TextType::class, [
+        'label' => 'Label',
+        'required' => false,
+        'attr' => [
+          'placeholder' => 'Ex: Home, Office, etc.',
+        ],
+      ])
+      ->add('street', TextType::class, [
+        'label' => 'Address',
+        'attr' => [
+          'placeholder' => 'Street number and name',
+        ],
+        'constraints' => [
+          new NotBlank([
+            'message' => 'Please enter an address',
+          ]),
+        ],
+      ])
+      ->add('complement', TextType::class, [
+        'label' => 'Additional address details',
+        'required' => false,
+        'attr' => [
+          'placeholder' => 'Apartment, floor, etc.',
+        ],
+      ])
+      ->add('postalCode', TextType::class, [
+        'label' => 'Postal code',
+        'attr' => [
+          'placeholder' => 'Postal code',
+        ],
+        'constraints' => [
+          new NotBlank([
+            'message' => 'Please enter a postal code',
+          ]),
+          new Regex([
+            'pattern' => '/^[0-9]{5}$/',
+            'message' => 'This postal code is not valid',
+          ]),
+        ],
+      ])
+      ->add('city', TextType::class, [
+        'label' => 'City',
+        'attr' => [
+          'placeholder' => 'City',
+        ],
+        'constraints' => [
+          new NotBlank([
+            'message' => 'Please enter a city',
+          ]),
+        ],
+      ])
+      ->add('isPrimary', CheckboxType::class, [
+        'label' => 'Set as primary address',
+        'required' => false,
+      ])
+    ;
+  }
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Address::class,
-        ]);
-    }
+  public function configureOptions(OptionsResolver $resolver): void {
+    $resolver->setDefaults([
+      'data_class' => Address::class,
+    ]);
+  }
 }
