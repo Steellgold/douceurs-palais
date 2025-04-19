@@ -18,184 +18,156 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/compte')]
 #[IsGranted('ROLE_USER')]
-class AccountController extends AbstractController
-{
+class AccountController extends AbstractController {
     #[Route('', name: 'app_account')]
-    public function index(): Response
-    {
-        return $this->render('account/index.html.twig');
+    public function index(): Response {
+      return $this->render('account/index.html.twig');
     }
 
     #[Route('/profil', name: 'app_account_profile')]
-    public function profile(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = $this->getUser();
-        $form = $this->createForm(AccountType::class, $user);
-        $form->handleRequest($request);
+    public function profile(Request $request, EntityManagerInterface $entityManager): Response {
+      $user = $this->getUser();
+      $form = $this->createForm(AccountType::class, $user);
+      $form->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+      if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
             
-            $this->addFlash('success', 'Vos informations ont été mises à jour avec succès.');
+        $this->addFlash('success', 'Vos informations ont été mises à jour avec succès.');
             
-            return $this->redirectToRoute('app_account');
-        }
+        return $this->redirectToRoute('app_account');
+      }
         
-        return $this->render('account/profile.html.twig', [
-            'form' => $form->createView(),
-        ]);
+      return $this->render('account/profile.html.twig', [
+        'form' => $form->createView(),
+      ]);
     }
 
     #[Route('/mot-de-passe', name: 'app_account_password')]
     public function changePassword(
-        Request $request, 
-        UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $entityManager
-    ): Response
-    {
-        $user = $this->getUser();
-        $form = $this->createForm(ChangePasswordType::class);
-        $form->handleRequest($request);
+      Request $request, 
+      UserPasswordHasherInterface $passwordHasher,
+      EntityManagerInterface $entityManager
+    ): Response {
+      $user = $this->getUser();
+      $form = $this->createForm(ChangePasswordType::class);
+      $form->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Check if current password is correct
-            if (!$passwordHasher->isPasswordValid($user, $form->get('currentPassword')->getData())) {
-                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
-            } else {
-                // Hash the new password
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                );
-                $user->setPassword($hashedPassword);
-                
-                $entityManager->flush();
-                
-                $this->addFlash('success', 'Votre mot de passe a été modifié avec succès.');
-                
-                return $this->redirectToRoute('app_account');
-            }
+      if ($form->isSubmitted() && $form->isValid()) {
+        if (!$passwordHasher->isPasswordValid($user, $form->get('currentPassword')->getData())) {
+          $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+        } else {
+          $hashedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
+          $user->setPassword($hashedPassword);
+
+          $entityManager->flush();
+          $this->addFlash('success', 'Votre mot de passe a été modifié avec succès.');
+          
+          return $this->redirectToRoute('app_account');
         }
+      }
         
-        return $this->render('account/change_password.html.twig', [
-            'form' => $form->createView(),
-        ]);
+      return $this->render('account/change_password.html.twig', [
+        'form' => $form->createView(),
+      ]);
     }
 
     #[Route('/adresses', name: 'app_account_addresses')]
-    public function addresses(): Response
-    {
-        return $this->render('account/addresses.html.twig');
+    public function addresses(): Response {
+      return $this->render('account/addresses.html.twig');
     }
 
     #[Route('/adresses/nouvelle', name: 'app_account_address_new')]
-    public function newAddress(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $address = new Address();
-        $address->setUser($this->getUser());
+    public function newAddress(Request $request, EntityManagerInterface $entityManager): Response {
+      $address = new Address();
+      $address->setUser($this->getUser());
         
-        $form = $this->createForm(AddressType::class, $address);
-        $form->handleRequest($request);
+      $form = $this->createForm(AddressType::class, $address);
+      $form->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Check if this is the first address
-            if ($this->getUser()->getAddresses()->isEmpty()) {
-                $address->setIsPrimary(true);
-            }
-            
-            $entityManager->persist($address);
-            $entityManager->flush();
-            
-            $this->addFlash('success', 'Votre adresse a été ajoutée avec succès.');
-            
-            return $this->redirectToRoute('app_account_addresses');
+      if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->getUser()->getAddresses()->isEmpty()) {
+          $address->setIsPrimary(true);
         }
+            
+        $entityManager->persist($address);
+        $entityManager->flush();
+            
+        $this->addFlash('success', 'Votre adresse a été ajoutée avec succès.');
         
-        return $this->render('account/address_form.html.twig', [
-            'form' => $form->createView(),
-            'address' => $address,
-        ]);
+        return $this->redirectToRoute('app_account_addresses');
+      }
+        
+      return $this->render('account/address_form.html.twig', [
+        'form' => $form->createView(),
+        'address' => $address,
+      ]);
     }
 
     #[Route('/adresses/{id}/modifier', name: 'app_account_address_edit')]
     public function editAddress(
-        Address $address, 
-        Request $request, 
-        EntityManagerInterface $entityManager
-    ): Response
-    {
-        // Security check
-        if ($address->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cette adresse.');
-        }
+      Address $address, 
+      Request $request, 
+      EntityManagerInterface $entityManager
+    ): Response {
+      if ($address->getUser() !== $this->getUser()) {
+        throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cette adresse.');
+      }
         
-        $form = $this->createForm(AddressType::class, $address);
-        $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+      $form = $this->createForm(AddressType::class, $address);
+      $form->handleRequest($request);
+
+      if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre adresse a été mise à jour avec succès.');
             
-            $this->addFlash('success', 'Votre adresse a été mise à jour avec succès.');
-            
-            return $this->redirectToRoute('app_account_addresses');
-        }
+        return $this->redirectToRoute('app_account_addresses');
+      }
         
-        return $this->render('account/address_form.html.twig', [
-            'form' => $form->createView(),
-            'address' => $address,
-            'edit' => true,
-        ]);
+      return $this->render('account/address_form.html.twig', [
+        'form' => $form->createView(),
+        'address' => $address,
+        'edit' => true,
+      ]);
     }
 
     #[Route('/adresses/{id}/supprimer', name: 'app_account_address_delete', methods: ['POST'])]
-    public function deleteAddress(
-        Address $address, 
-        Request $request, 
-        EntityManagerInterface $entityManager
-    ): Response
-    {
-        // Security check
-        if ($address->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer cette adresse.');
-        }
+    public function deleteAddress(Address $address, Request $request, EntityManagerInterface $entityManager): Response {
+      if ($address->getUser() !== $this->getUser()) {
+        throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer cette adresse.');
+      }
         
-        if ($this->isCsrfTokenValid('delete'.$address->getId(), $request->request->get('_token'))) {
-            $isPrimary = $address->isIsPrimary();
-            
-            $entityManager->remove($address);
-            $entityManager->flush();
-            
-            // If the primary address was deleted, set another one as primary
-            if ($isPrimary && !$this->getUser()->getAddresses()->isEmpty()) {
-                $newPrimary = $this->getUser()->getAddresses()->first();
-                $newPrimary->setIsPrimary(true);
-                $entityManager->flush();
-            }
-            
-            $this->addFlash('success', 'Votre adresse a été supprimée avec succès.');
-        }
+      if ($this->isCsrfTokenValid('delete'.$address->getId(), $request->request->get('_token'))) {
+        $isPrimary = $address->isIsPrimary();
+        $entityManager->remove($address);
+        $entityManager->flush();
         
-        return $this->redirectToRoute('app_account_addresses');
+        if ($isPrimary && !$this->getUser()->getAddresses()->isEmpty()) {
+          $newPrimary = $this->getUser()->getAddresses()->first();
+          $newPrimary->setIsPrimary(true);
+          $entityManager->flush();
+        }
+            
+        $this->addFlash('success', 'Votre adresse a été supprimée avec succès.');
+      }
+        
+      return $this->redirectToRoute('app_account_addresses');
     }
 
     #[Route('/adresses/{id}/principale', name: 'app_account_address_primary', methods: ['POST'])]
     public function setPrimaryAddress(
-        Address $address, 
-        Request $request, 
-        AddressRepository $addressRepository
-    ): Response
-    {
-        // Security check
-        if ($address->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cette adresse.');
-        }
+      Address $address, Request $request, AddressRepository $addressRepository
+    ): Response{
+      if ($address->getUser() !== $this->getUser()) {
+        throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cette adresse.');
+      }
         
-        if ($this->isCsrfTokenValid('primary'.$address->getId(), $request->request->get('_token'))) {
-            $addressRepository->setPrimaryAddress($address);
-            
-            $this->addFlash('success', 'Votre adresse principale a été modifiée avec succès.');
-        }
+      if ($this->isCsrfTokenValid('primary'.$address->getId(), $request->request->get('_token'))) {
+        $addressRepository->setPrimaryAddress($address);
+        $this->addFlash('success', 'Votre adresse principale a été modifiée avec succès.');
+      }
         
-        return $this->redirectToRoute('app_account_addresses');
+      return $this->redirectToRoute('app_account_addresses');
     }
 }
