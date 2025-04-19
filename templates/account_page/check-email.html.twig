@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="min-h-screen flex flex-col items-center justify-center bg-[#FEFDFB] py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md">
+      <div class="bg-white shadow-lg rounded-lg p-8 border border-gray-100 text-center">
+        <div class="rounded-full mx-auto flex items-center justify-center w-16 h-16 bg-green-100 text-green-500 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        
+        <h2 class="text-2xl font-playfair text-gray-900 mb-4">Email envoyé</h2>
+        <p class="text-gray-600 mb-6">
+          Si un compte est associé à cette adresse email, nous vous avons envoyé un lien pour réinitialiser votre mot de passe.
+          Ce lien expirera dans 1 heure.
+        </p>
+        
+        <p class="text-sm text-gray-500 mb-6">
+          Si vous n'avez pas reçu d'email, veuillez vérifier vos spams ou 
+          <a href="#" class="font-medium text-[#EDA239] hover:text-[#EFAF7D]">réessayer</a>
+        </p>
+        
+        {{ component('Button', {
+          label: 'Retour à la connexion',
+          variant: 'secondary',
+          href: path('app_login_page')
+        }) }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
