@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="flex flex-col items-center justify-center bg-[#FEFDFB] py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-10">
+        <h2 class="text-4xl font-playfair text-gray-900">Connexion</h2>
+        <p class="mt-2 text-gray-600">Accédez à votre compte pour commander vos pâtisseries préférées</p>
+      </div>
+
+      {% if error is defined and error is not null %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <span class="block sm:inline">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+        </div>
+      {% endif %}
+
+      <div class="bg-white shadow-lg rounded-lg p-8 border border-gray-100">
+        <form class="space-y-6" method="post">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <div class="mt-1">
+              {{ component('Input', {
+                id: 'email',
+                name: 'email',
+                type: 'email',
+                placeholder: 'Entrez votre email',
+                autocomplete: 'email',
+                required: true
+              }) }}
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between">
+              <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+              <a href="/" class="text-sm text-[#EDA239] hover:text-[#EFAF7D]">
+                Mot de passe oublié ?
+              </a>
+            </div>
+            <div class="mt-1">
+              {{ component('Input', {
+                id: 'password',
+                name: 'password',
+                type: 'password',
+                placeholder: 'Entrez votre mot de passe',
+                autocomplete: 'current-password',
+                required: true
+              }) }}
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <input id="remember_me" name="_remember_me" type="checkbox" class="h-4 w-4 text-[#EDA239] focus:ring-[#EDA239] border-gray-300 rounded">
+            <label for="remember_me" class="ml-2 block text-sm text-gray-700">
+              Se souvenir de moi
+            </label>
+          </div>
+
+          <div>
+            {{ component('Button', {
+              label: 'Se connecter',
+              variant: 'primary',
+              type: 'submit',
+              fullWidth: true
+            }) }}
+          </div>
+        </form>
+
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-600">
+            Pas encore de compte ?
+            <a href="/" class="font-medium text-[#EDA239] hover:text-[#EFAF7D]">
+              Créer un compte
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
