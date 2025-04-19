@@ -38,6 +38,26 @@
         </div>
         
         {{ form_start(registrationForm, {'attr': {'id': 'register-form', 'class': 'space-y-6'}}) }}
+        
+        {% if not registrationForm.vars.valid %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+            <strong>Le formulaire contient des erreurs :</strong>
+            <ul class="list-disc ml-5">
+                {% for error in registrationForm.vars.errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+                
+                {# Parcourir les erreurs de chaque champ #}
+                {% for child in registrationForm.children %}
+                    {% if not child.vars.valid %}
+                        {% for error in child.vars.errors %}
+                            <li>{{ child.vars.label|default(child.vars.name) }}: {{ error.message }}</li>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
           <div id="step1" class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>

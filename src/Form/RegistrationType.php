@@ -69,11 +69,7 @@ class RegistrationType extends AbstractType
                         new Length([
                             'min' => 8,
                             'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
-                        ]),
-                        new Regex([
-                            'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-                            'message' => 'Votre mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
-                        ]),
+                        ])
                     ],
                 ],
                 'second_options' => [
@@ -94,7 +90,7 @@ class RegistrationType extends AbstractType
             ->add('address', AddressType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => false,
+                'label' => false
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,

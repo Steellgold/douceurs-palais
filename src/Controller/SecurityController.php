@@ -52,40 +52,37 @@ class SecurityController extends AbstractController
         if ($this->getUser()) {
             return $this->redirectToRoute('app_account');
         }
-
+    
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hash the password
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $form->get('plainPassword')->getData()
-            );
-            $user->setPassword($hashedPassword);
-            
-            // Handle address if provided
-            $addressData = $form->get('address')->getData();
-            if ($addressData && $addressData['street'] && $addressData['postalCode'] && $addressData['city']) {
-                $address = new Address();
-                $address->setStreet($addressData['street']);
-                $address->setPostalCode($addressData['postalCode']);
-                $address->setCity($addressData['city']);
-                $address->setIsPrimary(true);
-                $address->setLabel('Adresse principale');
-                
-                $user->addAddress($address);
-            }
-            
-            $entityManager->persist($user);
-            $entityManager->flush();
-            
-            $this->addFlash('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');
-            
-            return $this->redirectToRoute('app_login');
-        }
-
+          // Hash the password
+          $hashedPassword = $passwordHasher->hashPassword(
+              $user,
+              $form->get('plainPassword')->getData()
+          );
+          $user->setPassword($hashedPassword);
+          
+          // Handle address if provided
+          $address = $form->get('address')->getData();
+          if ($address instanceof Address && $address->getStreet() && $address->getPostalCode() && $address->getCity()) {
+              $address->setIsPrimary(true);
+              if (!$address->getLabel()) {
+                  $address->setLabel('Adresse principale');
+              }
+              $user->addAddress($address);
+          }
+          
+          $entityManager->persist($user);
+          $entityManager->flush();
+          
+          $this->addFlash('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');
+          
+          return $this->redirectToRoute('app_login');
+      }
+    
         return $this->render('security/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
