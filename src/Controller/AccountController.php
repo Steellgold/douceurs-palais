@@ -67,7 +67,7 @@ class AccountController extends AbstractController {
         }
       }
 
-      return $this->render('account/change_password.html.twig', [
+      return $this->render('account/change-password.html.twig', [
         'form' => $form->createView(),
       ]);
     }
@@ -98,7 +98,7 @@ class AccountController extends AbstractController {
         return $this->redirectToRoute('app_account_addresses');
       }
 
-      return $this->render('account/address_form.html.twig', [
+      return $this->render('account/address-form.html.twig', [
         'form' => $form->createView(),
         'address' => $address,
       ]);
@@ -125,7 +125,7 @@ class AccountController extends AbstractController {
         return $this->redirectToRoute('app_account_addresses');
       }
 
-      return $this->render('account/address_form.html.twig', [
+      return $this->render('account/address-form.html.twig', [
         'form' => $form->createView(),
         'address' => $address,
         'edit' => true,

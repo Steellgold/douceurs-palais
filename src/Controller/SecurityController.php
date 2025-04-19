@@ -109,14 +109,14 @@ class SecurityController extends AbstractController {
       return $this->redirectToRoute('app_check_email');
     }
 
-    return $this->render('security/forgot_password.html.twig', [
+    return $this->render('security/forgot-password.html.twig', [
       'error' => $error
     ]);
   }
 
   #[Route('/check-email', name: 'app_check_email')]
   public function checkEmail(): Response {
-    return $this->render('security/check_email.html.twig');
+    return $this->render('security/check-email.html.twig');
   }
 
   #[Route('/reset-password/{token}', name: 'app_reset_password')]
@@ -151,7 +151,7 @@ class SecurityController extends AbstractController {
       return $this->redirectToRoute('app_login');
     }
 
-    return $this->render('security/reset_password.html.twig', [
+    return $this->render('security/reset-password.html.twig', [
       'resetForm' => $form->createView(),
     ]);
   }
