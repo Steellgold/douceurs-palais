@@ -1,0 +1,22 @@
+{% set inputClasses = [
+  'w-full px-3 py-2',
+  'border border-gray-300 rounded-md shadow-sm',
+  'placeholder-gray-400',
+  'focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+  extraClasses|default('')
+]|join(' ') %}
+
+<input
+  id="{{ id }}"
+  name="{{ name }}"
+  type="{{ type|default('text') }}"
+  class="{{ inputClasses }}"
+  {% if placeholder is defined and placeholder %}placeholder="{{ placeholder }}"{% endif %}
+  {% if value is defined and value %}value="{{ value }}"{% endif %}
+  {% if autocomplete is defined and autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+  {% if required %}required{% endif %}
+  {% if disabled %}disabled{% endif %}
+  {% for attr, val in extraAttributes %}
+    {{ attr }}="{{ val }}"
+  {% endfor %}
+>
