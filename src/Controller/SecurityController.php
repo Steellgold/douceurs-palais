@@ -16,18 +16,14 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\String\ByteString;
 
-class SecurityController extends AbstractController
-{
+class SecurityController extends AbstractController {
   #[Route('/login', name: 'app_login')]
-  public function login(AuthenticationUtils $authenticationUtils): Response
-  {
+  public function login(AuthenticationUtils $authenticationUtils): Response {
     if ($this->getUser()) {
       return $this->redirectToRoute('app_account');
     }
 
-    // get the login error if there is one
     $error = $authenticationUtils->getLastAuthenticationError();
-    // last username entered by the user
     $lastUsername = $authenticationUtils->getLastUsername();
 
     return $this->render('security/login.html.twig', [
@@ -37,9 +33,8 @@ class SecurityController extends AbstractController
   }
 
   #[Route('/logout', name: 'app_logout')]
-  public function logout(): void
-  {
-    throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+  public function logout(): void {
+    throw new \LogicException('');
   }
 
   #[Route('/register', name: 'app_register')]
@@ -124,7 +119,7 @@ class SecurityController extends AbstractController
       return $this->redirectToRoute('app_check_email');
     }
     
-    return $this->render('security/forgot_password.html.twig', [
+    return $this->render('security/forgot-password.html.twig', [
       'error' => $error
     ]);
   }
@@ -132,7 +127,7 @@ class SecurityController extends AbstractController
   #[Route('/check-email', name: 'app_check_email')]
   public function checkEmail(): Response
   {
-    return $this->render('security/check_email.html.twig');
+    return $this->render('security/check-email.html.twig');
   }
 
   #[Route('/reset-password/{token}', name: 'app_reset_password')]
@@ -173,7 +168,7 @@ class SecurityController extends AbstractController
       return $this->redirectToRoute('app_login');
     }
     
-    return $this->render('security/reset_password.html.twig', [
+    return $this->render('security/reset-password.html.twig', [
       'resetForm' => $form->createView(),
     ]);
   }
