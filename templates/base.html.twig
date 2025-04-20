@@ -26,8 +26,10 @@
     {% endblock %}
   </head>
   <body class="bg-[#FEFDFB] flex flex-col min-h-screen">
+    <twig:Navbar class="flex-shrink-0" />
     <main class="flex-grow">
       {% block body %}{% endblock %}
     </main>
+    <twig:Footer />
   </body>
 </html>
