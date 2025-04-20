@@ -27,9 +27,15 @@
       <div class="rounded-full p-2 flex items-center justify-center cursor-pointer">
         <i data-lucide="shopping-bag"></i>
       </div>
-      <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="/login">
-        Se connecter
-      </a>
+      {% if app.user %}
+        <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="{{ path('app_account') }}">
+          Mon compte
+        </a>
+      {% else %}
+        <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="{{ path('app_login') }}">
+          Se connecter
+        </a>
+      {% endif %}
     </div>
   </div>
   
@@ -40,6 +46,14 @@
           {{ link.name }}
         </a>
       {% endfor %}
+      {% if app.user %}
+        <a href="{{ path('app_account_addresses') }}" class="text-gray-800 py-3 px-4 hover:text-gray-600 transition duration-300 ease-in-out border-b border-gray-200">
+          Mes adresses
+        </a>
+        <a href="{{ path('app_logout') }}" class="text-gray-800 py-3 px-4 hover:text-gray-600 transition duration-300 ease-in-out border-b border-gray-200">
+          Déconnexion
+        </a>
+      {% endif %}
     </div>
   </div>
   
@@ -62,23 +76,62 @@
     <div class="rounded-full p-2 flex items-center justify-center cursor-pointer">
       <i data-lucide="shopping-bag"></i>
     </div>
-    <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="/login">
-      Se connecter
-    </a>
+    
+    {% if app.user %}
+      <div class="relative group">
+        <button id="account-dropdown" class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full">
+          {{ app.user.firstName }}
+          <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+          <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <a href="{{ path('app_account') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mon compte</a>
+            <a href="{{ path('app_account_addresses') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mes adresses</a>
+            <div class="border-t border-gray-100"></div>
+            <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déconnexion</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="{{ path('app_login') }}">
+        Se connecter
+      </a>
+    {% endif %}
   </div>
 </nav>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu toggle
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     const menuIcon = document.querySelector('.menu-icon');
     const closeIcon = document.querySelector('.close-icon');
+    
     if (mobileMenuButton && mobileMenu) {
       mobileMenuButton.addEventListener('click', function() {
         mobileMenu.classList.toggle('hidden');
         menuIcon.classList.toggle('hidden');
         closeIcon.classList.toggle('hidden');
+      });
+    }
+    
+    // Desktop dropdown toggle
+    const accountDropdown = document.getElementById('account-dropdown');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+    
+    if (accountDropdown && dropdownMenu) {
+      accountDropdown.addEventListener('click', function() {
+        dropdownMenu.classList.toggle('hidden');
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!accountDropdown.contains(event.target) && !dropdownMenu.contains(event.target)) {
+          dropdownMenu.classList.add('hidden');
+        }
       });
     }
   });

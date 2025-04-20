@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Email envoyé - Aux Douceurs du Palais{% endblock %}
+
 {% block body %}
   <div class="flex flex-col items-center justify-center bg-[#FEFDFB] py-12 px-4 sm:px-6 lg:px-8">
     <div class="w-full max-w-md">
@@ -18,14 +20,12 @@
         
         <p class="text-sm text-gray-500 mb-6">
           Si vous n'avez pas reçu d'email, veuillez vérifier vos spams ou 
-          <a href="#" class="font-medium text-[#EDA239] hover:text-[#EFAF7D]">réessayer</a>
+          <a href="{{ path('app_forgot_password') }}" class="font-medium text-[#EDA239] hover:text-[#EFAF7D]">réessayer</a>
         </p>
         
-        {{ component('Button', {
-          label: 'Retour à la connexion',
-          variant: 'secondary',
-          href: path('app_login_page')
-        }) }}
+        <a href="{{ path('app_login') }}" class="inline-flex justify-center px-4 py-2 border border-[#EDA239] text-sm font-medium rounded-md text-[#121212] bg-[#FEFDFB] hover:bg-[#FFF7EB] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+          Retour à la connexion
+        </a>
       </div>
     </div>
   </div>
