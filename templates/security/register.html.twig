@@ -38,6 +38,7 @@
         </div>
         
         {{ form_start(registrationForm, {'attr': {'id': 'register-form', 'class': 'space-y-6'}}) }}
+            {{ form_row(registrationForm._token) }}
         
         {% if not registrationForm.vars.valid %}
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
@@ -259,7 +260,7 @@
       </div>
     </div>
   </div>
-  
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const step1 = document.getElementById('step1');
@@ -271,7 +272,7 @@
       const step2Indicator = document.getElementById('step2-indicator');
       const progressBar = document.getElementById('progress-bar');
       const form = document.getElementById('register-form');
-      
+
       function validateStep1() {
         const firstName = document.getElementById('{{ registrationForm.firstName.vars.id }}').value;
         const lastName = document.getElementById('{{ registrationForm.lastName.vars.id }}').value;
@@ -293,17 +294,17 @@
           alert('Le mot de passe doit contenir au moins une lettre majuscule.');
           return false;
         }
-        
+
         if (!/[a-z]/.test(password)) {
           alert('Le mot de passe doit contenir au moins une lettre minuscule.');
           return false;
         }
-        
+
         if (!/[0-9]/.test(password)) {
           alert('Le mot de passe doit contenir au moins un chiffre.');
           return false;
         }
-        
+
         if (!/[!@#$%^&*]/.test(password)) {
           alert('Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*).');
           return false;
@@ -322,7 +323,7 @@
 
         return true;
       }
-      
+
       nextBtn.addEventListener('click', function() {
         if (validateStep1()) {
           step1.classList.add('hidden');
@@ -334,7 +335,7 @@
           progressBar.style.width = '100%';
         }
       });
-      
+
       backBtn.addEventListener('click', function() {
         step2.classList.add('hidden');
         step1.classList.remove('hidden');
@@ -342,7 +343,7 @@
         step2Indicator.classList.add('bg-gray-200', 'text-gray-500');
         progressBar.style.width = '0%';
       });
-      
+
       skipBtn.addEventListener('click', function() {
         // Clear address fields
         document.getElementById('{{ registrationForm.address.street.vars.id }}').value = '';
@@ -355,7 +356,7 @@
           alert('Vous devez accepter les conditions d\'utilisation pour continuer.');
           return;
         }
-        
+
         form.submit();
       });
     });

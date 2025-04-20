@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\String\ByteString;
 
@@ -41,10 +44,18 @@ class SecurityController extends AbstractController {
   public function register(
     Request $request,
     UserPasswordHasherInterface $passwordHasher,
-    EntityManagerInterface $entityManager
+    EntityManagerInterface $entityManager,
+    CsrfTokenManagerInterface $csrfTokenManager
   ): Response {
     if ($this->getUser()) {
       return $this->redirectToRoute('app_account');
+    }
+
+    $csrfToken = $request->request->get('_token');
+    $token = new CsrfToken('registration_form', $csrfToken);
+    
+    if (!$csrfTokenManager->isTokenValid($token)) {
+        throw new InvalidCsrfTokenException('Invalid CSRF token');
     }
 
     $user = new User();
