@@ -102,6 +102,17 @@ class ProductRepository extends ServiceEntityRepository {
   }
 
   /**
+   * @return Product[] Returns an array of most popular Product objects
+   */
+  public function findMostPopular(int $limit = 4): array {
+    return $this->createQueryBuilder('p')
+      ->orderBy('p.popularity', 'DESC')
+      ->setMaxResults($limit)
+      ->getQuery()
+      ->getResult();
+  }
+
+  /**
    * @return Product[] Returns an array of Product objects from favorite bakeries
    */
   public function findFromFavoriteBakeries(User $user, int $limit): array {

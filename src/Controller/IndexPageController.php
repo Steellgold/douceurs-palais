@@ -23,7 +23,7 @@ final class IndexPageController extends AbstractController {
       $favoriteCount = $this->bakeryRepository->countFavoritesByUser($user);
 
       if ($favoriteCount > 0) {
-        $favoriteBakeries = $this->bakeryRepository->findFavoritesByUser($user, null); // fuck php
+        $favoriteBakeries = $this->bakeryRepository->findFavoritesByUser($user, null);
         $productsFromFavorites = $this->productRepository->findFromFavoriteBakeries($user, 12);
 
         return $this->render('index_page/favorites.html.twig', [
@@ -33,6 +33,9 @@ final class IndexPageController extends AbstractController {
       }
     }
 
-    return $this->render('index_page/index.html.twig', []);
+    $popularProducts = $this->productRepository->findMostPopular();
+    return $this->render('index_page/index.html.twig', [
+      'popularProducts' => $popularProducts
+    ]);
   }
 }
