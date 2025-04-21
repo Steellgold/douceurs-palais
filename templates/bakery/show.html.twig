@@ -2,6 +2,17 @@
 
 {% block title %}{{ bakery.name }}{% endblock %}
 
+{% block meta %}
+  <title>{{ bakery.name }}</title>
+  <meta name="description" content="{{ bakery.description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ bakery.name }}">
+  <meta property="og:description" content="{{ bakery.description }}">
+  <meta property="og:image" content="{{ bakery.mainImage }}">
+  <meta property="og:url" content="{{ app.request.uri }}">
+  <meta property="og:site_name" content="Douceurs du Palais">
+{% endblock %}
+
 {% block body %}
   <div class="bg-[#FEFDFB]">
     <div class="relative w-full h-96 overflow-hidden">
