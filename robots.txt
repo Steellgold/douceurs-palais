@@ -1,0 +1,27 @@
+# Robots.txt for Aux Douceurs du Palais
+
+# Global crawling rules
+User-agent: *
+
+# Disallow sensitive areas
+Disallow: /auth/login
+Disallow: /auth/logout
+Disallow: /auth/register
+Disallow: /auth/forgot-password
+Disallow: /auth/reset-password
+Disallow: /auth/check-email
+
+# Account-related pages
+Disallow: /account/
+Disallow: /account/profile
+Disallow: /account/password
+Disallow: /account/addresses
+
+# Prevent indexing of admin and other private sections
+Disallow: /admin/
+
+# Sitemap location (if you have one)
+Sitemap: https://www.douceurs-palais.fr/sitemap.xml
+
+# Allow specific paths
+Allow: /
