@@ -1,0 +1,58 @@
+{% if variant == 'small' %}
+  <a href="{{ href }}" class="bg-white relative rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg h-auto">
+    <div class="h-32 bg-gray-200 relative">
+      {% if imageUrl %}
+        <img src="/{{ imageUrl }}" alt="{{ name }}" class="w-full h-full object-cover" />
+      {% else %}
+        <div class="w-full h-full flex items-center justify-center bg-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+      {% endif %}
+    </div>
+    <div class="p-4">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="text-lg font-semibold font-playfair">{{ name }}</h3>
+        {% if productCount is not null %}
+          <span class="text-xs font-medium bg-[#EDA239] text-white px-2 py-1 rounded-full">{{ productCount }}</span>
+        {% endif %}
+      </div>
+      {% if description %}
+        <p class="text-gray-600 text-sm line-clamp-2">{{ description }}</p>
+      {% endif %}
+    </div>
+  </a>
+{% else %}
+  <a href="{{ href }}" class="relative rounded-lg overflow-hidden group h-64 shadow-lg">
+    <div class="absolute inset-0 bg-gray-800 opacity-50 group-hover:opacity-40 transition-opacity"></div>
+    {% if imageUrl %}
+      <img src="{{ imageUrl }}" alt="{{ name }}" class="w-full h-full object-cover" />
+    {% else %}
+      <div class="w-full h-full flex items-center justify-center bg-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      </div>
+    {% endif %}
+    <div class="absolute inset-0 flex flex-col justify-end p-6">
+      <div class="flex items-center justify-between">
+        <h3 class="text-2xl font-playfair text-white">{{ name }}</h3>
+        {% if productCount is not null %}
+          <span class="text-sm font-medium bg-white text-gray-800 px-2 py-1 rounded-full">{{ productCount }} produits</span>
+        {% endif %}
+      </div>
+      {% if description %}
+        <p class="text-white/80 text-sm mt-2 line-clamp-2">{{ description }}</p>
+      {% endif %}
+      <div class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white text-gray-800">
+          Voir les produits
+          <svg xmlns="http://www.w3.org/2000/svg" class="ml-1 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </span>
+      </div>
+    </div>
+  </a>
+{% endif %}
