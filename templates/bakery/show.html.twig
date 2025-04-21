@@ -109,9 +109,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
                       <a
-                        href="tel:+33{{ bakery.phone|replace({' ': '', '(': '', ')': '', '-': ''}) }}"
-                        target="_blank"
-                        class="text-blue-600">{{ bakery.phone }}
+                          href="tel:+33{{ bakery.phone|replace({' ': '', '(': '', ')': '', '-': ''}) }}"
+                          target="_blank"
+                          class="text-blue-600">{{ bakery.phone }}
                       </a>
                     </div>
                   {% endif %}
@@ -121,11 +121,10 @@
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
-                      {# <p class="text-gray-800">{{ bakery.email }}</p> #}
                       <a
-                        href="mailto:{{ bakery.email }}"
-                        target="_blank"
-                        class="text-blue-600 hover:underline">{{ bakery.email }}
+                          href="mailto:{{ bakery.email }}"
+                          target="_blank"
+                          class="text-blue-600 hover:underline">{{ bakery.email }}
                       </a>
                     </div>
                   {% endif %}
@@ -149,6 +148,29 @@
         </div>
       </div>
 
+      {% if categories|length > 0 %}
+        <div class="mb-16">
+          <h2 class="text-3xl font-playfair text-center mb-10">Nos catégories</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for item in categories %}
+              {% set category = item[0] %}
+              {% set productCount = item.productCount %}
+
+              <twig:CategoryCard
+                  name="{{ category.name }}"
+                  description="{{ category.description }}"
+                  imageUrl="{{ category.image ? category.image : null }}"
+                  slug="{{ category.slug }}"
+                  productCount="{{ productCount }}"
+                  href="{{ path('app_bakery_category', {'bakery_slug': bakery.slug, 'category_slug': category.slug}) }}"
+                  variant="small"
+              />
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
       {% if popularProducts|length > 0 %}
         <div class="mb-16">
           <h2 class="text-3xl font-playfair text-center mb-10">Nos produits les plus populaires</h2>
@@ -158,7 +180,7 @@
               <twig:ProductCard
                   imageUrl="{{ product.mainImage ?: 'https://via.placeholder.com/400x250' }}"
                   price="{{ product.price|number_format(2, '.', ',') }}"
-                  category="{{ product.category ?: 'Pâtisserie' }}"
+                  category="{{ product.category is not null ? product.category.name : 'Produit' }}"
                   name="{{ product.name }}"
                   description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
               />
@@ -176,7 +198,7 @@
               <twig:ProductCard
                   imageUrl="{{ product.mainImage ?: 'https://via.placeholder.com/400x250' }}"
                   price="{{ product.price|number_format(2, '.', ',') }}"
-                  category="{{ product.category ?: 'Pâtisserie' }}"
+                  category="{{ product.category is not null ? product.category.name : 'Produit' }}"
                   name="{{ product.name }}"
                   description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
               />
