@@ -17,6 +17,8 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#fefdfb">
 
+    {% block meta %}{% endblock %}
+
     {% block stylesheets %}
       {{ encore_entry_link_tags('app') }}
     {% endblock %}
