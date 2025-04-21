@@ -17,9 +17,11 @@ class SitemapController extends AbstractController {
   ) {
   }
 
-  #[Route('/sitemap.xml', name: 'app_sitemap', defaults: ['_format' => 'xml'])]
+  #[Route('/sitemap.xml', name: 'app_sitemap', methods: ['GET'], format: 'xml')]
   public function index(): Response {
     $urls = [];
+    dump($this->productRepository->findAll());
+    dump($this->bakeryRepository->findAll());
 
     $urls[] = [
       'loc' => $this->urlGenerator->generate('app_index_page', [], UrlGeneratorInterface::ABSOLUTE_URL),
