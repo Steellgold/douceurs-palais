@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Product;
 use App\Entity\Bakery;
+use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -31,7 +32,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Baguette Tradition',
         'description' => 'Baguette croustillante, idéale pour tous les repas.',
         'price' => 1.20,
-        'category' => 'Pains',
+        'category_ref' => 'category-pains',
         'ingredients' => ['Farine de blé', 'eau', 'levure', 'sel'],
         'allergenes' => ['gluten'],
         'nutritionalValues' => [
@@ -48,7 +49,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Croissant au Beurre',
         'description' => 'Croissant feuilleté, riche et fondant.',
         'price' => 1.00,
-        'category' => 'Viennoiseries',
+        'category_ref' => 'category-viennoiseries',
         'ingredients' => ['Farine de blé', 'beurre', 'eau', 'sucre', 'levure', 'sel'],
         'allergenes' => ['gluten', 'lait'],
         'nutritionalValues' => [
@@ -65,7 +66,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Pain aux Céréales',
         'description' => 'Pain complet aux graines, riche en fibres.',
         'price' => 2.00,
-        'category' => 'Pains',
+        'category_ref' => 'category-pains',
         'ingredients' => ['Farine complète', 'graines (lin, tournesol, sésame)', 'eau', 'levure', 'sel'],
         'allergenes' => ['gluten'],
         'nutritionalValues' => [
@@ -82,7 +83,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Éclair au Chocolat',
         'description' => 'Pâtisserie fourrée à la crème pâtissière et nappée de glaçage au chocolat.',
         'price' => 2.20,
-        'category' => 'Pâtisseries',
+        'category_ref' => 'category-patisseries',
         'ingredients' => ['Pâte à choux', 'crème pâtissière', 'chocolat', 'sucre', 'beurre', 'œufs'],
         'allergenes' => ['gluten', 'lait', 'œufs'],
         'nutritionalValues' => [
@@ -99,7 +100,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Quiche Lorraine',
         'description' => 'Tarte salée à base de crème, lardons et fromage.',
         'price' => 3.50,
-        'category' => 'Snacks',
+        'category_ref' => 'category-snacks',
         'ingredients' => ['Pâte brisée', 'œufs', 'crème', 'lardons', 'fromage', 'sel', 'poivre'],
         'allergenes' => ['gluten', 'lait', 'œufs'],
         'nutritionalValues' => [
@@ -116,7 +117,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Pain aux Noix',
         'description' => 'Pain aux noix, idéal pour les amateurs de saveurs rustiques.',
         'price' => 2.50,
-        'category' => 'Pains',
+        'category_ref' => 'category-pains',
         'ingredients' => ['Farine de blé', 'noix', 'eau', 'levure', 'sel'],
         'allergenes' => ['gluten', 'fruits à coque'],
         'nutritionalValues' => [
@@ -135,7 +136,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Pain au Levain',
         'description' => 'Pain à la fermentation lente, saveur unique.',
         'price' => 2.50,
-        'category' => 'Pains',
+        'category_ref' => 'category-pains',
         'ingredients' => ['Farine de blé', 'eau', 'levain naturel', 'sel'],
         'allergenes' => ['gluten'],
         'nutritionalValues' => [
@@ -152,7 +153,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Tarte aux Fruits',
         'description' => 'Tarte avec fruits de saison sur pâte sablée.',
         'price' => 3.00,
-        'category' => 'Pâtisseries',
+        'category_ref' => 'category-patisseries',
         'ingredients' => ['Farine de blé', 'beurre', 'sucre', 'œufs', 'fruits de saison', 'confiture'],
         'allergenes' => ['gluten', 'lait', 'œufs'],
         'nutritionalValues' => [
@@ -169,7 +170,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Pain aux Olives',
         'description' => 'Pain parfumé aux olives noires, idéal pour l\'apéritif.',
         'price' => 2.70,
-        'category' => 'Pains',
+        'category_ref' => 'category-pains',
         'ingredients' => ['Farine de blé', 'olives noires', 'eau', 'levure', 'sel'],
         'allergenes' => ['gluten'],
         'nutritionalValues' => [
@@ -186,7 +187,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Tartelette Citron Meringuée',
         'description' => 'Tartelette au citron avec meringue italienne.',
         'price' => 2.50,
-        'category' => 'Pâtisseries',
+        'category_ref' => 'category-patisseries',
         'ingredients' => ['Pâte sablée', 'crème de citron', 'meringue (blancs d\'œufs, sucre)'],
         'allergenes' => ['gluten', 'œufs'],
         'nutritionalValues' => [
@@ -203,7 +204,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Pain de Campagne',
         'description' => 'Pain rustique à la farine de seigle.',
         'price' => 2.30,
-        'category' => 'Pains',
+        'category_ref' => 'category-pains',
         'ingredients' => ['Farine de seigle', 'farine de blé', 'eau', 'levain', 'sel'],
         'allergenes' => ['gluten'],
         'nutritionalValues' => [
@@ -222,7 +223,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Sandwich Poulet Crudités',
         'description' => 'Sandwich complet avec poulet rôti et légumes.',
         'price' => 4.50,
-        'category' => 'Snacks',
+        'category_ref' => 'category-sandwiches',
         'ingredients' => ['Pain', 'poulet rôti', 'laitue', 'tomates', 'concombre', 'sauce maison'],
         'allergenes' => ['gluten', 'œufs'],
         'nutritionalValues' => [
@@ -239,7 +240,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Muffin Chocolat',
         'description' => 'Muffin moelleux au chocolat noir.',
         'price' => 1.50,
-        'category' => 'Viennoiseries',
+        'category_ref' => 'category-viennoiseries',
         'ingredients' => ['Farine de blé', 'chocolat noir', 'sucre', 'œufs', 'beurre', 'lait'],
         'allergenes' => ['gluten', 'lait', 'œufs'],
         'nutritionalValues' => [
@@ -256,7 +257,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Fougasse',
         'description' => 'Pain plat aromatisé aux herbes de Provence.',
         'price' => 2.80,
-        'category' => 'Pains',
+        'category_ref' => 'category-pains',
         'ingredients' => ['Farine de blé', 'eau', 'levure', 'huile d\'olive', 'herbes de Provence', 'sel'],
         'allergenes' => ['gluten'],
         'nutritionalValues' => [
@@ -273,7 +274,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Pain au Chocolat',
         'description' => 'Petit pain fourré de pépites de chocolat.',
         'price' => 1.30,
-        'category' => 'Viennoiseries',
+        'category_ref' => 'category-viennoiseries',
         'ingredients' => ['Farine de blé', 'pépites de chocolat', 'beurre', 'sucre', 'œufs', 'lait'],
         'allergenes' => ['gluten', 'lait', 'œufs'],
         'nutritionalValues' => [
@@ -290,7 +291,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         'name' => 'Tarte aux Myrtilles',
         'description' => 'Tarte aux myrtilles sur une pâte sablée.',
         'price' => 3.30,
-        'category' => 'Pâtisseries',
+        'category_ref' => 'category-patisseries',
         'ingredients' => ['Pâte sablée', 'myrtilles', 'sucre', 'beurre', 'crème'],
         'allergenes' => ['gluten', 'lait'],
         'nutritionalValues' => [
@@ -301,6 +302,23 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
         ],
         'conservation' => 'À conserver au réfrigérateur, consommer rapidement.',
         'popularity' => 75
+      ],
+      [
+        'bakery_name' => 'Le Pain Quotidien',
+        'name' => 'Sandwich Veggie',
+        'description' => 'Sandwich aux légumes frais et humus.',
+        'price' => 4.20,
+        'category_ref' => 'category-sandwiches',
+        'ingredients' => ['Pain complet', 'humus', 'concombre', 'tomates', 'avocat', 'roquette'],
+        'allergenes' => ['gluten', 'sésame'],
+        'nutritionalValues' => [
+          'calories' => 380,
+          'fat' => 12,
+          'carbohydrates' => 42,
+          'proteins' => 18
+        ],
+        'conservation' => 'À consommer le jour de l\'achat.',
+        'popularity' => 87
       ]
     ];
 
@@ -310,12 +328,19 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
       $product->setSlug(strtolower($this->slugger->slug($productData['name'])->toString()));
       $product->setDescription($productData['description']);
       $product->setPrice($productData['price']);
-      $product->setCategory($productData['category']);
-      $product->setIngredients($productData['ingredients']);
-      $product->setAllergenes($productData['allergenes']);
-      $product->setNutritionalValues($productData['nutritionalValues']);
-      $product->setConservation($productData['conservation']);
-      $product->setPopularity($productData['popularity']);
+
+      if (isset($productData['category_ref']) && $this->hasReference($productData['category_ref'], Category::class)) {
+        $category = $this->getReference($productData['category_ref'], Category::class);
+        if ($category instanceof Category) {
+          $product->setCategory($category);
+        }
+      }
+
+      $product->setIngredients($productData['ingredients'] ?? []);
+      $product->setAllergenes($productData['allergenes'] ?? []);
+      $product->setNutritionalValues($productData['nutritionalValues'] ?? []);
+      $product->setConservation($productData['conservation'] ?? null);
+      $product->setPopularity($productData['popularity'] ?? 0);
 
       $bakery = $this->findBakeryByName($productData['bakery_name']);
       if ($bakery) {
@@ -340,6 +365,7 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface {
   public function getDependencies(): array {
     return [
       BakeryFixtures::class,
+      CategoryFixtures::class,
     ];
   }
 }
