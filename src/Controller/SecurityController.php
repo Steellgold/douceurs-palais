@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
-use Symfony\Component\Security\Csrf\CsrfToken;
+// use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+// use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\String\ByteString;
@@ -22,6 +22,7 @@ use Symfony\Component\String\ByteString;
 class SecurityController extends AbstractController {
   #[Route('/login', name: 'app_login')]
   public function login(AuthenticationUtils $authenticationUtils): Response {
+
     if ($this->getUser()) {
       return $this->redirectToRoute('app_account');
     }
@@ -51,12 +52,12 @@ class SecurityController extends AbstractController {
       return $this->redirectToRoute('app_account');
     }
 
-    $csrfToken = $request->request->get('_token');
-    $token = new CsrfToken('registration_form', $csrfToken);
-    
-    if (!$csrfTokenManager->isTokenValid($token)) {
-        throw new InvalidCsrfTokenException('Invalid CSRF token');
-    }
+    // $csrfToken = $request->request->get('_token');
+    // $token = new CsrfToken('registration_form', $csrfToken);
+
+    // if (!$csrfTokenManager->isTokenValid($token)) {
+    //     throw new InvalidCsrfTokenException('Invalid CSRF token');
+    // }
 
     $user = new User();
     $form = $this->createForm(RegistrationType::class, $user);
