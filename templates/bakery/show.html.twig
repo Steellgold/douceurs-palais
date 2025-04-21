@@ -1,12 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  {% if bakery is defined %}
-    {{ bakery.name }}
-  {% else %}
-    {{ category.name }}
-  {% endif %}
-{% endblock %}
+{% block title %}{{ bakery.name }}{% endblock %}
 
 {% block body %}
   <div class="bg-[#FEFDFB]">
