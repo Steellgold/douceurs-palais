@@ -1,6 +1,6 @@
 {% set links = [
   { 'name': 'Nos boutiques', 'url': '/' },
-  { 'name': 'Articles cœurs', 'url': '/' }
+  { 'name': 'Catégories', 'url': '/categories' }
 ] %}
 <nav class="relative flex flex-col md:flex-row md:justify-between bg-[#FBFBFB] p-4 shadow-md">
   <!-- Mobile layout -->
@@ -38,7 +38,7 @@
       {% endif %}
     </div>
   </div>
-  
+
   <div id="mobile-menu" class="hidden w-full md:hidden">
     <div class="flex flex-col w-full py-4">
       {% for link in links %}
@@ -56,7 +56,7 @@
       {% endif %}
     </div>
   </div>
-  
+
   <!-- Desktop layout -->
   <div class="hidden md:flex items-center">
     <div class="flex items-center gap-6">
@@ -67,16 +67,16 @@
       {% endfor %}
     </div>
   </div>
-  
+
   <a href="/" class="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <img src="https://cdn.douceurs-palais.fr/icon-title.png" alt="Logo" height="190px" width="190px" />
   </a>
-  
+
   <div class="hidden md:flex items-center gap-4">
     <div class="rounded-full p-2 flex items-center justify-center cursor-pointer">
       <i data-lucide="shopping-bag"></i>
     </div>
-    
+
     {% if app.user %}
       <div class="relative group">
         <button id="account-dropdown" class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full">
@@ -103,36 +103,36 @@
 </nav>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuIcon = document.querySelector('.menu-icon');
-    const closeIcon = document.querySelector('.close-icon');
-    
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
-        menuIcon.classList.toggle('hidden');
-        closeIcon.classList.toggle('hidden');
-      });
-    }
-    
-    // Desktop dropdown toggle
-    const accountDropdown = document.getElementById('account-dropdown');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-    
-    if (accountDropdown && dropdownMenu) {
-      accountDropdown.addEventListener('click', function() {
-        dropdownMenu.classList.toggle('hidden');
-      });
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(event) {
-        if (!accountDropdown.contains(event.target) && !dropdownMenu.contains(event.target)) {
-          dropdownMenu.classList.add('hidden');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.querySelector('.menu-icon');
+        const closeIcon = document.querySelector('.close-icon');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+                menuIcon.classList.toggle('hidden');
+                closeIcon.classList.toggle('hidden');
+            });
         }
-      });
-    }
-  });
+
+        // Desktop dropdown toggle
+        const accountDropdown = document.getElementById('account-dropdown');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        if (accountDropdown && dropdownMenu) {
+            accountDropdown.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!accountDropdown.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        }
+    });
 </script>
