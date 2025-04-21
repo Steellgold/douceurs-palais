@@ -3,9 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Bakery;
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -43,6 +45,44 @@ class ProductRepository extends ServiceEntityRepository {
     return $this->createQueryBuilder('p')
       ->andWhere('p.bakery = :bakery')
       ->setParameter('bakery', $bakery)
+      ->orderBy('p.name', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  public function findByCategory(Category $category, int|null $limit): array {
+    $qb = $this->createQueryBuilder('p')
+      ->andWhere('p.category = :category')
+      ->setParameter('category', $category)
+      ->orderBy('p.name', 'ASC');
+
+    if ($limit) {
+      $qb->setMaxResults($limit);
+    }
+
+    return $qb->getQuery()->getResult();
+  }
+
+  public function findByCategoryPaginated(Category $category, int $page = 1, int $limit = 12) {
+    $firstResult = ($page - 1) * $limit;
+
+    $query = $this->createQueryBuilder('p')
+      ->andWhere('p.category = :category')
+      ->setParameter('category', $category)
+      ->orderBy('p.name', 'ASC')
+      ->setFirstResult($firstResult)
+      ->setMaxResults($limit)
+      ->getQuery();
+
+    return new Paginator($query, true);
+  }
+
+  public function findByBakeryAndCategory(Bakery $bakery, Category $category): array {
+    return $this->createQueryBuilder('p')
+      ->andWhere('p.bakery = :bakery')
+      ->andWhere('p.category = :category')
+      ->setParameter('bakery', $bakery)
+      ->setParameter('category', $category)
       ->orderBy('p.name', 'ASC')
       ->getQuery()
       ->getResult();

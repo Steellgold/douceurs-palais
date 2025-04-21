@@ -64,8 +64,11 @@ class Product {
   #[ORM\Column(nullable: true)]
   private ?int $popularity = 0;
 
-  #[ORM\Column(length: 255, nullable: true)]
-  private ?string $category = null;
+  // #[ORM\Column(length: 255, nullable: true)]
+  // private ?string $category = null;
+
+  #[ORM\ManyToOne(inversedBy: 'products')]
+  private ?Category $category = null;
 
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
@@ -265,11 +268,11 @@ class Product {
     return $this;
   }
 
-  public function getCategory(): ?string {
+  public function getCategory(): ?Category {
     return $this->category;
   }
 
-  public function setCategory(?string $category): static {
+  public function setCategory(?Category $category): static {
     $this->category = $category;
 
     return $this;

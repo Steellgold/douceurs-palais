@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Bakery;
 use App\Repository\BakeryRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +17,7 @@ class BakeryController extends AbstractController {
   public function __construct(
     private readonly BakeryRepository $bakeryRepository,
     private readonly ProductRepository $productRepository,
+    private readonly CategoryRepository $categoryRepository,
     private readonly EntityManagerInterface $entityManager
   ) {
   }
@@ -30,11 +32,13 @@ class BakeryController extends AbstractController {
 
     $popularProducts = $this->productRepository->findMostPopularByBakery($bakery, 3);
     $allProducts = $this->productRepository->findByBakery($bakery);
+    $categories = $this->categoryRepository->findCategoriesWithProductsByBakery($bakery->getId());
 
     return $this->render('bakery/show.html.twig', [
       'bakery' => $bakery,
       'popularProducts' => $popularProducts,
       'allProducts' => $allProducts,
+      'categories' => $categories,
     ]);
   }
 
