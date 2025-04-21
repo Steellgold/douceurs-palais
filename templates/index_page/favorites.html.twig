@@ -75,7 +75,7 @@
               <twig:ProductCard
                   imageUrl="{{ product.mainImage ?: 'https://via.placeholder.com/400x250' }}"
                   price="{{ product.price|number_format(2, '.', ',') }}"
-                  category="{{ product.category ?: 'Pâtisserie' }}"
+                  category="{{ product.category.name ?: 'Pâtisserie' }}"
                   name="{{ product.name }}"
                   description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
               />
