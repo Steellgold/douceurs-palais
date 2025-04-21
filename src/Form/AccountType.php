@@ -51,8 +51,7 @@ class AccountType extends AbstractType {
             'message' => 'Ce numéro de téléphone n\'est pas valide',
           ]),
         ],
-      ])
-    ;
+      ]);
   }
 
   public function configureOptions(OptionsResolver $resolver): void {

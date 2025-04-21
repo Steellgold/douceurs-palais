@@ -42,7 +42,7 @@
                     {% else %}
                       <h3 class="text-lg font-semibold">Adresse {{ loop.index }}</h3>
                     {% endif %}
-                    
+
                     {% if address.isPrimary %}
                       <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-1">
                         Adresse principale
@@ -50,7 +50,7 @@
                     {% endif %}
                   </div>
                 </div>
-                
+
                 <div class="mb-6">
                   <p>{{ address.street }}</p>
                   {% if address.complement %}
@@ -58,7 +58,7 @@
                   {% endif %}
                   <p>{{ address.postalCode }} {{ address.city }}</p>
                 </div>
-                
+
                 <div class="flex flex-wrap gap-2">
                   <a href="{{ path('app_account_address_edit', {'id': address.id}) }}" class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
@@ -66,7 +66,7 @@
                     </svg>
                     Modifier
                   </a>
-                  
+
                   {% if not address.isPrimary %}
                     <form method="post" action="{{ path('app_account_address_primary', {'id': address.id}) }}" class="inline">
                       <input type="hidden" name="_token" value="{{ csrf_token('primary' ~ address.id) }}">
@@ -78,7 +78,7 @@
                       </button>
                     </form>
                   {% endif %}
-                  
+
                   <form method="post" action="{{ path('app_account_address_delete', {'id': address.id}) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette adresse ?');">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ address.id) }}">
                     <button type="submit" class="inline-flex items-center px-3 py-1.5 border border-red-300 text-xs font-medium rounded shadow-sm text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">

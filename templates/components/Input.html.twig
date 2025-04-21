@@ -7,16 +7,16 @@
 ]|join(' ') %}
 
 <input
-  id="{{ id }}"
-  name="{{ name }}"
-  type="{{ type|default('text') }}"
-  class="{{ inputClasses }}"
-  {% if placeholder is defined and placeholder %}placeholder="{{ placeholder }}"{% endif %}
-  {% if value is defined and value %}value="{{ value }}"{% endif %}
-  {% if autocomplete is defined and autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
-  {% if required %}required{% endif %}
-  {% if disabled %}disabled{% endif %}
+    id="{{ id }}"
+    name="{{ name }}"
+    type="{{ type|default('text') }}"
+    class="{{ inputClasses }}"
+    {% if placeholder is defined and placeholder %}placeholder="{{ placeholder }}"{% endif %}
+    {% if value is defined and value %}value="{{ value }}"{% endif %}
+    {% if autocomplete is defined and autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+    {% if required %}required{% endif %}
+    {% if disabled %}disabled{% endif %}
   {% for attr, val in extraAttributes %}
     {{ attr }}="{{ val }}"
-  {% endfor %}
+    {% endfor %}
 >

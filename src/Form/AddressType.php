@@ -69,8 +69,7 @@ class AddressType extends AbstractType {
       ->add('isPrimary', CheckboxType::class, [
         'label' => 'Définir comme adresse principale',
         'required' => false,
-      ])
-    ;
+      ]);
   }
 
   public function configureOptions(OptionsResolver $resolver): void {

@@ -38,25 +38,25 @@
 ]|join(' ')|trim %}
 
 {% if href is defined and href is not null %}
-  <a 
-    href="{{ href }}" 
-    class="{{ buttonClasses }}"
-    {% if disabled is defined and disabled %}aria-disabled="true"{% endif %}
-    {% if target is defined %}target="{{ target }}"{% endif %}
-    {% if rel is defined %}rel="{{ rel }}"{% endif %}
+  <a
+      href="{{ href }}"
+      class="{{ buttonClasses }}"
+      {% if disabled is defined and disabled %}aria-disabled="true"{% endif %}
+      {% if target is defined %}target="{{ target }}"{% endif %}
+      {% if rel is defined %}rel="{{ rel }}"{% endif %}
   >
     {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4 mr-2"></i>{% endif %}
     {{ label is defined ? label : 'Button' }}
     {% if iconRight is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4"></i>{% endif %}
   </a>
 {% else %}
-  <button 
-    type="{{ type is defined ? type : 'button' }}" 
-    class="{{ buttonClasses }}"
-    {% if disabled is defined and disabled %}disabled{% endif %}
-    {% if onClick is defined %}onclick="{{ onClick }}"{% endif %}
-    {% if title is defined %}title="{{ title }}"{% endif %}
-    {% if ariaLabel is defined %}aria-label="{{ ariaLabel }}"{% endif %}
+  <button
+      type="{{ type is defined ? type : 'button' }}"
+      class="{{ buttonClasses }}"
+      {% if disabled is defined and disabled %}disabled{% endif %}
+      {% if onClick is defined %}onclick="{{ onClick }}"{% endif %}
+      {% if title is defined %}title="{{ title }}"{% endif %}
+      {% if ariaLabel is defined %}aria-label="{{ ariaLabel }}"{% endif %}
   >
     {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4 mr-2"></i>{% endif %}
     {{ label is defined ? label : 'Button' }}
