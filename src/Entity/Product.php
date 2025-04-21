@@ -58,6 +58,15 @@ class Product {
   #[ORM\Column(nullable: true)]
   private ?\DateTimeImmutable $updatedAt = null;
 
+  #[ORM\ManyToOne(inversedBy: 'products')]
+  private ?Bakery $bakery = null;
+
+  #[ORM\Column(nullable: true)]
+  private ?int $popularity = 0;
+
+  #[ORM\Column(length: 255, nullable: true)]
+  private ?string $category = null;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
@@ -132,6 +141,10 @@ class Product {
     $this->images = $images ?? [];
 
     return $this;
+  }
+
+  public function getMainImage(): ?string {
+    return $this->images[0] ?? null;
   }
 
   public function addImage(string $image): static {
@@ -228,6 +241,36 @@ class Product {
 
   public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static {
     $this->updatedAt = $updatedAt;
+
+    return $this;
+  }
+
+  public function getBakery(): ?Bakery {
+    return $this->bakery;
+  }
+
+  public function setBakery(?Bakery $bakery): static {
+    $this->bakery = $bakery;
+
+    return $this;
+  }
+
+  public function getPopularity(): ?int {
+    return $this->popularity;
+  }
+
+  public function setPopularity(?int $popularity): static {
+    $this->popularity = $popularity;
+
+    return $this;
+  }
+
+  public function getCategory(): ?string {
+    return $this->category;
+  }
+
+  public function setCategory(?string $category): static {
+    $this->category = $category;
 
     return $this;
   }

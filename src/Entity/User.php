@@ -65,10 +65,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
   #[ORM\Column(nullable: true)]
   private ?\DateTimeImmutable $resetTokenExpiresAt = null;
 
+  #[ORM\ManyToMany(targetEntity: Bakery::class, inversedBy: 'favoriteByUsers')]
+  #[ORM\JoinTable(name: 'user_favorite_bakeries')]
+  private Collection $favoriteBakeries;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
     $this->addresses = new ArrayCollection();
+    $this->favoriteBakeries = new ArrayCollection();
   }
 
   #[ORM\PreUpdate]
@@ -209,7 +214,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
 
   public function removeAddress(Address $address): static {
     if ($this->addresses->removeElement($address)) {
-      // set the owning side to null (unless already changed)
       if ($address->getUser() === $this) {
         $address->setUser(null);
       }
@@ -256,5 +260,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     $this->resetTokenExpiresAt = $resetTokenExpiresAt;
 
     return $this;
+  }
+
+  /**
+   * @return Collection<int, Bakery>
+   */
+  public function getFavoriteBakeries(): Collection {
+    return $this->favoriteBakeries;
+  }
+
+  public function addFavoriteBakery(Bakery $bakery): static {
+    if (!$this->favoriteBakeries->contains($bakery)) {
+      $this->favoriteBakeries->add($bakery);
+    }
+
+    return $this;
+  }
+
+  public function removeFavoriteBakery(Bakery $bakery): static {
+    $this->favoriteBakeries->removeElement($bakery);
+
+    return $this;
+  }
+
+  public function hasFavoriteBakery(Bakery $bakery): bool {
+    return $this->favoriteBakeries->contains($bakery);
   }
 }
