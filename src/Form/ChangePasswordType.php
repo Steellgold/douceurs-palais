@@ -15,11 +15,11 @@ class ChangePasswordType extends AbstractType {
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
       ->add('currentPassword', PasswordType::class, [
-        'label' => 'Current password',
+        'label' => 'Mot de passe actuel',
         'mapped' => false,
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter your current password',
+            'message' => 'Veuillez saisir votre mot de passe actuel',
           ]),
         ],
       ])
@@ -27,25 +27,25 @@ class ChangePasswordType extends AbstractType {
         'type' => PasswordType::class,
         'mapped' => false,
         'first_options' => [
-          'label' => 'New password',
+          'label' => 'Nouveau mot de passe',
           'constraints' => [
             new NotBlank([
-              'message' => 'Please enter a new password',
+              'message' => 'Veuillez saisir un nouveau mot de passe',
             ]),
             new Length([
               'min' => 8,
-              'minMessage' => 'Your password must contain at least {{ limit }} characters',
+              'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
             ]),
             new Regex([
               'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-              'message' => 'Your password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
+              'message' => 'Votre mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
             ]),
           ],
         ],
         'second_options' => [
-          'label' => 'Confirm new password',
+          'label' => 'Confirmer le nouveau mot de passe',
         ],
-        'invalid_message' => 'Passwords do not match',
+        'invalid_message' => 'Les mots de passe ne correspondent pas',
       ])
     ;
   }

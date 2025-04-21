@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Bakery;
 use App\Entity\Product;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -32,6 +34,49 @@ class ProductRepository extends ServiceEntityRepository {
       ->setMaxResults($limit)
       ->getQuery()
       ->getResult();
+  }
+
+  /**
+   * @return Product[] Returns an array of Product objects
+   */
+  public function findByBakery(Bakery $bakery): array {
+    return $this->createQueryBuilder('p')
+      ->andWhere('p.bakery = :bakery')
+      ->setParameter('bakery', $bakery)
+      ->orderBy('p.name', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  /**
+   * @return Product[] Returns an array of Product objects
+   */
+  public function findMostPopularByBakery(Bakery $bakery, int $limit = 3): array {
+    return $this->createQueryBuilder('p')
+      ->andWhere('p.bakery = :bakery')
+      ->setParameter('bakery', $bakery)
+      ->orderBy('p.popularity', 'DESC')
+      ->setMaxResults($limit)
+      ->getQuery()
+      ->getResult();
+  }
+
+  /**
+   * @return Product[] Returns an array of Product objects from favorite bakeries
+   */
+  public function findFromFavoriteBakeries(User $user, int $limit): array {
+    $qb = $this->createQueryBuilder('p')
+      ->join('p.bakery', 'b')
+      ->join('b.favoriteByUsers', 'u')
+      ->where('u.id = :userId')
+      ->setParameter('userId', $user->getId())
+      ->orderBy('p.name', 'ASC');
+
+    if ($limit) {
+      $qb->setMaxResults($limit);
+    }
+
+    return $qb->getQuery()->getResult();
   }
 
   /**
@@ -69,5 +114,21 @@ class ProductRepository extends ServiceEntityRepository {
       ->orderBy('p.name', 'ASC')
       ->getQuery()
       ->getResult();
+  }
+
+  public function save(Product $entity, bool $flush = false): void {
+    $this->getEntityManager()->persist($entity);
+
+    if ($flush) {
+      $this->getEntityManager()->flush();
+    }
+  }
+
+  public function remove(Product $entity, bool $flush = false): void {
+    $this->getEntityManager()->remove($entity);
+
+    if ($flush) {
+      $this->getEntityManager()->flush();
+    }
   }
 }

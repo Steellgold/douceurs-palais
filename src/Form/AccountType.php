@@ -16,18 +16,18 @@ class AccountType extends AbstractType {
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
       ->add('firstName', TextType::class, [
-        'label' => 'First name',
+        'label' => 'Prénom',
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter your first name',
+            'message' => 'Veuillez saisir votre prénom',
           ]),
         ],
       ])
       ->add('lastName', TextType::class, [
-        'label' => 'Last name',
+        'label' => 'Nom',
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter your last name',
+            'message' => 'Veuillez saisir votre nom',
           ]),
         ],
       ])
@@ -35,20 +35,20 @@ class AccountType extends AbstractType {
         'label' => 'Email',
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter your email',
+            'message' => 'Veuillez saisir votre email',
           ]),
           new Email([
-            'message' => 'This email is not valid',
+            'message' => 'Cet email n\'est pas valide',
           ]),
         ],
       ])
       ->add('phone', TextType::class, [
-        'label' => 'Phone',
+        'label' => 'Téléphone',
         'required' => false,
         'constraints' => [
           new Regex([
             'pattern' => '/^\+?[0-9]{10,15}$/',
-            'message' => 'This phone number is not valid',
+            'message' => 'Ce numéro de téléphone n\'est pas valide',
           ]),
         ],
       ])

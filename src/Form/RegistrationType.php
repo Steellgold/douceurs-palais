@@ -21,35 +21,35 @@ class RegistrationType extends AbstractType {
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
       ->add('firstName', TextType::class, [
-        'label' => 'First name',
+        'label' => 'Prénom',
         'attr' => [
-          'placeholder' => 'Your first name',
+          'placeholder' => 'Votre prénom',
         ],
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter your first name',
+            'message' => 'Veuillez saisir votre prénom',
           ]),
         ],
       ])
       ->add('lastName', TextType::class, [
-        'label' => 'Last name',
+        'label' => 'Nom',
         'attr' => [
-          'placeholder' => 'Your last name',
+          'placeholder' => 'Votre nom',
         ],
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter your last name',
+            'message' => 'Veuillez saisir votre nom',
           ]),
         ],
       ])
       ->add('email', EmailType::class, [
         'label' => 'Email',
         'attr' => [
-          'placeholder' => 'Your email',
+          'placeholder' => 'Votre email',
         ],
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter your email',
+            'message' => 'Veuillez saisir votre email',
           ]),
         ],
       ])
@@ -57,33 +57,33 @@ class RegistrationType extends AbstractType {
         'type' => PasswordType::class,
         'mapped' => false,
         'first_options' => [
-          'label' => 'Password',
+          'label' => 'Mot de passe',
           'attr' => [
-            'placeholder' => 'Password',
+            'placeholder' => 'Mot de passe',
           ],
           'constraints' => [
             new NotBlank([
-              'message' => 'Please enter a password',
+              'message' => 'Veuillez saisir un mot de passe',
             ]),
             new Length([
               'min' => 8,
-              'minMessage' => 'Your password must contain at least {{ limit }} characters',
+              'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
             ])
           ],
         ],
         'second_options' => [
-          'label' => 'Confirm',
+          'label' => 'Confirmer',
           'attr' => [
-            'placeholder' => 'Confirm password',
+            'placeholder' => 'Confirmer le mot de passe',
           ],
         ],
-        'invalid_message' => 'Passwords do not match',
+        'invalid_message' => 'Les mots de passe ne correspondent pas',
       ])
       ->add('phone', TextType::class, [
-        'label' => 'Phone',
+        'label' => 'Téléphone',
         'required' => false,
         'attr' => [
-          'placeholder' => 'Phone number',
+          'placeholder' => 'Numéro de téléphone',
         ],
       ])
       ->add('address', AddressType::class, [
@@ -93,17 +93,17 @@ class RegistrationType extends AbstractType {
       ])
       ->add('agreeTerms', CheckboxType::class, [
         'mapped' => false,
-        'label' => 'I agree to the terms of use and privacy policy',
+        'label' => 'J\'accepte les conditions d\'utilisation et la politique de confidentialité',
         'constraints' => [
           new IsTrue([
-            'message' => 'You must accept our terms of use.',
+            'message' => 'Vous devez accepter nos conditions d\'utilisation.',
           ]),
         ],
       ])
-      ->add('_token', HiddenType::class, [
-          'mapped' => false,
-          'error_bubbling' => true,
-      ]);
+      // ->add('_token', HiddenType::class, [
+      // 'mapped' => false,
+      // 'error_bubbling' => true,
+      // ]);
     ;
   }
 

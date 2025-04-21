@@ -18,25 +18,25 @@ class ResetPasswordType extends AbstractType {
         'type' => PasswordType::class,
         'mapped' => false,
         'first_options' => [
-          'label' => 'New password',
+          'label' => 'Nouveau mot de passe',
           'constraints' => [
             new NotBlank([
-              'message' => 'Please enter a new password',
+              'message' => 'Veuillez saisir un nouveau mot de passe',
             ]),
             new Length([
               'min' => 8,
-              'minMessage' => 'Your password must contain at least {{ limit }} characters',
+              'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
             ]),
             new Regex([
               'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
-              'message' => 'Your password must contain at least one uppercase letter, one lowercase letter, one number and one special character',
+              'message' => 'Votre mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial',
             ]),
           ],
         ],
         'second_options' => [
-          'label' => 'Confirm password',
+          'label' => 'Confirmer le mot de passe',
         ],
-        'invalid_message' => 'Passwords do not match',
+        'invalid_message' => 'Les mots de passe ne correspondent pas',
       ])
     ;
   }

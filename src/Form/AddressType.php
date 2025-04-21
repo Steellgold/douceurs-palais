@@ -16,58 +16,58 @@ class AddressType extends AbstractType {
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
       ->add('label', TextType::class, [
-        'label' => 'Label',
+        'label' => 'Libellé',
         'required' => false,
         'attr' => [
-          'placeholder' => 'Ex: Home, Office, etc.',
+          'placeholder' => 'Ex: Domicile, Bureau, etc.',
         ],
       ])
       ->add('street', TextType::class, [
-        'label' => 'Address',
+        'label' => 'Adresse',
         'attr' => [
-          'placeholder' => 'Street number and name',
+          'placeholder' => 'Numéro et nom de rue',
         ],
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter an address',
+            'message' => 'Veuillez saisir une adresse',
           ]),
         ],
       ])
       ->add('complement', TextType::class, [
-        'label' => 'Additional address details',
+        'label' => 'Complément d\'adresse',
         'required' => false,
         'attr' => [
-          'placeholder' => 'Apartment, floor, etc.',
+          'placeholder' => 'Appartement, étage, etc.',
         ],
       ])
       ->add('postalCode', TextType::class, [
-        'label' => 'Postal code',
+        'label' => 'Code postal',
         'attr' => [
-          'placeholder' => 'Postal code',
+          'placeholder' => 'Code postal',
         ],
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter a postal code',
+            'message' => 'Veuillez saisir un code postal',
           ]),
           new Regex([
             'pattern' => '/^[0-9]{5}$/',
-            'message' => 'This postal code is not valid',
+            'message' => 'Ce code postal n\'est pas valide',
           ]),
         ],
       ])
       ->add('city', TextType::class, [
-        'label' => 'City',
+        'label' => 'Ville',
         'attr' => [
-          'placeholder' => 'City',
+          'placeholder' => 'Ville',
         ],
         'constraints' => [
           new NotBlank([
-            'message' => 'Please enter a city',
+            'message' => 'Veuillez saisir une ville',
           ]),
         ],
       ])
       ->add('isPrimary', CheckboxType::class, [
-        'label' => 'Set as primary address',
+        'label' => 'Définir comme adresse principale',
         'required' => false,
       ])
     ;
