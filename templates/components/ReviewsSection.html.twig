@@ -1,29 +1,29 @@
 <style>
-  .marquee-container {
-    position: relative;
-    overflow-x: hidden;
-    padding-block: 2rem;
-  }
-
-  .marquee-track {
-    display: flex;
-    width: max-content;
-    gap: 1.5rem;
-    animation: scroll-left 60s linear infinite;
-  }
-
-  .marquee-container:hover .marquee-track {
-    animation-play-state: paused;
-  }
-
-  @keyframes scroll-left {
-    0% {
-      transform: translateX(0);
+    .marquee-container {
+        position: relative;
+        overflow-x: hidden;
+        padding-block: 2rem;
     }
-    100% {
-      transform: translateX(-50%);
+
+    .marquee-track {
+        display: flex;
+        width: max-content;
+        gap: 1.5rem;
+        animation: scroll-left 60s linear infinite;
     }
-  }
+
+    .marquee-container:hover .marquee-track {
+        animation-play-state: paused;
+    }
+
+    @keyframes scroll-left {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
 </style>
 
 <div class="marquee-container group">
