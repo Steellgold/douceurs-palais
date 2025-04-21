@@ -22,7 +22,9 @@ class SitemapController extends AbstractController {
     $urls = [];
 
     $urls[] = [
-      'loc' => $this->urlGenerator->generate('app_index_page', [], UrlGeneratorInterface::ABSOLUTE_URL),
+      'loc' => str_replace('http://', 'https://',
+        $this->urlGenerator->generate('app_index_page', [], UrlGeneratorInterface::ABSOLUTE_URL)
+      ),
       'priority' => '1.0',
       'changefreq' => 'daily'
     ];
@@ -30,7 +32,9 @@ class SitemapController extends AbstractController {
     $products = $this->productRepository->findAll();
     foreach ($products as $product) {
       $urls[] = [
-        'loc' => $this->urlGenerator->generate('app_product_page', ['slug' => $product->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),
+        'loc' => str_replace('http://', 'https://',
+          $this->urlGenerator->generate('app_product_page', ['slug' => $product->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL)
+        ),
         'priority' => '0.7',
         'changefreq' => 'weekly',
         'lastmod' => $product->getUpdatedAt() ?? $product->getCreatedAt()
@@ -40,7 +44,9 @@ class SitemapController extends AbstractController {
     $bakeries = $this->bakeryRepository->findAll();
     foreach ($bakeries as $bakery) {
       $urls[] = [
-        'loc' => $this->urlGenerator->generate('app_bakery_show', ['slug' => $bakery->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL),
+        'loc' => str_replace('http://', 'https://',
+          $this->urlGenerator->generate('app_bakery_show', ['slug' => $bakery->getSlug()], UrlGeneratorInterface::ABSOLUTE_URL)
+        ),
         'priority' => '0.8',
         'changefreq' => 'weekly',
         'lastmod' => $bakery->getUpdatedAt() ?? $bakery->getCreatedAt()
