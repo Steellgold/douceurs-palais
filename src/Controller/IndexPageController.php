@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class IndexPageController extends AbstractController {
   public function __construct(
-    private readonly BakeryRepository $bakeryRepository,
+    private readonly BakeryRepository  $bakeryRepository,
     private readonly ProductRepository $productRepository
   ) {
   }

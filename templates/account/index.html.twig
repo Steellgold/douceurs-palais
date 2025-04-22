@@ -62,7 +62,7 @@
           </div>
           <h2 class="text-2xl font-playfair">Mes adresses</h2>
         </div>
-        
+
         {% if app.user.addresses|length > 0 %}
           <div class="mb-4">
             <h3 class="text-lg font-semibold mb-2">Adresse principale</h3>
@@ -85,7 +85,7 @@
         {% else %}
           <p class="text-gray-600 mb-4">Vous n'avez pas encore enregistré d'adresse de livraison.</p>
         {% endif %}
-        
+
         <a href="{{ path('app_account_addresses') }}" class="inline-flex items-center justify-center px-4 py-2 border border-[#EDA239] text-sm font-medium rounded-md text-[#121212] bg-[#FEFDFB] hover:bg-[#FFF7EB] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
           {% if app.user.addresses|length > 0 %}
             Gérer mes adresses

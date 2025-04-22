@@ -69,11 +69,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
   #[ORM\JoinTable(name: 'user_favorite_bakeries')]
   private Collection $favoriteBakeries;
 
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cart::class, orphanRemoval: true)]
+  private Collection $carts;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
     $this->addresses = new ArrayCollection();
     $this->favoriteBakeries = new ArrayCollection();
+    $this->carts = new ArrayCollection();
   }
 
   #[ORM\PreUpdate]
@@ -101,7 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
    * @see UserInterface
    */
   public function getUserIdentifier(): string {
-    return (string) $this->email;
+    return (string)$this->email;
   }
 
   /**
@@ -285,5 +289,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
 
   public function hasFavoriteBakery(Bakery $bakery): bool {
     return $this->favoriteBakeries->contains($bakery);
+  }
+
+  /**
+   * @return Collection<int, Cart>
+   */
+  public function getCarts(): Collection {
+    return $this->carts;
+  }
+
+  public function addCart(Cart $cart): static {
+    if (!$this->carts->contains($cart)) {
+      $this->carts->add($cart);
+      $cart->setUser($this);
+    }
+
+    return $this;
+  }
+
+  public function removeCart(Cart $cart): static {
+    if ($this->carts->removeElement($cart)) {
+      if ($cart->getUser() === $this) {
+        $cart->setUser(null);
+      }
+    }
+
+    return $this;
   }
 }

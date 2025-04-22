@@ -46,8 +46,7 @@ class ChangePasswordType extends AbstractType {
           'label' => 'Confirmer le nouveau mot de passe',
         ],
         'invalid_message' => 'Les mots de passe ne correspondent pas',
-      ])
-    ;
+      ]);
   }
 
   public function configureOptions(OptionsResolver $resolver): void {

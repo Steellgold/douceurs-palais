@@ -194,6 +194,7 @@
                   category="{{ product.category is not null ? product.category.name : 'Produit' }}"
                   name="{{ product.name }}"
                   description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
+                  productId="{{ product.id }}"
               />
             {% endfor %}
           </div>
@@ -212,6 +213,7 @@
                   category="{{ product.category is not null ? product.category.name : 'Produit' }}"
                   name="{{ product.name }}"
                   description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
+                  productId="{{ product.id }}"
               />
             {% endfor %}
           </div>

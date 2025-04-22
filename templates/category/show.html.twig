@@ -27,6 +27,7 @@
                 category="{{ product.bakery.name }}"
                 name="{{ product.name }}"
                 description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
+                productId="{{ product.id }}"
             />
           {% endfor %}
         </div>

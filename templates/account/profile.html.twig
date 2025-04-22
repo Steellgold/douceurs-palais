@@ -24,67 +24,67 @@
 
       <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100">
         {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
-          <div>
-            <label for="{{ form.firstName.vars.id }}" class="block text-sm font-medium text-gray-700">Prénom</label>
-            <div class="mt-1">
-              {{ form_widget(form.firstName, {
-                'attr': {
-                  'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
-                }
-              }) }}
-              <div class="text-red-500 text-xs mt-1">
-                {{ form_errors(form.firstName) }}
-              </div>
+        <div>
+          <label for="{{ form.firstName.vars.id }}" class="block text-sm font-medium text-gray-700">Prénom</label>
+          <div class="mt-1">
+            {{ form_widget(form.firstName, {
+              'attr': {
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+              }
+            }) }}
+            <div class="text-red-500 text-xs mt-1">
+              {{ form_errors(form.firstName) }}
             </div>
           </div>
+        </div>
 
-          <div>
-            <label for="{{ form.lastName.vars.id }}" class="block text-sm font-medium text-gray-700">Nom</label>
-            <div class="mt-1">
-              {{ form_widget(form.lastName, {
-                'attr': {
-                  'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
-                }
-              }) }}
-              <div class="text-red-500 text-xs mt-1">
-                {{ form_errors(form.lastName) }}
-              </div>
+        <div>
+          <label for="{{ form.lastName.vars.id }}" class="block text-sm font-medium text-gray-700">Nom</label>
+          <div class="mt-1">
+            {{ form_widget(form.lastName, {
+              'attr': {
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+              }
+            }) }}
+            <div class="text-red-500 text-xs mt-1">
+              {{ form_errors(form.lastName) }}
             </div>
           </div>
+        </div>
 
-          <div>
-            <label for="{{ form.email.vars.id }}" class="block text-sm font-medium text-gray-700">Email</label>
-            <div class="mt-1">
-              {{ form_widget(form.email, {
-                'attr': {
-                  'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
-                }
-              }) }}
-              <div class="text-red-500 text-xs mt-1">
-                {{ form_errors(form.email) }}
-              </div>
+        <div>
+          <label for="{{ form.email.vars.id }}" class="block text-sm font-medium text-gray-700">Email</label>
+          <div class="mt-1">
+            {{ form_widget(form.email, {
+              'attr': {
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+              }
+            }) }}
+            <div class="text-red-500 text-xs mt-1">
+              {{ form_errors(form.email) }}
             </div>
           </div>
+        </div>
 
-          <div>
-            <label for="{{ form.phone.vars.id }}" class="block text-sm font-medium text-gray-700">Téléphone</label>
-            <div class="mt-1">
-              {{ form_widget(form.phone, {
-                'attr': {
-                  'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
-                }
-              }) }}
-              <div class="text-red-500 text-xs mt-1">
-                {{ form_errors(form.phone) }}
-              </div>
+        <div>
+          <label for="{{ form.phone.vars.id }}" class="block text-sm font-medium text-gray-700">Téléphone</label>
+          <div class="mt-1">
+            {{ form_widget(form.phone, {
+              'attr': {
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+              }
+            }) }}
+            <div class="text-red-500 text-xs mt-1">
+              {{ form_errors(form.phone) }}
             </div>
           </div>
+        </div>
 
-          <div class="pt-4">
-            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
-              Enregistrer les modifications
-            </button>
-          </div>
+        <div class="pt-4">
+          <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+            Enregistrer les modifications
+          </button>
+        </div>
         {{ form_end(form) }}
       </div>
     </div>

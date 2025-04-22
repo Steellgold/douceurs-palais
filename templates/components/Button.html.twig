@@ -3,7 +3,6 @@
   'secondary': 'bg-[#FEFDFB] text-[#121212] border border-[#EDA239] hover:bg-[#FFF7EB]',
   'dark': 'bg-[#121212] text-white hover:bg-[#333333]',
   'cream': 'bg-[#F8ECD9] text-[#121212] hover:bg-[#FFF7EB]',
-
   'destructive': 'bg-red-600 text-white hover:bg-red-700',
   'success': 'bg-green-600 text-white hover:bg-green-700',
   'ghost': 'bg-transparent text-gray-700 hover:bg-gray-100',
@@ -38,25 +37,39 @@
 ]|join(' ')|trim %}
 
 {% if href is defined and href is not null %}
-  <a 
-    href="{{ href }}" 
+  <a
+    href="{{ href }}"
     class="{{ buttonClasses }}"
     {% if disabled is defined and disabled %}aria-disabled="true"{% endif %}
     {% if target is defined %}target="{{ target }}"{% endif %}
     {% if rel is defined %}rel="{{ rel }}"{% endif %}
+    {% if extraAttributes is defined %}
+      {% for key, value in extraAttributes %}
+        {{ key }}="{{ value }}"
+      {% endfor %}
+    {% endif %}
   >
     {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4 mr-2"></i>{% endif %}
     {{ label is defined ? label : 'Button' }}
     {% if iconRight is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4"></i>{% endif %}
   </a>
 {% else %}
-  <button 
-    type="{{ type is defined ? type : 'button' }}" 
+  <button
+    type="{{ type is defined ? type : 'button' }}"
     class="{{ buttonClasses }}"
     {% if disabled is defined and disabled %}disabled{% endif %}
     {% if onClick is defined %}onclick="{{ onClick }}"{% endif %}
     {% if title is defined %}title="{{ title }}"{% endif %}
     {% if ariaLabel is defined %}aria-label="{{ ariaLabel }}"{% endif %}
+    {% if addCart is defined and addCart %}
+      data-add-to-cart
+      data-product-id="{{ productId }}"
+    {% endif %}
+    {% if extraAttributes is defined %}
+      {% for key, value in extraAttributes %}
+        {{ key }}="{{ value }}"
+      {% endfor %}
+    {% endif %}
   >
     {% if iconLeft is defined %}<i data-lucide="{{ iconLeft|raw }}" class="w-4 mr-2"></i>{% endif %}
     {{ label is defined ? label : 'Button' }}

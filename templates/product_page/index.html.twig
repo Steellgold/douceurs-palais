@@ -22,9 +22,7 @@
   <div class="max-w-3xl mx-auto px-4 py-8">
     <div class="flex items-center mb-4">
       <a href="{{ path('app_bakery_show', {'slug': product.bakery.slug}) }}" class="mr-2 text-gray-600 hover:text-gray-900">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-        </svg>
+        <i data-lucide="chevron-left" class="h-5 w-5"></i>
       </a>
 
       <div class="flex items-center">
@@ -44,16 +42,16 @@
       <h1 class="text-4xl font-playfair">{{ product.name }} · {{ product.price|number_format(2, '.', ',') }}€</h1>
       <p class="mt-4 mb-6 mx-auto max-w-md text-center">{{ product.description }}</p>
 
-      <div class="flex justify-center mb-8">
+      <div class="flex flex-col items-center mb-8">
         <div class="flex">
-          <twig:Button
-              label="Ajouter au panier"
-              variant="primary"
-              href="#"
-              fullWidth
-              iconLeft="shopping-bag"
-              class="w-full"
-          />
+          <button
+              class="inline-flex items-center justify-center px-4 py-2 bg-[#EDA239] text-black font-medium rounded-md hover:bg-[#EFAF7D] transition-colors"
+              data-add-to-cart
+              data-product-id="{{ product.id }}"
+          >
+            <i data-lucide="shopping-bag" class="w-4 h-4 mr-2"></i>
+            Ajouter au panier
+          </button>
         </div>
       </div>
     </div>
@@ -174,8 +172,26 @@
     </div>
   </div>
 
+  <style>
+      .tab-button.active {
+          color: black;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none; /* Internet Explorer */
+          scrollbar-width: none; /* Firefox */
+      }
+  </style>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // Tabs management
       const buttons = document.querySelectorAll('.tab-button');
       const tabs = document.querySelectorAll('.tab-content');
 
@@ -192,17 +208,4 @@
       });
     });
   </script>
-
-  <style>
-    .tab-button.active {
-      color: black;
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none; /* Internet Explorer */
-      scrollbar-width: none; /* Firefox */
-    }
-  </style>
 {% endblock %}
