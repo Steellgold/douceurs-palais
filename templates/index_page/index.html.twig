@@ -2,12 +2,12 @@
 
 {% block body %}
   <div class="w-full relative">
-    <img 
-      src="{{ asset('images/header-background.jpg') }}" 
-      alt="Header Background" 
-      class="w-full h-auto object-cover min-h-64 max-h-screen" 
+    <img
+      src="{{ asset('images/header-background.jpg') }}"
+      alt="Header Background"
+      class="w-full h-auto object-cover min-h-64 max-h-screen"
     />
-    
+
     <div class="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black/30">
       <h1 class="text-5xl text-[#FEFDFB] font-semibold text-center font-playfair">Savourez l'Excellence Artisanale</h1>
       <p class="text-lg text-[#FEFDFB] mt-1 text-center">Des pains et pâtisseries artisanaux livrés directement chez vous</p>
@@ -35,7 +35,7 @@
         icon: 'star',
         variant: 'big'
       }) }}
-        
+
       {{ component('Card', {
         label: 'Livraison à Domicile',
         description: 'Profitez de nos délices livrés directement chez vous, frais et à l\'heure.',
@@ -67,6 +67,7 @@
               category="{{ product.category.name ?: 'Pâtisserie' }}"
               name="{{ product.name }}"
               description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
+              productId="{{ product.id }}"
           />
         {% endfor %}
       {% else %}
@@ -148,7 +149,7 @@
         address: '12 Rue des Artisans',
         note: 4.8
       }) }}
-      
+
       {{ component('BakeryCard', {
         imageUrl: 'https://cdn.douceurs-palais.fr/bakeries/6c853937-3167-4a9d-a1ca-ec44b8b155c2.webp',
         location: 'Mulhouse',

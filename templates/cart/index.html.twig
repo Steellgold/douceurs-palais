@@ -1,0 +1,363 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre panier{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-12">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-playfair mb-8 text-center">Votre panier</h1>
+
+      {% if cart.items|length > 0 %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+          <div class="p-6 md:p-0">
+            <table class="w-full min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50 hidden md:table-header-group">
+              <tr>
+                <th scope="col" class="py-3 pl-6 pr-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
+                  Produit
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Nom
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Prix unitaire
+                </th>
+                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Quantité
+                </th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Total
+                </th>
+                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+              {% for item in cart.items %}
+                <tr class="flex flex-col md:table-row border-b md:border-0 relative" data-item-id="{{ item.id }}">
+                  <td class="md:py-4 pl-6 md:pr-3 whitespace-nowrap w-full md:w-16 flex justify-center md:block">
+                    <div class="h-24 w-24 md:h-16 md:w-16 flex-shrink-0 rounded-md overflow-hidden">
+                      <a href="{{ path('app_product_page', {'slug': item.product.slug}) }}">
+                        <img src="{{ item.product.mainImage ?: 'https://via.placeholder.com/400x250' }}" alt="{{ item.product.name }}" class="h-full w-full object-cover">
+                      </a>
+                    </div>
+                  </td>
+                  <td class="px-6 md:py-4 whitespace-normal md:whitespace-nowrap text-center md:text-left mt-2 md:mt-0">
+                    <a href="{{ path('app_product_page', {'slug': item.product.slug}) }}" class="text-gray-900 font-medium hover:text-[#EDA239]">
+                      {{ item.product.name }}
+                    </a>
+                    <p class="text-gray-500 text-sm mt-1">
+                      {% if item.product.category %}
+                        {{ item.product.category.name }}
+                      {% endif %}
+                    </p>
+                  </td>
+                  <td class="px-6 md:py-4 whitespace-nowrap text-right text-sm font-medium flex justify-between md:table-cell">
+                    <span class="md:hidden">Prix unitaire :</span>
+                    <span>{{ item.product.price|number_format(2, '.', ',') }}€</span>
+                  </td>
+                  <td class="px-6 md:py-4 whitespace-nowrap text-center flex justify-between md:table-cell items-center">
+                    <span class="md:hidden">Quantité :</span>
+                    <div class="flex justify-center items-center">
+                      <button type="button" class="decrease-quantity rounded-l-md border border-gray-300 px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">-</button>
+                      <input type="number" value="{{ item.quantity }}" min="1" max="99" class="quantity-input w-12 border-t border-b border-gray-300 px-2 py-1 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                      <button type="button" class="increase-quantity rounded-r-md border border-gray-300 px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">+</button>
+                    </div>
+                  </td>
+                  <td class="px-6 md:py-4 whitespace-nowrap text-right text-sm font-medium flex justify-between md:table-cell">
+                    <span class="md:hidden">Total :</span>
+                    <span class="item-total">{{ (item.product.price * item.quantity)|number_format(2, '.', ',') }}€</span>
+                  </td>
+                  <td class="px-6 md:py-4 whitespace-nowrap text-right text-sm font-medium flex justify-between md:table-cell md:text-center">
+                    <span class="md:hidden">Actions :</span>
+                    <button type="button" class="remove-item text-red-600 hover:text-red-900">
+                      <i data-lucide="trash-2" class="h-5 w-5"></i>
+                    </button>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-between gap-6">
+          <div class="md:w-1/2 lg:w-2/3 space-y-4">
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <h2 class="text-xl font-playfair mb-4">Besoin d'aide ?</h2>
+              <p class="text-gray-600 mb-2">Appelez-nous au <a href="tel:+33389456789" class="text-[#EDA239] hover:underline">03 89 45 67 89</a></p>
+              <p class="text-gray-600">Du lundi au vendredi de 9h à 18h</p>
+            </div>
+          </div>
+
+          <div class="md:w-1/2 lg:w-1/3 space-y-4">
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <h2 class="text-xl font-playfair mb-4">Récapitulatif</h2>
+              <div class="flex justify-between py-2 border-b border-gray-200">
+                <span class="text-gray-600">Total produits</span>
+                <span class="text-gray-900 font-medium" id="subtotal">{{ cart.totalPrice|number_format(2, '.', ',') }}€</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-gray-200">
+                <span class="text-gray-600">Frais de livraison</span>
+                <span class="text-gray-900 font-medium">0,00€</span>
+              </div>
+              <div class="flex justify-between py-2 mt-2">
+                <span class="text-gray-800 font-semibold">Total</span>
+                <span class="text-gray-900 font-bold text-xl" id="cart-total">{{ cart.totalPrice|number_format(2, '.', ',') }}€</span>
+              </div>
+
+              <div class="mt-6 space-y-3">
+                <button id="checkout-button" type="button" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+                  Passer commande
+                </button>
+
+                <a href="/" class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239] text-center">
+                  Continuer mes achats
+                </a>
+
+                <button id="clear-cart-button" type="button" class="text-gray-500 hover:text-gray-700 text-sm w-full text-center mt-2">
+                  Vider mon panier
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="bg-white shadow-md rounded-lg p-8 text-center">
+          <i data-lucide="shopping-cart" class="h-16 w-16 text-gray-400 mx-auto mb-4"></i>
+          <h2 class="text-xl font-playfair mb-2">Votre panier est vide</h2>
+          <p class="text-gray-600 mb-6">Découvrez nos délicieuses pâtisseries et ajoutez-les à votre panier.</p>
+          <a href="/" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+            Découvrir nos produits
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  {% if cart.items|length > 0 %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const decreaseButtons = document.querySelectorAll('.decrease-quantity');
+        const increaseButtons = document.querySelectorAll('.increase-quantity');
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        const removeButtons = document.querySelectorAll('.remove-item');
+        const clearCartButton = document.getElementById('clear-cart-button');
+
+        function updateQuantity(itemId, quantity) {
+          fetch('{{ path("app_cart_api_update") }}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              itemId: itemId,
+              quantity: quantity
+            })
+          })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  updateCartDisplay(data);
+                } else {
+                  console.error(data.message);
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+        }
+
+        function removeItem(itemId) {
+          fetch('{{ path("app_cart_api_remove") }}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              itemId: itemId
+            })
+          })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  const itemRow = document.querySelector(`tr[data-item-id="${itemId}"]`);
+                  if (itemRow) {
+                    itemRow.remove();
+                  }
+
+                  updateCartDisplay(data);
+
+                  if (data.itemCount === 0) {
+                    window.location.reload();
+                  }
+                } else {
+                  console.error(data.message);
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+        }
+
+        function clearCart() {
+          fetch('{{ path("app_cart_api_clear") }}', {
+            method: 'POST'
+          })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  window.location.reload();
+                } else {
+                  console.error(data.message);
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+        }
+
+        function updateCartDisplay(data) {
+          const navbarCartCount = document.querySelector('.cart-count');
+          if (navbarCartCount) {
+            navbarCartCount.textContent = data.itemCount;
+
+            if (data.itemCount > 0) {
+              navbarCartCount.classList.remove('hidden');
+            } else {
+              navbarCartCount.classList.add('hidden');
+            }
+          }
+
+          const subtotal = document.getElementById('subtotal');
+          const cartTotal = document.getElementById('cart-total');
+
+          if (subtotal && cartTotal) {
+            const formattedTotal = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(data.total);
+            subtotal.textContent = formattedTotal + '€';
+            cartTotal.textContent = formattedTotal + '€';
+          }
+        }
+
+        decreaseButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const itemId = row.dataset.itemId;
+            const quantityInput = row.querySelector('.quantity-input');
+            let quantity = parseInt(quantityInput.value);
+
+            if (quantity > 1) {
+              quantity--;
+              quantityInput.value = quantity;
+
+              const unitPriceText = row.querySelector('td:nth-child(3) span:last-child').textContent.trim();
+              const unitPrice = parseFloat(unitPriceText.replace('€', '').replace(',', '.'));
+
+              const itemTotal = row.querySelector('.item-total');
+              const totalPrice = (unitPrice * quantity).toFixed(2);
+              itemTotal.textContent = totalPrice + '€';
+
+              updateQuantity(itemId, quantity);
+            }
+          });
+        });
+
+        increaseButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const itemId = row.dataset.itemId;
+            const quantityInput = row.querySelector('.quantity-input');
+            let quantity = parseInt(quantityInput.value);
+
+            if (quantity < 99) {
+              quantity++;
+              quantityInput.value = quantity;
+
+              const unitPriceText = row.querySelector('td:nth-child(3) span:last-child').textContent.trim();
+              const unitPrice = parseFloat(unitPriceText.replace('€', '').replace(',', '.'));
+
+              const itemTotal = row.querySelector('.item-total');
+              const totalPrice = (unitPrice * quantity).toFixed(2);
+              itemTotal.textContent = totalPrice + '€';
+
+              updateQuantity(itemId, quantity);
+            }
+          });
+        });
+
+        quantityInputs.forEach(input => {
+          input.addEventListener('change', function() {
+            const row = this.closest('tr');
+            const itemId = row.dataset.itemId;
+            let quantity = parseInt(this.value);
+
+            if (isNaN(quantity) || quantity < 1) quantity = 1;
+            else if (quantity > 99) quantity = 99;
+
+            this.value = quantity;
+
+            const unitPriceText = row.querySelector('td:nth-child(3) span:last-child').textContent.trim();
+            const unitPrice = parseFloat(unitPriceText.replace('€', '').replace(',', '.'));
+
+            const itemTotal = row.querySelector('.item-total');
+            const totalPrice = (unitPrice * quantity).toFixed(2);
+            itemTotal.textContent = totalPrice + '€';
+
+            updateQuantity(itemId, quantity);
+          });
+        });
+
+
+        quantityInputs.forEach(input => {
+          input.addEventListener('change', function() {
+            const row = this.closest('tr');
+            const itemId = row.dataset.itemId;
+            let quantity = parseInt(this.value);
+
+            if (isNaN(quantity) || quantity < 1) quantity = 1;
+            else if (quantity > 99) quantity = 99;
+
+            this.value = quantity;
+
+            const unitPrice = parseFloat(row.querySelector('td:nth-child(3)').textContent.replace('€', '').replace(',', '.'));
+            const itemTotal = row.querySelector('.item-total');
+            itemTotal.textContent = (unitPrice * quantity).toFixed(2).replace('.', ',') + '€';
+
+            updateQuantity(itemId, quantity);
+          });
+        });
+
+        removeButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const itemId = row.dataset.itemId;
+
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet article du panier ?')) {
+              removeItem(itemId);
+            }
+          });
+        });
+
+        if (clearCartButton) {
+          clearCartButton.addEventListener('click', function() {
+            if (confirm('Êtes-vous sûr de vouloir vider votre panier ?')) {
+              clearCart();
+            }
+          });
+        }
+
+        const checkoutButton = document.getElementById('checkout-button');
+        if (checkoutButton) {
+          checkoutButton.addEventListener('click', function() {
+            alert('TODO: Stripe');
+          });
+        }
+      });
+    </script>
+  {% endif %}
+{% endblock %}

@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8">
-    <title>
-      {%- if block('title') is defined and block('title')|trim is not empty -%}
-        {{ block('title') }} -&nbsp;
-      {%- endif -%}
-      Aux Douceurs du Palais
-    </title>
+<head>
+  <meta charset="UTF-8">
+  <title>
+    {%- if block('title') is defined and block('title')|trim is not empty -%}
+      {{ block('title') }} -&nbsp;
+    {%- endif -%}
+    Aux Douceurs du Palais
+  </title>
 
-    <link rel="icon" href="https://cdn.douceurs-palais.fr/icon-tab.svg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Au Douceurs du Palais - Votre pâtisserie en ligne. Commandez vos douceurs préférées et faites-vous livrer à domicile.">
-    <meta name="keywords" content="pâtisserie, douceurs, en ligne, livraison, desserts, gâteaux, macarons">
-    <meta name="author" content="Au Douceurs du Palais">
-    <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#fefdfb">
+  <link rel="icon" href="https://cdn.douceurs-palais.fr/icon-tab.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Au Douceurs du Palais - Votre pâtisserie en ligne. Commandez vos douceurs préférées et faites-vous livrer à domicile.">
+  <meta name="keywords" content="pâtisserie, douceurs, en ligne, livraison, desserts, gâteaux, macarons">
+  <meta name="author" content="Au Douceurs du Palais">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#fefdfb">
 
-    {% block meta %}{% endblock %}
+  {% block meta %}{% endblock %}
 
-    {% block stylesheets %}
-      {{ encore_entry_link_tags('app') }}
-    {% endblock %}
+  {% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+  {% endblock %}
 
   {% block javascripts %}
     {{ encore_entry_script_tags('app') }}

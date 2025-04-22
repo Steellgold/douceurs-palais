@@ -8,15 +8,8 @@
     <div class="flex items-center gap-3">
       <div>
         <button id="mobile-menu-button" class="flex items-center justify-center p-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="menu-icon">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="close-icon hidden">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
+          <i data-lucide="menu" class="menu-icon w-6 h-6"></i>
+          <i data-lucide="x" class="close-icon hidden w-6 h-6"></i>
         </button>
       </div>
       <a href="/">
@@ -24,8 +17,16 @@
       </a>
     </div>
     <div class="flex items-center gap-2">
-      <div class="rounded-full p-2 flex items-center justify-center cursor-pointer">
-        <i data-lucide="shopping-bag"></i>
+      <div class="relative">
+        <a href="{{ path('app_cart_index') }}" class="rounded-full p-2 flex items-center justify-center cursor-pointer">
+          <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+          {% set itemCount = cart_item_count() %}
+          {% if itemCount > 0 %}
+            <span class="cart-count absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {{ itemCount }}
+            </span>
+          {% endif %}
+        </a>
       </div>
       {% if app.user %}
         <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="{{ path('app_account') }}">
@@ -73,17 +74,23 @@
   </a>
 
   <div class="hidden md:flex items-center gap-4">
-    <div class="rounded-full p-2 flex items-center justify-center cursor-pointer">
-      <i data-lucide="shopping-bag"></i>
+    <div class="relative">
+      <a href="{{ path('app_cart_index') }}" class="rounded-full p-2 flex items-center justify-center cursor-pointer">
+        <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+        {% set itemCount = cart_item_count() %}
+        {% if itemCount > 0 %}
+          <span class="cart-count absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            {{ itemCount }}
+          </span>
+        {% endif %}
+      </a>
     </div>
 
     {% if app.user %}
       <div class="relative group">
         <button id="account-dropdown" class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full">
           {{ app.user.firstName }}
-          <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
+          <i data-lucide="chevron-down" class="ml-1 w-4 h-4"></i>
         </button>
         <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
           <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
@@ -103,36 +110,36 @@
 </nav>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = document.querySelector('.menu-icon');
-        const closeIcon = document.querySelector('.close-icon');
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.querySelector('.menu-icon');
+    const closeIcon = document.querySelector('.close-icon');
 
-        if (mobileMenuButton && mobileMenu) {
-            mobileMenuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-                menuIcon.classList.toggle('hidden');
-                closeIcon.classList.toggle('hidden');
-            });
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+        menuIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+      });
+    }
+
+    // Desktop dropdown toggle
+    const accountDropdown = document.getElementById('account-dropdown');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+
+    if (accountDropdown && dropdownMenu) {
+      accountDropdown.addEventListener('click', function() {
+        dropdownMenu.classList.toggle('hidden');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!accountDropdown.contains(event.target) && !dropdownMenu.contains(event.target)) {
+          dropdownMenu.classList.add('hidden');
         }
-
-        // Desktop dropdown toggle
-        const accountDropdown = document.getElementById('account-dropdown');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-
-        if (accountDropdown && dropdownMenu) {
-            accountDropdown.addEventListener('click', function() {
-                dropdownMenu.classList.toggle('hidden');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(event) {
-                if (!accountDropdown.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                    dropdownMenu.classList.add('hidden');
-                }
-            });
-        }
-    });
+      });
+    }
+  });
 </script>
