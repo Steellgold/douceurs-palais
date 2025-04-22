@@ -11,9 +11,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SitemapController extends AbstractController {
   public function __construct(
-    private ProductRepository     $productRepository,
-    private BakeryRepository      $bakeryRepository,
-    private UrlGeneratorInterface $urlGenerator
+    private readonly ProductRepository     $productRepository,
+    private readonly BakeryRepository      $bakeryRepository,
+    private readonly UrlGeneratorInterface $urlGenerator
   ) {
   }
 
