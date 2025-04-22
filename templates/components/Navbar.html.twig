@@ -1,5 +1,5 @@
 {% set links = [
-  { 'name': 'Nos boutiques', 'url': '/' },
+  { 'name': 'Nos boutiques', 'url': '/all' },
   { 'name': 'Catégories', 'url': '/categories' }
 ] %}
 
@@ -60,7 +60,7 @@
   </div>
 
   <!-- Desktop layout -->
-  <div class="hidden md:flex items-center">
+  <div class="hidden md:flex items-center px-8">
     <div class="flex items-center gap-6">
       {% for link in links %}
         <a href="{{ link.url }}" class="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out hover:border-b-2 hover:border-black">
@@ -74,7 +74,7 @@
     <img src="https://cdn.douceurs-palais.fr/icon-title.png" alt="Logo" height="190px" width="190px" />
   </a>
 
-  <div class="hidden md:flex items-center gap-4">
+  <div class="hidden md:flex items-center gap-4 px-8">
     <div class="relative">
       <a href="{{ path('app_cart_index') }}" class="rounded-full p-2 flex items-center justify-center cursor-pointer">
         <i data-lucide="shopping-bag" class="w-6 h-6"></i>
