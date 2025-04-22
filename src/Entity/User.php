@@ -72,6 +72,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cart::class, orphanRemoval: true)]
   private Collection $carts;
 
+  #[ORM\OneToOne(mappedBy: 'baker', targetEntity: Bakery::class)]
+  private ?Bakery $managedBakery = null;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
@@ -315,5 +318,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     }
 
     return $this;
+  }
+
+  public function getManagedBakery(): ?Bakery {
+    return $this->managedBakery;
+  }
+
+  public function setManagedBakery(?Bakery $bakery): static {
+    $this->managedBakery = $bakery;
+
+    return $this;
+  }
+
+  public function isBaker(): bool {
+    return in_array('ROLE_BAKER', $this->getRoles());
   }
 }

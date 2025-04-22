@@ -70,6 +70,10 @@ class Bakery {
   #[ORM\Column(nullable: true)]
   private ?\DateTimeImmutable $updatedAt = null;
 
+  #[ORM\OneToOne(inversedBy: 'managedBakery', targetEntity: User::class)]
+  #[ORM\JoinColumn(nullable: true)]
+  private ?User $baker = null;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
@@ -290,6 +294,16 @@ class Bakery {
 
   public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static {
     $this->updatedAt = $updatedAt;
+
+    return $this;
+  }
+
+  public function getBaker(): ?User {
+    return $this->baker;
+  }
+
+  public function setBaker(?User $user): static {
+    $this->baker = $user;
 
     return $this;
   }

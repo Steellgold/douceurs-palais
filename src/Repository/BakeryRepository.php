@@ -79,4 +79,15 @@ class BakeryRepository extends ServiceEntityRepository {
       $this->getEntityManager()->flush();
     }
   }
+
+  /**
+   * @return Bakery[] Returns an array of Bakery objects without a baker
+   */
+  public function findBakeriesWithoutBaker(): array {
+    return $this->createQueryBuilder('b')
+      ->where('b.baker IS NULL')
+      ->orderBy('b.name', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
 }
