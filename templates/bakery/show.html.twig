@@ -205,7 +205,7 @@
         <h2 class="text-3xl font-playfair text-center mb-10">Tous nos produits</h2>
 
         {% if allProducts|length > 0 %}
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div class="flex flex-wrap gap-4 justify-center">
             {% for product in allProducts %}
               <twig:ProductCard
                   imageUrl="{{ product.mainImage ?: 'https://via.placeholder.com/400x250' }}"

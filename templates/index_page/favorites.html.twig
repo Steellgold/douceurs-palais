@@ -11,12 +11,14 @@
       <div class="mb-16">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-2xl font-playfair">Vos favoris ({{ favoriteBakeries|length }})</h2>
-          <a href="/" class="text-black hover:underline flex items-center">
-            <span>Tout voir</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-            </svg>
-          </a>
+          {% if favoriteBakeries|length <= 2 %}
+            <a href="{{ path('app_bakery_list') }}" class="text-black hover:underline flex items-center">
+              <span>Tout voir</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          {% endif %}
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -42,6 +44,17 @@
                       {{ bakery.rating|number_format(1) }}
                     </span>
                   </div>
+
+                  <div class="absolute top-2 left-2">
+                    <form method="post" action="{{ path('app_bakery_toggle_favorite', {'id': bakery.id}) }}">
+                      <input type="hidden" name="_token" value="{{ csrf_token('favorite-bakery' ~ bakery.id) }}">
+                      <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 fill-red-500" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </form>
+                  </div>
                 </div>
                 <div class="p-4">
                   <h3 class="text-xl font-playfair mb-2">{{ bakery.name }}</h3>
@@ -53,9 +66,9 @@
                     </svg>
                     <span>
                      {% if bakery.city %}
-                      {{ bakery.city }}
+                       {{ bakery.city }}
                      {% else %}
-                      {{ bakery.address|slice(0, 30) ~ (bakery.address|length > 30 ? '...' : '') }}
+                       {{ bakery.address|slice(0, 30) ~ (bakery.address|length > 30 ? '...' : '') }}
                      {% endif %}
                     </span>
                   </div>
@@ -63,6 +76,22 @@
               </a>
             </div>
           {% endfor %}
+
+          {% if favoriteBakeries|length <= 2 %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg">
+              <a href="{{ path('app_bakery_list') }}" class="block h-full flex flex-col">
+                <div class="h-40 bg-gray-100 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                </div>
+                <div class="p-4 flex-grow flex flex-col justify-center items-center text-center">
+                  <h3 class="text-xl font-playfair mb-2">Découvrir plus de boutiques</h3>
+                  <p class="text-gray-600 text-sm mb-3">Explorez notre sélection de boulangeries et pâtisseries de qualité</p>
+                </div>
+              </a>
+            </div>
+          {% endif %}
         </div>
       </div>
 
@@ -70,7 +99,7 @@
         <h2 class="text-2xl font-playfair mb-6">Produits recommandés pour vous</h2>
 
         {% if products|length > 0 %}
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div class="flex flex-wrap gap-4 justify-center">
             {% for product in products %}
               <twig:ProductCard
                   imageUrl="{{ product.mainImage ?: 'https://via.placeholder.com/400x250' }}"
@@ -88,7 +117,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             <p class="text-gray-500 mb-4">Aucun produit disponible pour le moment</p>
-            <a href="/" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D]">
+            <a href="{{ path('app_bakery_list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D]">
               Découvrir plus de boutiques
             </a>
           </div>

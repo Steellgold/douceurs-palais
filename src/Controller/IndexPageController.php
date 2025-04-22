@@ -19,6 +19,9 @@ final class IndexPageController extends AbstractController {
   public function index(): Response {
     $user = $this->getUser();
 
+    $popularProducts = $this->productRepository->findMostPopular();
+    $popularBakeries = $this->bakeryRepository->findPopularBakeries(3);
+
     if ($user) {
       $favoriteCount = $this->bakeryRepository->countFavoritesByUser($user);
 
@@ -33,9 +36,18 @@ final class IndexPageController extends AbstractController {
       }
     }
 
-    $popularProducts = $this->productRepository->findMostPopular();
     return $this->render('index_page/index.html.twig', [
-      'popularProducts' => $popularProducts
+      'popularProducts' => $popularProducts,
+      'popularBakeries' => $popularBakeries
+    ]);
+  }
+
+  #[Route('/all', name: 'app_bakery_list')]
+  public function list(): Response {
+    $bakeries = $this->bakeryRepository->findAll();
+
+    return $this->render('bakery/list.html.twig', [
+      'bakeries' => $bakeries,
     ]);
   }
 }

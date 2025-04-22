@@ -1,32 +1,50 @@
-  <div class="bg-[#FEFDFB] rounded-lg p-3 w-full max-w-xs flex flex-col shadow-lg h-auto">
-    <div class="relative w-full h-48 overflow-hidden rounded-lg mb-3">
-      <a href="{{ path('app_bakery_show', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir la boulangerie {{ name }}">
-        <img
-            src="{{ imageUrl }}"
-            alt="Product Image"
-            class="w-full h-48 object-cover rounded-lg mb-3"
-        />
-      </a>
+<div class="bg-[#FEFDFB] rounded-lg p-3 w-full max-w-xs flex flex-col shadow-lg h-auto">
+  <div class="relative w-full h-48 overflow-hidden rounded-lg mb-3">
+    <a href="{{ path('app_bakery_show', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir la boulangerie {{ name }}">
+      <img
+          src="{{ imageUrl }}"
+          alt="Product Image"
+          class="w-full h-48 object-cover rounded-lg mb-3"
+      />
+    </a>
 
-
-      <span class="absolute top-2 left-2 bg-[#FEFDFB] text-[#121212] text-xs font-semibold px-2 py-1 rounded-full shadow-md">
+    <span class="absolute top-2 left-2 bg-[#FEFDFB] text-[#121212] text-xs font-semibold px-2 py-1 rounded-full shadow-md">
         {{ note }}/5
       </span>
-    </div>
 
-    <div class="flex flex-col flex-grow">
-      <a href="{{ path('app_bakery_show', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir la boulangerie {{ name }}" class="flex flex-col flex-grow">
-        <span class="text-sm font-normal text-gray-800">{{ location }}</span>
+    {% if app.user is defined and app.user and bakeryId is defined and bakeryId is not null %}
+      <div class="absolute top-2 right-2">
+        <form method="post" action="{{ path('app_bakery_toggle_favorite', {'id': bakeryId}) }}">
+          <input type="hidden" name="_token" value="{{ csrf_token('favorite-bakery' ~ bakeryId) }}">
+          <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-sm">
+            {% if isFavorite %}
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 fill-red-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+              </svg>
+            {% else %}
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-red-500" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+              </svg>
+            {% endif %}
+          </button>
+        </form>
+      </div>
+    {% endif %}
+  </div>
 
-        <p class="font-semibold text-xl font-playfair">{{ name }}</p>
+  <div class="flex flex-col flex-grow">
+    <a href="{{ path('app_bakery_show', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir la boulangerie {{ name }}" class="flex flex-col flex-grow">
+      <span class="text-sm font-normal text-gray-800">{{ location }}</span>
 
-        <p class="text-gray-600 mt-2 text-sm flex-grow line-clamp-3">{{ description }}</p>
+      <p class="font-semibold text-xl font-playfair">{{ name }}</p>
 
-        <p class="text-gray-600 mt-2 text-xs font-semibold mt-3">{{ address }}</p>
-      </a>
+      <p class="text-gray-600 mt-2 text-sm flex-grow line-clamp-3">{{ description }}</p>
 
-      <div class="w-full flex flex-col sm:flex-row gap-2 mt-2">
-        <twig:Button
+      <p class="text-gray-600 mt-2 text-xs font-semibold mt-3">{{ address }}</p>
+    </a>
+
+    <div class="w-full flex flex-col sm:flex-row gap-2 mt-2">
+      <twig:Button
           label="Voir sur la carte"
           variant="dark"
           href="#"
@@ -34,7 +52,7 @@
           iconLeft="map"
           size="sm"
           class="w-full"
-        />
-      </div>
+      />
     </div>
   </div>
+</div>
