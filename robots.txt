@@ -14,6 +14,7 @@ Disallow: /account/profile
 Disallow: /account/password
 Disallow: /account/addresses
 Disallow: /admin/
+Disallow: /baker/
 
 # Sitemap location
 Sitemap: https://www.douceurs-palais.fr/sitemap.xml
