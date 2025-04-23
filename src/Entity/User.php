@@ -33,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
    * @var string The hashed password
    */
   #[ORM\Column]
-  private ?string $password = null;
+  private string $password = "";
 
   #[ORM\Column(length: 255)]
   #[Assert\NotBlank(message: 'Veuillez entrer votre prénom')]
@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
   #[ORM\Column(nullable: true)]
   private ?\DateTimeImmutable $updatedAt = null;
 
-  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class, orphanRemoval: true, cascade: ['persist'])]
+  #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'user', cascade: ['persist'], orphanRemoval: true)]
   private Collection $addresses;
 
   #[ORM\Column(nullable: true)]
@@ -69,10 +69,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
   #[ORM\JoinTable(name: 'user_favorite_bakeries')]
   private Collection $favoriteBakeries;
 
-  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Cart::class, orphanRemoval: true)]
+  #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: 'user', orphanRemoval: true)]
   private Collection $carts;
 
-  #[ORM\OneToOne(mappedBy: 'baker', targetEntity: Bakery::class)]
+  #[ORM\ManyToOne(inversedBy: 'bakers')]
+  #[ORM\JoinColumn(nullable: true)]
   private ?Bakery $managedBakery = null;
 
   public function __construct() {
@@ -320,16 +321,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     return $this;
   }
 
+  /**
+   * @return Bakery|null
+   */
   public function getManagedBakery(): ?Bakery {
     return $this->managedBakery;
   }
 
+  /**
+   * @param Bakery|null $bakery
+   * @return $this
+   */
   public function setManagedBakery(?Bakery $bakery): static {
     $this->managedBakery = $bakery;
 
     return $this;
   }
 
+  /**
+   * @return bool
+   */
   public function isBaker(): bool {
     return in_array('ROLE_BAKER', $this->getRoles());
   }

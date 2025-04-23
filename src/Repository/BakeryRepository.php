@@ -80,12 +80,18 @@ class BakeryRepository extends ServiceEntityRepository {
     }
   }
 
-  /**
-   * @return Bakery[] Returns an array of Bakery objects without a baker
-   */
-  public function findBakeriesWithoutBaker(): array {
+  public function findAllOrderedByName(): array {
     return $this->createQueryBuilder('b')
-      ->where('b.baker IS NULL')
+      ->orderBy('b.name', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  public function findBakeriesWithBakerCounts(): array {
+    return $this->createQueryBuilder('b')
+      ->select('b', 'COUNT(u.id) as bakerCount')
+      ->leftJoin('b.bakers', 'u')
+      ->groupBy('b.id')
       ->orderBy('b.name', 'ASC')
       ->getQuery()
       ->getResult();
