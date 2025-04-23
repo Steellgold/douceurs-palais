@@ -79,4 +79,21 @@ class BakeryRepository extends ServiceEntityRepository {
       $this->getEntityManager()->flush();
     }
   }
+
+  public function findAllOrderedByName(): array {
+    return $this->createQueryBuilder('b')
+      ->orderBy('b.name', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  public function findBakeriesWithBakerCounts(): array {
+    return $this->createQueryBuilder('b')
+      ->select('b', 'COUNT(u.id) as bakerCount')
+      ->leftJoin('b.bakers', 'u')
+      ->groupBy('b.id')
+      ->orderBy('b.name', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
 }

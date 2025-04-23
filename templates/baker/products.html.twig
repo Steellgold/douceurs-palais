@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produits - {{ bakery.name }}{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+          <a href="{{ path('app_baker') }}" class="mr-4 text-gray-600 hover:text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+          </a>
+          <h1 class="text-3xl font-playfair">Produits</h1>
+        </div>
+        <a href="{{ path('app_baker_product_new') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+          Ajouter un produit
+        </a>
+      </div>
+
+      {% for label, messages in app.flashes %}
+        {% for message in messages %}
+          <div class="mb-6 p-4 rounded-md {% if label == 'success' %}bg-green-100 border border-green-400 text-green-700{% else %}bg-red-100 border border-red-400 text-red-700{% endif %}">
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endfor %}
+
+      {% if products|length > 0 %}
+        <!-- Vue tableau pour écrans larges (desktop) -->
+        <div class="hidden md:block bg-white shadow-md rounded-lg overflow-hidden">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produit</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catégorie</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            {% for product in products %}
+              <tr>
+                <td class="px-6 py-4">
+                  <div class="flex items-center">
+                    {% if product.mainImage %}
+                      <div class="flex-shrink-0 h-10 w-10">
+                        <img class="h-10 w-10 rounded-md object-cover" src="{{ product.mainImage }}" alt="{{ product.name }}">
+                      </div>
+                    {% endif %}
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+                      <div class="text-sm text-gray-500 line-clamp-1">{{ product.description }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ product.category ? product.category.name : '-' }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ product.price|number_format(2, ',', ' ') }} €</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <a href="{{ path('app_baker_product_edit', {'id': product.id}) }}" class="text-[#EDA239] hover:text-[#EFAF7D] mr-3">Modifier</a>
+                  <a href="{{ path('app_product_page', {'slug': product.slug}) }}" class="text-gray-600 hover:text-gray-900 mr-3">Voir</a>
+                  <form method="post" action="{{ path('app_baker_product_delete', {'id': product.id}) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                    <button type="submit" class="text-red-600 hover:text-red-900 bg-transparent border-none p-0 inline cursor-pointer font-medium">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Vue carte pour écrans mobiles -->
+        <div class="md:hidden space-y-4">
+          {% for product in products %}
+            <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-100">
+              <div class="p-4">
+                <div class="flex items-center">
+                  {% if product.mainImage %}
+                    <div class="flex-shrink-0 h-16 w-16">
+                      <img class="h-16 w-16 rounded-md object-cover" src="{{ product.mainImage }}" alt="{{ product.name }}">
+                    </div>
+                  {% endif %}
+                  <div class="ml-4 flex-1">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+                        {% if product.category %}
+                          <div class="text-xs text-gray-500 mt-1">{{ product.category.name }}</div>
+                        {% endif %}
+                      </div>
+                      <div class="text-sm font-medium text-gray-900">{{ product.price|number_format(2, ',', ' ') }} €</div>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-2 line-clamp-2">{{ product.description }}</div>
+                  </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between">
+                  <a href="{{ path('app_baker_product_edit', {'id': product.id}) }}" class="text-sm text-[#EDA239] hover:text-[#EFAF7D] inline-flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                    Modifier
+                  </a>
+                  <a href="{{ path('app_product_page', {'slug': product.slug}) }}" class="text-sm text-gray-600 hover:text-gray-900 inline-flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>
+                    Voir
+                  </a>
+                  <form method="post" action="{{ path('app_baker_product_delete', {'id': product.id}) }}" class="inline-flex items-center" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                    <button type="submit" class="text-sm text-red-600 hover:text-red-900 bg-transparent border-none p-0 inline-flex items-center cursor-pointer font-medium">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                      </svg>
+                      Supprimer
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="bg-white shadow-md rounded-lg p-8 text-center border border-gray-100">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          <h2 class="text-xl font-playfair mb-2">Aucun produit trouvé</h2>
+          <p class="text-gray-600 mb-6">Commencez par ajouter un nouveau produit à votre catalogue.</p>
+          <a href="{{ path('app_baker_product_new') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Ajouter mon premier produit
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Définir comme boulanger{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+      <div class="flex items-center mb-6">
+        <a href="{{ path('app_admin_users') }}" class="mr-4 text-gray-600 hover:text-gray-900">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </a>
+        <h1 class="text-3xl font-playfair">Définir comme boulanger</h1>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100">
+        <p class="mb-6">Vous allez définir <strong>{{ user.fullName }}</strong> comme boulanger. Veuillez sélectionner la boulangerie qu'il/elle gérera :</p>
+
+        {% if user.managedBakery %}
+          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-yellow-700">
+                  Cet utilisateur est déjà boulanger pour la boulangerie <strong>{{ user.managedBakery.name }}</strong>. Veuillez d'abord le retirer de cette boulangerie.
+                </p>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if bakeries|length > 0 and not user.managedBakery %}
+          <form method="post" class="space-y-4">
+            <div>
+              <label for="bakery" class="block text-sm font-medium text-gray-700">Boulangerie</label>
+              <div class="mt-1">
+                <select id="bakery" name="bakery" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]">
+                  <option value="">Sélectionner une boulangerie</option>
+                  {% for bakery in bakeries %}
+                    <option value="{{ bakery.id }}">{{ bakery.name }} ({{ bakery.bakers|length }} boulanger(s))</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4">
+              <a href="{{ path('app_admin_users') }}" class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+                Annuler
+              </a>
+              <button type="submit" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+                Confirmer
+              </button>
+            </div>
+          </form>
+        {% else %}
+          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-yellow-700">
+                  Aucune boulangerie disponible. Veuillez d'abord <a href="{{ path('app_admin_bakery_new') }}" class="font-medium underline text-yellow-700 hover:text-yellow-600">créer une boulangerie</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

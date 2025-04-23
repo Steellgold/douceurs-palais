@@ -58,7 +58,7 @@ class Bakery {
   #[ORM\Column(type: Types::JSON, nullable: true)]
   private array $openingHours = [];
 
-  #[ORM\OneToMany(mappedBy: 'bakery', targetEntity: Product::class)]
+  #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'bakery')]
   private Collection $products;
 
   #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'favoriteBakeries')]
@@ -70,11 +70,15 @@ class Bakery {
   #[ORM\Column(nullable: true)]
   private ?\DateTimeImmutable $updatedAt = null;
 
+  #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'managedBakery')]
+  private Collection $bakers;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
     $this->products = new ArrayCollection();
     $this->favoriteByUsers = new ArrayCollection();
+    $this->bakers = new ArrayCollection();
   }
 
   #[ORM\PreUpdate]
@@ -290,6 +294,44 @@ class Bakery {
 
   public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static {
     $this->updatedAt = $updatedAt;
+
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, User>
+   */
+  public function getBakers(): Collection {
+    return $this->bakers;
+  }
+
+  public function addBaker(User $user): self {
+    if (!$this->bakers->contains($user)) {
+      $this->bakers[] = $user;
+      $user->setManagedBakery($this);
+
+      $roles = $user->getRoles();
+      if (!in_array('ROLE_BAKER', $roles)) {
+        $roles[] = 'ROLE_BAKER';
+        $user->setRoles($roles);
+      }
+    }
+
+    return $this;
+  }
+
+  public function removeBaker(User $user): self {
+    if ($this->bakers->removeElement($user)) {
+      if ($user->getManagedBakery() === $this) {
+        $user->setManagedBakery(null);
+
+        $roles = array_filter($user->getRoles(), function($role) {
+          return $role !== 'ROLE_BAKER';
+        });
+
+        $user->setRoles($roles);
+      }
+    }
 
     return $this;
   }
