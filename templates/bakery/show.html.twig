@@ -24,9 +24,7 @@
         />
       {% else %}
         <div class="w-full h-96 bg-gray-200 flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
+          <i data-lucide="image" class="h-24 w-24 text-gray-400"></i>
         </div>
       {% endif %}
 
@@ -37,13 +35,9 @@
           <div class="flex">
             {% for i in 1..5 %}
               {% if i <= bakery.rating %}
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+                <i data-lucide="star" class="h-5 w-5 text-yellow-400 fill-yellow-400"></i>
               {% else %}
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+                <i data-lucide="star" class="h-5 w-5 text-gray-300"></i>
               {% endif %}
             {% endfor %}
           </div>
@@ -56,23 +50,17 @@
               <input type="hidden" name="_token" value="{{ csrf_token('favorite-bakery' ~ bakery.id) }}">
               <button type="submit" class="flex items-center gap-2 px-4 py-2 rounded-full {{ app.user and app.user.hasFavoriteBakery(bakery) ? 'bg-red-500 text-white' : 'bg-white text-black' }} transition-colors">
                 {% if app.user and app.user.hasFavoriteBakery(bakery) %}
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
-                  </svg>
+                  <i data-lucide="heart" class="h-5 w-5 fill-current"></i>
                   J'aime cette boutique
                 {% else %}
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
+                  <i data-lucide="heart" class="h-5 w-5"></i>
                   Ajouter aux favoris
                 {% endif %}
               </button>
             </form>
           {% else %}
             <a href="{{ path('app_login') }}" class="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
+              <i data-lucide="heart" class="h-5 w-5"></i>
               Ajouter aux favoris
             </a>
           {% endif %}
@@ -102,10 +90,7 @@
 
                 <div class="space-y-3">
                   <div class="flex items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                    <i data-lucide="map-pin" class="h-5 w-5 text-gray-500 mr-3 mt-0.5"></i>
                     <div>
                       <p class="text-gray-800">{{ bakery.address }}</p>
                       {% if bakery.postalCode and bakery.city %}
@@ -116,9 +101,7 @@
 
                   {% if bakery.phone %}
                     <div class="flex items-center hover:underline">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
+                      <i data-lucide="phone" class="h-5 w-5 text-blue-500 mr-3"></i>
                       <a
                           href="tel:+33{{ bakery.phone|replace({' ': '', '(': '', ')': '', '-': ''}) }}"
                           target="_blank"
@@ -129,9 +112,7 @@
 
                   {% if bakery.email %}
                     <div class="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
+                      <i data-lucide="mail" class="h-5 w-5 text-blue-500 mr-3"></i>
                       <a
                           href="mailto:{{ bakery.email }}"
                           target="_blank"
@@ -142,9 +123,7 @@
 
                   {% if bakery.website %}
                     <div class="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#EDA239] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                      </svg>
+                      <i data-lucide="globe" class="h-5 w-5 text-[#EDA239] mr-3"></i>
                       <p class="text-gray-800">
                         <a href="{{ bakery.website }}" target="_blank" rel="noopener noreferrer" class="text-[#EDA239] hover:underline">
                           {{ bakery.website|replace({'http://': '', 'https://': ''}) }}
@@ -219,9 +198,7 @@
           </div>
         {% else %}
           <div class="text-center py-8">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
+            <i data-lucide="shopping-bag" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
             <p class="text-gray-500">Aucun produit disponible pour le moment</p>
           </div>
         {% endif %}

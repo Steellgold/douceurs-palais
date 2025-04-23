@@ -2,9 +2,9 @@
   <div class="bg-[#FEFDFB] rounded-lg p-2 w-full max-w-xs flex flex-row items-center shadow-md h-auto">
     <a href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir le produit {{ name }}">
       <img
-          src="{{ imageUrl }}"
-          alt="Product Image"
-          class="w-16 h-16 object-cover rounded-lg"
+        src="{{ imageUrl }}"
+        alt="Product Image"
+        class="w-16 h-16 object-cover rounded-lg"
       />
 
       <div class="flex flex-col ml-3 flex-grow">
@@ -16,7 +16,7 @@
 
     <div class="flex">
       <button class="p-2 bg-orange-400 rounded-full text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <i data-lucide="shopping-bag" class="h-4 w-4"></i>
       </button>
     </div>
   </div>
@@ -24,9 +24,9 @@
   <div class="bg-[#FEFDFB] rounded-lg p-3 w-full max-w-xs flex flex-col shadow-lg h-auto">
     <a href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir le produit {{ name }}">
       <img
-          src="{{ imageUrl }}"
-          alt="Product Image"
-          class="w-full h-48 object-cover rounded-lg mb-3"
+        src="{{ imageUrl }}"
+        alt="Product Image"
+        class="w-full h-48 object-cover rounded-lg mb-3"
       />
     </a>
 

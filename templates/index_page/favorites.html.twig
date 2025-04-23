@@ -14,9 +14,7 @@
           {% if favoriteBakeries|length <= 2 %}
             <a href="{{ path('app_bakery_list') }}" class="text-black hover:underline flex items-center">
               <span>Tout voir</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-              </svg>
+              <i data-lucide="chevron-right" class="h-5 w-5 ml-1"></i>
             </a>
           {% endif %}
         </div>
@@ -30,17 +28,12 @@
                     <img src="{{ bakery.mainImage }}" alt="{{ bakery.name }}" class="w-full h-full object-cover" />
                   {% else %}
                     <div class="w-full h-full flex items-center justify-center bg-gray-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                      </svg>
+                      <i data-lucide="cake" class="h-12 w-12 text-gray-400"></i>
                     </div>
                   {% endif %}
                   <div class="absolute top-0 right-0 m-2">
                     <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-white shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-
+                      <i data-lucide="star" class="h-4 w-4 text-yellow-400 mr-1"></i>
                       {{ bakery.rating|number_format(1) }}
                     </span>
                   </div>
@@ -49,9 +42,7 @@
                     <form method="post" action="{{ path('app_bakery_toggle_favorite', {'id': bakery.id}) }}">
                       <input type="hidden" name="_token" value="{{ csrf_token('favorite-bakery' ~ bakery.id) }}">
                       <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 fill-red-500" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
-                        </svg>
+                        <i data-lucide="heart" class="h-5 w-5 text-red-500 fill-red-500"></i>
                       </button>
                     </form>
                   </div>
@@ -60,10 +51,7 @@
                   <h3 class="text-xl font-playfair mb-2">{{ bakery.name }}</h3>
                   <p class="text-gray-600 text-sm line-clamp-2 mb-3">{{ bakery.description|striptags|slice(0, 100) ~ (bakery.description|length > 100 ? '...' : '') }}</p>
                   <div class="flex items-center text-sm text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                    <i data-lucide="map-pin" class="h-4 w-4 mr-1"></i>
                     <span>
                      {% if bakery.city %}
                        {{ bakery.city }}
@@ -81,9 +69,7 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg">
               <a href="{{ path('app_bakery_list') }}" class="block h-full flex flex-col">
                 <div class="h-40 bg-gray-100 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
+                  <i data-lucide="plus" class="h-16 w-16 text-gray-400"></i>
                 </div>
                 <div class="p-4 flex-grow flex flex-col justify-center items-center text-center">
                   <h3 class="text-xl font-playfair mb-2">Découvrir plus de boutiques</h3>
@@ -113,9 +99,7 @@
           </div>
         {% else %}
           <div class="text-center py-12 bg-white rounded-lg shadow-md">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-            </svg>
+            <i data-lucide="shopping-bag" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
             <p class="text-gray-500 mb-4">Aucun produit disponible pour le moment</p>
             <a href="{{ path('app_bakery_list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D]">
               Découvrir plus de boutiques
