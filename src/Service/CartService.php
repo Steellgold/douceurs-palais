@@ -23,13 +23,19 @@ class CartService {
     private readonly EntityManagerInterface $entityManager,
     private readonly Security               $security
   ) {
-    $session = $this->requestStack->getSession();
+    $request = $this->requestStack->getCurrentRequest();
 
-    if (!$session->has('cart_id')) {
-      $session->set('cart_id', uniqid());
+    if ($request && $request->hasSession()) {
+      $session = $request->getSession();
+    
+      if (!$session->has('cart_id')) {
+        $session->set('cart_id', uniqid());
+      }
+    
+      $this->sessionId = $session->get('cart_id');
+    } else {
+      $this->sessionId = uniqid('cli_', true);
     }
-
-    $this->sessionId = $session->get('cart_id');
   }
 
   public function getCart(): Cart {
