@@ -3,16 +3,13 @@
 # Global crawling rules
 User-agent: *
 
-Disallow: /auth/login
-Disallow: /auth/logout
-Disallow: /auth/register
-Disallow: /auth/forgot-password
-Disallow: /auth/reset-password
-Disallow: /auth/check-email
+# Disallow access to admin and sensitive areas
+Disallow: /auth/
+
+# Disallow access to sensitive user data
 Disallow: /account/
-Disallow: /account/profile
-Disallow: /account/password
-Disallow: /account/addresses
+
+# Restrict access to certain directories
 Disallow: /admin/
 Disallow: /baker/
 
