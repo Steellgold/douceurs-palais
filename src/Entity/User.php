@@ -76,12 +76,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
   #[ORM\JoinColumn(nullable: true)]
   private ?Bakery $managedBakery = null;
 
+  #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+  private Collection $orders;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
     $this->addresses = new ArrayCollection();
     $this->favoriteBakeries = new ArrayCollection();
     $this->carts = new ArrayCollection();
+    $this->orders = new ArrayCollection();
   }
 
   #[ORM\PreUpdate]
@@ -343,5 +347,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
    */
   public function isBaker(): bool {
     return in_array('ROLE_BAKER', $this->getRoles());
+  }
+
+  /**
+   * @return Collection<int, Order>
+   */
+  public function getOrders(): Collection {
+    return $this->orders;
+  }
+
+  public function addOrder(Order $order): static {
+    if (!$this->orders->contains($order)) {
+      $this->orders->add($order);
+      $order->setUser($this);
+    }
+
+    return $this;
+  }
+
+  public function removeOrder(Order $order): static {
+    if ($this->orders->removeElement($order)) {
+      if ($order->getUser() === $this) {
+        $order->setUser(null);
+      }
+    }
+
+    return $this;
   }
 }
