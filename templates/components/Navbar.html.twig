@@ -78,10 +78,10 @@
     <div class="relative">
       <a href="{{ path('app_cart_index') }}" class="rounded-full p-2 flex items-center justify-center cursor-pointer">
         <i data-lucide="shopping-bag" class="w-6 h-6"></i>
-        {% set itemCount = cart_item_count() %}
-        <span class="cart-count absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center {{ itemCount > 0 ? '' : 'hidden' }}">
-      {{ itemCount }}
-    </span>
+          {% set itemCount = cart_item_count() %}
+          <span class="cart-count absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center {{ itemCount > 0 ? '' : 'hidden' }}">
+          {{ itemCount }}
+        </span>
       </a>
     </div>
 
