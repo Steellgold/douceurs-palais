@@ -6,6 +6,7 @@ use App\Entity\Bakery;
 use App\Entity\Order;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -89,6 +90,21 @@ class OrderRepository extends ServiceEntityRepository {
       ->setParameter('sessionId', $sessionId)
       ->getQuery()
       ->getOneOrNullResult();
+  }
+
+  /**
+   * @throws Exception
+   */
+  public function findByPartialPaymentIntentId(string $paymentIntentId): ?Order {
+    $conn = $this->getEntityManager()->getConnection();
+    $sql = 'SELECT id FROM `order` WHERE stripe_payment_intent_id LIKE :paymentId LIMIT 1';
+    $result = $conn->executeQuery($sql, ['paymentId' => '%' . $paymentIntentId . '%'])->fetchAssociative();
+
+    if ($result && isset($result['id'])) {
+      return $this->find($result['id']);
+    }
+
+    return null;
   }
 
   public function findLatest(int $limit = 10): array {

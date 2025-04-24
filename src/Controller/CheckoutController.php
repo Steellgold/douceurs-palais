@@ -73,7 +73,6 @@ class CheckoutController extends AbstractController {
   #[Route('/success', name: 'app_checkout_success')]
   public function success(Request $request): Response {
     $sessionId = $request->query->get('session_id');
-
     if (!$sessionId) return $this->redirectToRoute('app_cart_index');
 
     $order = $this->orderService->getOrderByStripeSessionId($sessionId);
