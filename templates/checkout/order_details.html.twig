@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex items-center mb-6">
+        <a href="{{ path('app_account_orders') }}" class="mr-4 text-gray-600 hover:text-gray-900">
+          <i data-lucide="chevron-left" class="h-5 w-5"></i>
+        </a>
+        <h1 class="text-3xl font-playfair">Commande #{{ order.reference }}</h1>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 mb-6">
+        <div class="px-6 py-4 bg-gray-50 border-b border-gray-100">
+          <div class="flex justify-between items-center">
+            <h2 class="text-lg font-playfair">Informations de commande</h2>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ order.statusClass }}">
+              {{ order.statusLabel }}
+            </span>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <h3 class="text-sm font-medium text-gray-700 mb-1">Date de commande</h3>
+              <p class="text-sm">{{ order.createdAt|date('d/m/Y H:i') }}</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-700 mb-1">Montant total</h3>
+              <p class="text-sm">{{ order.totalAmount|number_format(2, ',', ' ') }} €</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-700 mb-1">Statut</h3>
+              <p class="text-sm">{{ order.statusLabel }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% set bakeries = {} %}
+      {% for item in order.items %}
+        {% set bakeryId = item.product.bakery.id %}
+        {% if bakeries[bakeryId] is not defined %}
+          {% set bakeries = bakeries|merge({(bakeryId): {
+            'bakery': item.product.bakery,
+            'items': []
+          }}) %}
+        {% endif %}
+
+        {% set newItems = bakeries[bakeryId].items %}
+        {% set newItems = newItems|merge([item]) %}
+
+        {% set bakeries = bakeries|merge({
+          (bakeryId): {
+            'bakery': bakeries[bakeryId].bakery,
+            'items': newItems
+          }
+        }) %}
+      {% endfor %}
+
+      {% for bakeryId, data in bakeries %}
+        <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 mb-6">
+          <div class="px-6 py-4 bg-gray-50 border-b border-gray-100">
+            <h2 class="text-lg font-playfair">{{ data.bakery.name }}</h2>
+          </div>
+
+          <div class="p-6">
+            <div class="space-y-4">
+              {% set bakeryTotal = 0 %}
+              {% for item in data.items %}
+                {% set itemTotal = item.price * item.quantity %}
+                {% set bakeryTotal = bakeryTotal + itemTotal %}
+                <div class="flex items-center justify-between pb-4 {% if not loop.last %}border-b border-gray-100{% endif %}">
+                  <div class="flex items-center">
+                    {% if item.product.mainImage %}
+                      <img src="{{ item.product.mainImage }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-md mr-4">
+                    {% else %}
+                      <div class="w-16 h-16 bg-gray-100 rounded-md flex items-center justify-center mr-4">
+                        <i data-lucide="image" class="h-8 w-8 text-gray-400"></i>
+                      </div>
+                    {% endif %}
+                    <div>
+                      <h3 class="text-sm font-medium">{{ item.product.name }}</h3>
+                      <p class="text-xs text-gray-500">Quantité: {{ item.quantity }}</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-sm font-medium">{{ itemTotal|number_format(2, ',', ' ') }} €</p>
+                    <p class="text-xs text-gray-500">{{ item.price|number_format(2, ',', ' ') }} € / unité</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-gray-100">
+              <div class="flex justify-between">
+                <span class="font-medium">Total pour {{ data.bakery.name }}</span>
+                <span class="font-medium">{{ bakeryTotal|number_format(2, ',', ' ') }} €</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-100">
+          <div class="px-6 py-4 bg-gray-50 border-b border-gray-100">
+            <h2 class="text-lg font-playfair">Adresse de livraison</h2>
+          </div>
+
+          <div class="p-6">
+            {% if order.shippingAddress %}
+              {% if order.shippingAddress.label %}
+                <p class="text-sm font-medium mb-1">{{ order.shippingAddress.label }}</p>
+              {% endif %}
+              <p class="text-sm">{{ order.shippingAddress.street }}</p>
+              {% if order.shippingAddress.complement %}
+                <p class="text-sm">{{ order.shippingAddress.complement }}</p>
+              {% endif %}
+              <p class="text-sm">{{ order.shippingAddress.postalCode }} {{ order.shippingAddress.city }}</p>
+            {% else %}
+              <p class="text-sm text-gray-500">Aucune adresse de livraison fournie</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-100">
+          <div class="px-6 py-4 bg-gray-50 border-b border-gray-100">
+            <h2 class="text-lg font-playfair">Adresse de facturation</h2>
+          </div>
+
+          <div class="p-6">
+            {% if order.billingAddress %}
+              {% if order.billingAddress.label %}
+                <p class="text-sm font-medium mb-1">{{ order.billingAddress.label }}</p>
+              {% endif %}
+              <p class="text-sm">{{ order.billingAddress.street }}</p>
+              {% if order.billingAddress.complement %}
+                <p class="text-sm">{{ order.billingAddress.complement }}</p>
+              {% endif %}
+              <p class="text-sm">{{ order.billingAddress.postalCode }} {{ order.billingAddress.city }}</p>
+            {% else %}
+              <p class="text-sm text-gray-500">Aucune adresse de facturation fournie</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
