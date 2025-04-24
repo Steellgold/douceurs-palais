@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\Product;
 use App\Form\BakeryType;
 use App\Form\ProductType;
+use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -148,21 +150,6 @@ class BakerController extends AbstractController {
     return $this->redirectToRoute('app_baker_products');
   }
 
-  #[Route('/orders', name: 'app_baker_orders')]
-  public function orders(): Response {
-    $user = $this->getUser();
-    $bakery = $user->getManagedBakery();
-
-    if (!$bakery) {
-      throw $this->createAccessDeniedException('Vous n\'êtes pas associé à une boulangerie.');
-    }
-
-    return $this->render('baker/orders.html.twig', [
-      'bakery' => $bakery,
-      'orders' => [],
-    ]);
-  }
-
   #[Route('/bakery/edit', name: 'app_baker_bakery_edit')]
   public function editBakery(Request $request, EntityManagerInterface $entityManager): Response {
     $user = $this->getUser();
@@ -189,5 +176,91 @@ class BakerController extends AbstractController {
       'form' => $form->createView(),
       'bakery' => $bakery
     ]);
+  }
+
+  #[Route('/orders', name: 'app_baker_orders')]
+  public function orders(Request $request, OrderRepository $orderRepository): Response {
+    $user = $this->getUser();
+    $bakery = $user->getManagedBakery();
+
+    if (!$bakery) {
+      throw $this->createAccessDeniedException('Vous n\'êtes pas associé à une boulangerie.');
+    }
+
+    $status = $request->query->get('status', 'all');
+    $orders = $orderRepository->findOrdersContainingBakeryProducts($bakery, $status);
+
+    return $this->render('baker/orders.html.twig', [
+      'bakery' => $bakery,
+      'orders' => $orders,
+    ]);
+  }
+
+  #[Route('/orders/{id}/details', name: 'app_baker_order_details')]
+  public function orderDetails(Order $order): Response {
+    list($bakery, $hasProductsFromBakery) = $this->extracted($order);
+
+    if (!$hasProductsFromBakery) {
+      throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à voir cette commande.');
+    }
+
+    return $this->render('baker/order_details.html.twig', [
+      'bakery' => $bakery,
+      'order' => $order,
+    ]);
+  }
+
+  #[Route('/orders/{id}/update-status/{status}', name: 'app_baker_order_update_status', methods: ['POST'])]
+  public function updateOrderStatus(Order $order, string $status, Request $request, EntityManagerInterface $entityManager): Response {
+    list($bakery, $hasProductsFromBakery) = $this->extracted($order);
+
+    if (!$hasProductsFromBakery) {
+      throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier cette commande.');
+    }
+
+    if (!$this->isCsrfTokenValid('update_status' . $order->getId(), $request->request->get('_token'))) {
+      $this->addFlash('error', 'Token CSRF invalide.');
+      return $this->redirectToRoute('app_baker_orders');
+    }
+
+    $validTransitions = [
+      'paid' => ['preparing', 'cancelled'],
+      'preparing' => ['shipped', 'cancelled'],
+      'shipped' => ['delivered', 'cancelled'],
+    ];
+
+    if (!isset($validTransitions[$order->getStatus()]) || !in_array($status, $validTransitions[$order->getStatus()])) {
+      $this->addFlash('error', 'Transition de statut non valide.');
+      return $this->redirectToRoute('app_baker_orders');
+    }
+
+    $order->setStatus($status);
+    $entityManager->flush();
+
+    $this->addFlash('success', 'Statut de la commande mis à jour avec succès.');
+
+    return $this->redirectToRoute('app_baker_orders');
+  }
+
+  /**
+   * @param Order $order
+   * @return array
+   */
+  public function extracted(Order $order): array {
+    $user = $this->getUser();
+    $bakery = $user->getManagedBakery();
+
+    if (!$bakery) {
+      throw $this->createAccessDeniedException('Vous n\'êtes pas associé à une boulangerie.');
+    }
+
+    $hasProductsFromBakery = false;
+    foreach ($order->getItems() as $item) {
+      if ($item->getProduct()->getBakery() === $bakery) {
+        $hasProductsFromBakery = true;
+        break;
+      }
+    }
+    return array($bakery, $hasProductsFromBakery);
   }
 }
