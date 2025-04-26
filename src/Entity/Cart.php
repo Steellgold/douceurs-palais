@@ -147,4 +147,25 @@ class Cart {
       $this->removeItem($item);
     }
   }
+
+  public function getUniqueShops(): array {
+    $shops = [];
+    foreach ($this->items as $item) {
+      $bakeryId = $item->getProduct()->getBakery()->getId();
+      if (!isset($shops[$bakeryId])) {
+        $shops[$bakeryId] = [
+          'bakery' => $item->getProduct()->getBakery(),
+          'items' => [],
+          'total' => 0
+        ];
+      }
+      $shops[$bakeryId]['items'][] = $item;
+      $shops[$bakeryId]['total'] += $item->getProduct()->getPrice() * $item->getQuantity();
+    }
+    return $shops;
+  }
+
+  public function hasMultipleShops(): bool {
+    return count($this->getUniqueShops()) > 1;
+  }
 }
