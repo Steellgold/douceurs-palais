@@ -29,19 +29,8 @@ class CartController extends AbstractController {
     $productId = $request->request->get('productId');
     $quantity = (int)$request->request->get('quantity', 1);
 
-    // Debug logging
-    $this->logDebug('Adding product to cart', [
-      'productId' => $productId,
-      'quantity' => $quantity,
-    ]);
-
     try {
       $cart = $this->cartService->addItem($productId, $quantity);
-
-      $this->logDebug('Product added to cart', [
-        'itemCount' => $cart->getTotalItems(),
-        'total' => $cart->getTotalPrice(),
-      ]);
 
       return $this->json([
         'success' => true,
@@ -50,11 +39,6 @@ class CartController extends AbstractController {
         'total' => $cart->getTotalPrice(),
       ]);
     } catch (\Exception $e) {
-      $this->logDebug('Error adding product to cart', [
-        'error' => $e->getMessage(),
-        'trace' => $e->getTraceAsString(),
-      ]);
-
       return $this->json([
         'success' => false,
         'message' => $e->getMessage()
@@ -122,15 +106,36 @@ class CartController extends AbstractController {
     ]);
   }
 
-  /**
-   * Helper method for debug logging
-   */
-  private function logDebug(string $message, array $context = []): void {
-    // Log to file
-    $logDir = $this->getParameter('kernel.logs_dir');
-    $logFile = $logDir . '/cart.log';
+  #[Route('/select-shop', name: 'app_cart_select_shop')]
+  public function selectShop(): Response {
+    $cart = $this->cartService->getCart();
 
-    $logMessage = '[' . date('Y-m-d H:i:s') . '] ' . $message . ': ' . json_encode($context, JSON_PRETTY_PRINT) . PHP_EOL;
-    file_put_contents($logFile, $logMessage, FILE_APPEND);
+    if (!$cart->hasMultipleShops()) {
+      return $this->redirectToRoute('app_checkout');
+    }
+
+    return $this->render('cart/select_shop.html.twig', [
+      'shops' => $cart->getUniqueShops()
+    ]);
+  }
+
+  #[Route('/filter-shop', name: 'app_cart_filter_shop', methods: ['POST'])]
+  public function filterShop(Request $request): Response {
+    $bakeryId = $request->request->get('bakery_id');
+
+    if (!$bakeryId) {
+      $this->addFlash('error', 'Veuillez sélectionner une boutique');
+      return $this->redirectToRoute('app_cart_select_shop');
+    }
+
+    $cart = $this->cartService->getCart();
+
+    foreach ($cart->getItems() as $item) {
+      if ($item->getProduct()->getBakery()->getId() !== $bakeryId) {
+        $this->cartService->removeItem($item->getId());
+      }
+    }
+
+    return $this->redirectToRoute('app_checkout');
   }
 }

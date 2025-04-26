@@ -37,6 +37,10 @@ class CheckoutController extends AbstractController {
       return $this->redirectToRoute('app_cart_index');
     }
 
+    if ($cart->hasMultipleShops()) {
+      return $this->redirectToRoute('app_cart_select_shop');
+    }
+
     $user = $this->getUser();
     $form = $this->createForm(CheckoutType::class, null, [
       'user' => $user,
