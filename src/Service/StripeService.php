@@ -48,9 +48,7 @@ readonly class StripeService {
       'line_items' => $lineItems,
       'mode' => 'payment',
       'customer_email' => $order->getUser()->getEmail(),
-      'success_url' => $this->urlGenerator->generate('app_checkout_success', [
-        'session_id' => '{CHECKOUT_SESSION_ID}',
-      ], UrlGeneratorInterface::ABSOLUTE_URL),
+      'success_url' => $this->urlGenerator->generate('app_checkout_success', [], UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
       'cancel_url' => $this->urlGenerator->generate('app_checkout_cancel', [
         'order_id' => $order->getId(),
       ], UrlGeneratorInterface::ABSOLUTE_URL),
