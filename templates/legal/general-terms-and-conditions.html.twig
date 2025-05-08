@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions Générales de Vente{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-playfair mb-8">Conditions Générales de Vente</h1>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 1 : Préambule</h2>
+        <p class="mb-4">Les présentes conditions générales de vente (CGV) s'appliquent à toutes les ventes conclues sur le site Internet Aux Douceurs du Palais entre :</p>
+        <p class="mb-4"><strong>La société Aux Douceurs du Palais</strong>, SAS au capital de 10 000 euros, immatriculée au Registre du Commerce et des Sociétés de Mulhouse sous le numéro 123 456 789, dont le siège social est situé au 123 Rue de la Boulangerie, 68100 Mulhouse, France, ci-après dénommée « le Vendeur »</p>
+        <p class="mb-4"><strong>Et</strong></p>
+        <p class="mb-4">Les personnes souhaitant effectuer un achat via le site Internet www.douceurs-palais.fr, ci-après dénommées « l'Acheteur ».</p>
+        <p class="mb-4">Les CGV définissent les droits et obligations des parties dans le cadre de la vente en ligne des produits proposés par le Vendeur. Elles constituent le socle unique de la relation commerciale entre les parties.</p>
+        <p class="mb-4">Date de dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 2 : Produits</h2>
+        <p class="mb-4">Les produits proposés à la vente sont ceux figurant sur le site www.douceurs-palais.fr, dans la limite des stocks disponibles. Le Vendeur se réserve le droit de modifier à tout moment l'assortiment de produits.</p>
+        <p class="mb-4">Les produits sont décrits et présentés avec la plus grande exactitude possible. Toutefois, si des erreurs ou omissions ont pu se produire quant à cette présentation, la responsabilité du Vendeur ne pourrait être engagée.</p>
+        <p class="mb-4">Les photographies des produits ne sont pas contractuelles et sont données à titre illustratif.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 3 : Prix</h2>
+        <p class="mb-4">Les prix des produits sont indiqués en euros toutes taxes comprises (TTC) hors participation aux frais de livraison.</p>
+        <p class="mb-4">Les frais de livraison sont indiqués avant la validation finale de la commande.</p>
+        <p class="mb-4">Le Vendeur se réserve le droit de modifier ses prix à tout moment mais les produits seront facturés sur la base des tarifs en vigueur au moment de la validation de la commande.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 4 : Commande</h2>
+        <p class="mb-4">L'Acheteur qui souhaite acheter un produit doit :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Sélectionner le ou les produits qu'il souhaite acheter</li>
+          <li>Valider son panier</li>
+          <li>S'identifier en complétant le formulaire mis à sa disposition ou en se connectant à son compte client</li>
+          <li>Choisir son mode de livraison</li>
+          <li>Valider son mode de paiement</li>
+          <li>Confirmer sa commande et son paiement</li>
+        </ul>
+        <p class="mb-4">La confirmation de la commande entraîne acceptation des présentes CGV et forme le contrat.</p>
+        <p class="mb-4">Un courrier électronique accusant réception de la commande et de son paiement est envoyé par le Vendeur dans les meilleurs délais.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 5 : Paiement</h2>
+        <p class="mb-4">Le paiement est exigible immédiatement à la commande. L'Acheteur peut effectuer le règlement par carte bancaire (Visa, MasterCard, American Express), Apple Pay ou Google Pay.</p>
+        <p class="mb-4">Les paiements effectués par l'Acheteur ne seront considérés comme définitifs qu'après encaissement effectif des sommes dues par le Vendeur.</p>
+        <p class="mb-4">En cas de retard ou défaut de paiement, le Vendeur se réserve le droit de suspendre ou d'annuler la livraison de toute commande en cours.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 6 : Livraison</h2>
+        <p class="mb-4">La livraison n'est possible que dans les zones définies sur le site. L'Acheteur est tenu de vérifier l'état des produits livrés et de signaler toute anomalie sur le bon de livraison.</p>
+        <p class="mb-4">Les délais de livraison sont donnés à titre indicatif. Tout retard raisonnable dans la livraison des produits ne pourra pas donner lieu au profit de l'Acheteur à l'allocation de dommages et intérêts ou à l'annulation de la commande.</p>
+        <p class="mb-4">En cas de non-réception d'une commande dans les délais indiqués, l'Acheteur doit en informer le Vendeur afin qu'une enquête soit menée auprès du transporteur.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 7 : Droit de rétractation</h2>
+        <p class="mb-4">Conformément aux dispositions légales en vigueur, l'Acheteur dispose d'un délai de 14 jours à compter de la réception des produits pour exercer son droit de rétractation sans avoir à justifier de motifs ni à payer de pénalités.</p>
+        <p class="mb-4">En cas d'exercice du droit de rétractation, le Vendeur remboursera l'Acheteur de la totalité des sommes versées, y compris les frais de livraison, au plus tard dans les 14 jours suivant la date à laquelle ce droit a été exercé.</p>
+        <p class="mb-4">Toutefois, compte tenu de la nature périssable des produits vendus, le droit de rétractation ne peut pas être exercé pour les produits susceptibles de se détériorer ou de se périmer rapidement conformément à l'article L.221-28 du Code de la Consommation.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 8 : Garanties</h2>
+        <p class="mb-4">Le Vendeur est tenu des défauts de conformité du bien vendu dans les conditions des articles L.217-4 et suivants du Code de la consommation et des défauts cachés de la chose vendue dans les conditions prévues aux articles 1641 et suivants du Code civil.</p>
+        <p class="mb-4">Pour être valable, toute réclamation doit être adressée par écrit au Service Client du Vendeur dans les délais prévus par la loi à compter de la livraison par lettre recommandée avec accusé de réception.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 9 : Responsabilité</h2>
+        <p class="mb-4">Le Vendeur ne saurait être tenu pour responsable de l'inexécution du contrat conclu en cas de rupture de stock ou indisponibilité du produit, de force majeure, de perturbation ou grève totale ou partielle notamment des services postaux et moyens de transport et/ou communications.</p>
+        <p class="mb-4">Le Vendeur n'encourra aucune responsabilité pour tous dommages indirects du fait des présentes, perte d'exploitation, perte de profit, perte de chance, dommages ou frais.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 10 : Protection des données personnelles</h2>
+        <p class="mb-4">Les données personnelles collectées auprès de l'Acheteur font l'objet d'un traitement informatique réalisé par le Vendeur. Elles sont enregistrées dans son fichier clients et sont indispensables au traitement de sa commande.</p>
+        <p class="mb-4">Ces informations pourront être communiquées aux partenaires du Vendeur pour l'exécution de la commande.</p>
+        <p class="mb-4">L'Acheteur dispose d'un droit d'accès, de rectification, d'opposition, de portabilité et de suppression de ses données personnelles. Il peut exercer ce droit en adressant un message à l'adresse suivante : rgpd@douceurs-palais.fr.</p>
+        <p class="mb-4">Pour plus d'informations sur le traitement des données personnelles, veuillez consulter notre <a href="/politique-de-protection-des-donnees" class="text-[#EDA239] hover:underline">Politique de protection des données</a>.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 11 : Propriété intellectuelle</h2>
+        <p class="mb-4">Tous les éléments du site www.douceurs-palais.fr sont et restent la propriété intellectuelle et exclusive du Vendeur. Nul n'est autorisé à reproduire, exploiter, rediffuser, ou utiliser à quelque titre que ce soit, même partiellement, des éléments du site.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 12 : Archivage et preuve</h2>
+        <p class="mb-4">Le Vendeur archivera les bons de commandes et les factures sur un support fiable et durable constituant une copie fidèle. Les registres informatisés du Vendeur seront considérés par les parties comme preuve des communications, commandes, paiements et transactions intervenus entre les parties.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Article 13 : Droit applicable et tribunal compétent</h2>
+        <p class="mb-4">Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera recherchée avant toute action judiciaire. À défaut, les tribunaux français seront seuls compétents.</p>
+        <p class="mb-4">Conformément aux dispositions du Code de la consommation concernant le règlement amiable des litiges, l'Acheteur peut recourir au service de médiation [Nom du médiateur] dont les coordonnées sont : [Coordonnées du médiateur].</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100">
+        <h2 class="text-2xl font-playfair mb-4">Article 14 : Contact</h2>
+        <p class="mb-4">Pour toute information, question ou réclamation, le client peut s'adresser au service client du Vendeur :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Par courrier : Aux Douceurs du Palais, Service Client, 123 Rue de la Boulangerie, 68100 Mulhouse</li>
+          <li>Par email : contact@douceurs-palais.fr</li>
+          <li>Par téléphone : +33 3 89 45 67 89 (du lundi au vendredi de 9h à 18h)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

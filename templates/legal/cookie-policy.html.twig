@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de cookies{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-playfair mb-8">Politique de cookies</h1>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Qu'est-ce qu'un cookie ?</h2>
+        <p class="mb-4">Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, tablette, smartphone) lors de votre visite sur notre site. Il nous permet de stocker des informations relatives à votre navigation et de vous offrir une expérience adaptée lors de vos visites ultérieures.</p>
+        <p class="mb-4">Les cookies sont largement utilisés pour faire fonctionner les sites web ou pour améliorer l'expérience de navigation, ainsi que pour fournir certaines informations aux propriétaires du site.</p>
+        <p class="mb-4">Date de dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Comment utilisons-nous les cookies ?</h2>
+        <p class="mb-4">Notre site utilise différents types de cookies pour les finalités suivantes :</p>
+
+        <h3 class="text-xl font-semibold mt-6 mb-3">Cookies strictement nécessaires</h3>
+        <p class="mb-4">Ces cookies sont essentiels au fonctionnement de notre site et ne peuvent pas être désactivés. Ils permettent notamment :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>De maintenir votre session active pendant votre visite</li>
+          <li>De mémoriser les produits dans votre panier</li>
+          <li>De sécuriser votre connexion à votre compte client</li>
+          <li>De mémoriser vos préférences de confidentialité</li>
+        </ul>
+        <p class="mb-4">Ces cookies ne collectent pas d'informations utilisées à des fins marketing et ne permettent pas de suivre votre navigation sur d'autres sites.</p>
+
+        <h3 class="text-xl font-semibold mt-6 mb-3">Cookies analytiques ou de performance</h3>
+        <p class="mb-4">Ces cookies nous permettent de comprendre comment les visiteurs interagissent avec notre site en recueillant et analysant des informations de manière anonyme. Ils nous aident à :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Mesurer le nombre de visiteurs et leur provenance</li>
+          <li>Identifier les pages les plus populaires</li>
+          <li>Observer comment les utilisateurs naviguent sur le site</li>
+          <li>Améliorer le fonctionnement et les performances du site</li>
+        </ul>
+        <p class="mb-4">Nous utilisons Google Analytics pour cette finalité.</p>
+
+        <h3 class="text-xl font-semibold mt-6 mb-3">Cookies fonctionnels</h3>
+        <p class="mb-4">Ces cookies permettent d'améliorer la fonctionnalité et la personnalisation de votre expérience sur notre site. Ils peuvent être définis par nous ou par des fournisseurs tiers dont nous avons ajouté les services à nos pages. Ils permettent notamment :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>De mémoriser vos préférences (langue, région, etc.)</li>
+          <li>De personnaliser l'affichage selon votre appareil</li>
+          <li>De mémoriser les informations que vous avez saisies dans les formulaires</li>
+        </ul>
+
+        <h3 class="text-xl font-semibold mt-6 mb-3">Cookies de ciblage ou publicitaires</h3>
+        <p class="mb-4">Ces cookies peuvent être déposés par nos partenaires publicitaires et sont utilisés pour construire un profil de vos intérêts et vous proposer des publicités pertinentes sur d'autres sites. Ils permettent :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>D'adapter les annonces à vos centres d'intérêt</li>
+          <li>De limiter le nombre de fois où vous voyez une publicité</li>
+          <li>De mesurer l'efficacité des campagnes publicitaires</li>
+        </ul>
+        <p class="mb-4">Ces cookies ne stockent pas directement d'informations personnelles mais sont basés sur l'identification unique de votre navigateur et de votre appareil.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Liste des cookies utilisés</h2>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 mb-6">
+            <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom du cookie</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Finalité</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durée de conservation</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">session_id</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Maintien de la session utilisateur</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Session</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Nécessaire</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">cart_id</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Gestion du panier d'achat</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1 mois</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Nécessaire</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">cookie_consent</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mémorisation des préférences de cookies</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1 an</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Nécessaire</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">user_preferences</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mémorisation des préférences utilisateur</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6 mois</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Fonctionnel</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mb-4 text-sm text-gray-500">Cette liste n'est pas exhaustive et peut être mise à jour régulièrement.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Cookies tiers</h2>
+        <p class="mb-4">Certains cookies sont déposés par des services tiers qui apparaissent sur nos pages :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li><strong>Stripe :</strong> Pour le traitement sécurisé des paiements</li>
+        </ul>
+        <p class="mb-4">Nous n'avons pas accès aux données collectées par ces cookies tiers, qui sont soumis aux politiques de confidentialité de leurs émetteurs respectifs.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Comment gérer vos préférences en matière de cookies ?</h2>
+        <p class="mb-4">Lors de votre première visite sur notre site, une bannière vous informe de l'utilisation des cookies et vous invite à exprimer vos préférences. Vous pouvez à tout moment modifier vos choix en cliquant sur le lien "Gestion des cookies" présent en bas de chaque page de notre site.</p>
+
+        <p class="mb-4">Vous pouvez également configurer votre navigateur pour qu'il accepte ou refuse les cookies. Chaque navigateur étant différent, vous devez consulter le menu d'aide de votre navigateur pour savoir comment modifier vos préférences en matière de cookies :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li><strong>Microsoft Edge :</strong> <a href="https://support.microsoft.com/fr-fr/microsoft-edge/supprimer-les-cookies-dans-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener noreferrer" class="text-[#EDA239] hover:underline">Instructions</a></li>
+          <li><strong>Google Chrome :</strong> <a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer" class="text-[#EDA239] hover:underline">Instructions</a></li>
+          <li><strong>Safari :</strong> <a href="https://support.apple.com/fr-fr/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer" class="text-[#EDA239] hover:underline">Instructions</a></li>
+          <li><strong>Firefox :</strong> <a href="https://support.mozilla.org/fr/kb/effacer-les-cookies-pour-supprimer-les-information" target="_blank" rel="noopener noreferrer" class="text-[#EDA239] hover:underline">Instructions</a></li>
+          <li><strong>Opera :</strong> <a href="https://help.opera.com/en/latest/web-preferences/#cookies" target="_blank" rel="noopener noreferrer" class="text-[#EDA239] hover:underline">Instructions</a></li>
+        </ul>
+
+        <p class="mb-4">Attention : la désactivation de certains cookies peut entraîner des difficultés de navigation ou rendre certaines fonctionnalités du site indisponibles.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Conservation des données</h2>
+        <p class="mb-4">Les informations recueillies par les cookies ne sont jamais conservées plus de 13 mois à compter de leur dépôt sur votre terminal, conformément aux recommandations de la CNIL.</p>
+        <p class="mb-4">À l'expiration de ce délai, votre consentement sera à nouveau sollicité lors de votre prochaine visite sur notre site.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Lien avec notre politique de protection des données</h2>
+        <p class="mb-4">Pour plus d'informations sur la manière dont nous traitons vos données personnelles, nous vous invitons à consulter notre <a href="/politique-de-protection-des-donnees" class="text-[#EDA239] hover:underline">Politique de protection des données</a>.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100">
+        <h2 class="text-2xl font-playfair mb-4">Contact</h2>
+        <p class="mb-4">Pour toute question concernant notre politique en matière de cookies, vous pouvez nous contacter :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Par email : rgpd@douceurs-palais.fr</li>
+          <li>Par courrier : Aux Douceurs du Palais, Service RGPD, 123 Rue de la Boulangerie, 68100 Mulhouse</li>
+          <li>Par téléphone : +33 3 89 45 67 89</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

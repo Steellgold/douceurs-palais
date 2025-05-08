@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de protection des données{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-playfair mb-8">Politique de protection des données</h1>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Introduction</h2>
+        <p class="mb-4">Aux Douceurs du Palais s'engage à protéger la vie privée des utilisateurs de son site internet. La présente politique de protection des données personnelles vous informe sur la manière dont nous recueillons, utilisons et protégeons vos informations lorsque vous utilisez notre site web et nos services, conformément au Règlement Général sur la Protection des Données (RGPD).</p>
+        <p class="mb-4">Date de dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Collecte et traitement des données personnelles</h2>
+        <p class="mb-4">Nous collectons les données personnelles suivantes :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Informations d'identification (nom, prénom)</li>
+          <li>Coordonnées (adresse email, numéro de téléphone, adresse postale)</li>
+          <li>Données de connexion et de navigation</li>
+          <li>Informations relatives aux commandes et aux paiements</li>
+          <li>Préférences et historiques d'achat</li>
+        </ul>
+
+        <p class="mb-4">Ces données sont collectées lorsque vous :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Créez un compte sur notre site</li>
+          <li>Effectuez une commande</li>
+          <li>Vous inscrivez à notre newsletter</li>
+          <li>Contactez notre service client</li>
+          <li>Naviguez sur notre site (via les cookies)</li>
+        </ul>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Finalités du traitement des données</h2>
+        <p class="mb-4">Nous utilisons vos données personnelles pour :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Gérer votre compte client</li>
+          <li>Traiter et livrer vos commandes</li>
+          <li>Vous informer sur l'état de vos commandes</li>
+          <li>Gérer vos paiements</li>
+          <li>Vous fournir un service client personnalisé</li>
+          <li>Vous envoyer des communications marketing (si vous y avez consenti)</li>
+          <li>Améliorer notre site et nos services</li>
+          <li>Prévenir la fraude</li>
+          <li>Respecter nos obligations légales</li>
+        </ul>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Base légale du traitement</h2>
+        <p class="mb-4">Nous traitons vos données personnelles sur les bases légales suivantes :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li><strong>Exécution contractuelle :</strong> lorsque le traitement est nécessaire à l'exécution du contrat auquel vous êtes partie (traitement de commandes, livraison, etc.)</li>
+          <li><strong>Consentement :</strong> lorsque vous avez donné votre consentement explicite (newsletter, cookies non essentiels)</li>
+          <li><strong>Intérêt légitime :</strong> lorsque le traitement est nécessaire aux fins de nos intérêts légitimes (amélioration de nos services, prévention des fraudes)</li>
+          <li><strong>Obligation légale :</strong> lorsque le traitement est nécessaire au respect d'une obligation légale à laquelle nous sommes soumis (conservation des factures)</li>
+        </ul>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Conservation des données</h2>
+        <p class="mb-4">Nous conservons vos données personnelles uniquement pendant la durée nécessaire à la réalisation des finalités pour lesquelles elles ont été collectées, ou pour se conformer à des obligations légales :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Données relatives au compte client : pendant toute la durée de votre compte et jusqu'à 3 ans après votre dernière activité</li>
+          <li>Données relatives aux commandes : 10 ans (obligation comptable et fiscale)</li>
+          <li>Données de carte bancaire : non conservées après la transaction (sauf consentement explicite)</li>
+          <li>Données de navigation et cookies : 13 mois maximum</li>
+        </ul>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Destinataires des données</h2>
+        <p class="mb-4">Vos données personnelles peuvent être partagées avec :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Notre personnel autorisé (service client, marketing, informatique, comptabilité)</li>
+          <li>Nos sous-traitants (hébergement, logistique, livraison, paiement, emailing)</li>
+          <li>Nos partenaires commerciaux (avec votre consentement)</li>
+          <li>Les autorités administratives ou judiciaires lorsque la loi l'exige</li>
+        </ul>
+        <p class="mb-4">Tous nos sous-traitants sont soumis à des obligations strictes en matière de protection des données et de confidentialité.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Transfert hors UE</h2>
+        <p class="mb-4">Certaines de vos données peuvent être transférées vers des pays situés en dehors de l'Union Européenne. Dans ce cas, nous nous assurons que ces transferts sont effectués vers des pays assurant un niveau de protection adéquat ou dans le cadre de garanties appropriées (clauses contractuelles types de la Commission européenne, règles d'entreprise contraignantes, etc.).</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Vos droits</h2>
+        <p class="mb-4">Conformément au RGPD, vous disposez des droits suivants concernant vos données personnelles :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li><strong>Droit d'accès :</strong> obtenir une copie de vos données</li>
+          <li><strong>Droit de rectification :</strong> corriger des données inexactes</li>
+          <li><strong>Droit à l'effacement (droit à l'oubli) :</strong> demander la suppression de vos données</li>
+          <li><strong>Droit à la limitation du traitement :</strong> restreindre le traitement de vos données</li>
+          <li><strong>Droit à la portabilité :</strong> recevoir vos données dans un format structuré</li>
+          <li><strong>Droit d'opposition :</strong> vous opposer au traitement de vos données</li>
+          <li><strong>Droit de retirer votre consentement</strong> à tout moment pour les traitements basés sur le consentement</li>
+          <li><strong>Droit d'introduire une réclamation</strong> auprès de la CNIL (www.cnil.fr)</li>
+        </ul>
+        <p class="mb-4">Pour exercer ces droits, vous pouvez nous contacter à l'adresse email : rgpd@douceurs-palais.fr ou par courrier à l'adresse : Aux Douceurs du Palais, Service RGPD, 123 Rue de la Boulangerie, 68100 Mulhouse.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Politique relative aux cookies</h2>
+        <p class="mb-4">Notre site utilise des cookies pour améliorer votre expérience de navigation. Les cookies sont de petits fichiers texte stockés sur votre appareil qui nous permettent de reconnaître votre navigateur.</p>
+        <p class="mb-4">Nous utilisons différents types de cookies :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li><strong>Cookies essentiels :</strong> nécessaires au fonctionnement du site</li>
+          <li><strong>Cookies analytiques :</strong> pour comprendre comment les visiteurs utilisent notre site</li>
+          <li><strong>Cookies fonctionnels :</strong> pour se souvenir de vos préférences</li>
+          <li><strong>Cookies publicitaires :</strong> pour vous montrer des publicités personnalisées</li>
+        </ul>
+        <p class="mb-4">Vous pouvez à tout moment modifier vos préférences en matière de cookies en cliquant sur "Paramètres des cookies" en bas de notre site.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Sécurité des données</h2>
+        <p class="mb-4">Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour assurer la sécurité de vos données personnelles, notamment :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Chiffrement des données sensibles</li>
+          <li>Accès limité aux données personnelles</li>
+          <li>Politique de mots de passe stricts</li>
+          <li>Mise à jour régulière de nos systèmes</li>
+          <li>Formation de notre personnel</li>
+          <li>Audits de sécurité</li>
+        </ul>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Modifications de la politique de confidentialité</h2>
+        <p class="mb-4">Nous nous réservons le droit de modifier cette politique de confidentialité à tout moment. Toute modification sera publiée sur cette page avec une date de mise à jour. Nous vous encourageons à consulter régulièrement cette page.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Contact</h2>
+        <p class="mb-4">Pour toute question concernant notre politique de protection des données, vous pouvez nous contacter :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Par email : rgpd@douceurs-palais.fr</li>
+          <li>Par courrier : Aux Douceurs du Palais, Service RGPD, 123 Rue de la Boulangerie, 68100 Mulhouse</li>
+          <li>Par téléphone : +33 3 89 45 67 89</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

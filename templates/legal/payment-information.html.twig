@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Informations de paiement{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-playfair mb-8">Informations de paiement</h1>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Moyens de paiement acceptés</h2>
+        <p class="mb-4">Aux Douceurs du Palais vous propose les moyens de paiement suivants :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Carte bancaire (Visa, Mastercard, American Express)</li>
+          <li>Apple Pay</li>
+          <li>Google Pay</li>
+        </ul>
+        <p class="mb-4">Le paiement est traité de manière sécurisée par Stripe, notre prestataire de services de paiement.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Sécurité des paiements</h2>
+        <p class="mb-4">Nous accordons la plus grande importance à la sécurité de vos paiements :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Toutes les transactions sont chiffrées selon le protocole TLS (Transport Layer Security)</li>
+          <li>Nous ne stockons jamais les informations complètes de votre carte bancaire sur nos serveurs</li>
+          <li>Notre prestataire de paiement Stripe est certifié PCI DSS (Payment Card Industry Data Security Standard)</li>
+          <li>Authentification forte (3D Secure) pour toutes les transactions conformément à la directive européenne DSP2</li>
+        </ul>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Processus de commande et de paiement</h2>
+        <ol class="list-decimal pl-6 mb-4 space-y-2">
+          <li>Ajoutez les produits souhaités à votre panier</li>
+          <li>Accédez à votre panier et vérifiez votre commande</li>
+          <li>Cliquez sur "Passer la commande"</li>
+          <li>Connectez-vous à votre compte ou créez un nouveau compte</li>
+          <li>Sélectionnez votre adresse de livraison</li>
+          <li>Choisissez votre mode de paiement</li>
+          <li>Entrez vos informations de paiement dans l'interface sécurisée</li>
+          <li>Confirmez votre commande</li>
+          <li>Une confirmation de commande vous sera envoyée par email</li>
+        </ol>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Moment du débit</h2>
+        <p class="mb-4">Le montant de votre commande est débité au moment de la validation de votre commande. Aucune somme n'est prélevée avant cette étape.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Factures</h2>
+        <p class="mb-4">Une facture électronique est générée pour chaque commande. Vous pouvez la consulter et la télécharger à tout moment dans votre espace client, rubrique "Mes commandes".</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Politique de remboursement</h2>
+        <p class="mb-4">Conformément à notre politique de retour et de remboursement :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>En cas d'annulation d'une commande avant expédition, le remboursement est effectué intégralement sous 3 à 5 jours ouvrés.</li>
+          <li>En cas de produits défectueux ou non conformes, le remboursement est effectué après retour et vérification des produits.</li>
+          <li>Les remboursements sont effectués par le même moyen de paiement que celui utilisé lors de l'achat.</li>
+        </ul>
+        <p class="mb-4">Pour plus d'informations, veuillez consulter nos <a href="#" class="text-[#EDA239] hover:underline">Conditions Générales de Vente</a>.</p>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+        <h2 class="text-2xl font-playfair mb-4">Protection des données liées au paiement</h2>
+        <p class="mb-4">En conformité avec le RGPD (Règlement Général sur la Protection des Données), nous appliquons des mesures strictes pour protéger vos données de paiement :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Les données de carte bancaire ne sont jamais stockées dans notre base de données</li>
+          <li>Seules les informations nécessaires au traitement de votre commande sont conservées (montant, date de transaction, référence de commande)</li>
+          <li>Nos employés n'ont pas accès à vos informations de paiement complètes</li>
+          <li>Pour plus d'informations, veuillez consulter notre <a href="/politique-de-protection-des-donnees" class="text-[#EDA239] hover:underline">Politique de protection des données</a></li>
+        </ul>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100">
+        <h2 class="text-2xl font-playfair mb-4">Contact</h2>
+        <p class="mb-4">Pour toute question concernant les paiements ou les factures, notre service client est à votre disposition :</p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>Par email : facturation@douceurs-palais.fr</li>
+          <li>Par téléphone : +33 3 89 45 67 89 (du lundi au vendredi, 9h-18h)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}

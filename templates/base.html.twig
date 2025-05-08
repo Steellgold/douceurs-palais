@@ -32,6 +32,8 @@
   <twig:Navbar class="flex-shrink-0" />
   <main class="flex-grow">
     {% block body %}{% endblock %}
+
+    {% include 'partials/cookie-manager.html.twig' %}
   </main>
   <twig:Footer />
 </body>

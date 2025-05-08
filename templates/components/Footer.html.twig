@@ -27,8 +27,11 @@
         <h3 class="text-lg font-semibold mb-4 font-playfair">Informations</h3>
         <ul class="space-y-2 text-sm text-gray-600">
           <li><a href="/" class="hover:text-gray-900">Livraison</a></li>
-          <li><a href="/" class="hover:text-gray-900">Conditions Générales</a></li>
-          <li><a href="/" class="hover:text-gray-900">Politique de Confidentialité</a></li>
+          <li><a href="{{ path('app_mentions_legales') }}" class="hover:text-gray-900">Mentions légales</a></li>
+          <li><a href="{{ path('app_cgv') }}" class="hover:text-gray-900">CGV</a></li>
+          <li><a href="{{ path('app_protection_donnees') }}" class="hover:text-gray-900">Protection des données</a></li>
+          <li><a href="{{ path('app_politique_cookies') }}" class="hover:text-gray-900">Politique de cookies</a></li>
+          <li><a href="{{ path('app_informations_paiement') }}" class="hover:text-gray-900">Paiement</a></li>
           <li><a href="/" class="hover:text-gray-900">FAQ</a></li>
         </ul>
       </div>
