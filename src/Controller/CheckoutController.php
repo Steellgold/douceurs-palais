@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\User;
+use App\Form\CheckoutGuestType;
 use App\Form\CheckoutType;
 use App\Repository\OrderRepository;
 use App\Service\CartService;
@@ -13,18 +15,19 @@ use Stripe\Exception\ApiErrorException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\ByteString;
 
 #[Route('/checkout')]
-#[IsGranted('ROLE_USER')]
 class CheckoutController extends AbstractController {
   public function __construct(
-    private readonly CartService            $cartService,
-    private readonly OrderService           $orderService,
-    private readonly StripeService          $stripeService,
-    private readonly EntityManagerInterface $entityManager,
-    private readonly OrderRepository        $orderRepository
+    private readonly CartService                 $cartService,
+    private readonly OrderService                $orderService,
+    private readonly StripeService               $stripeService,
+    private readonly EntityManagerInterface      $entityManager,
+    private readonly OrderRepository             $orderRepository,
+    private readonly UserPasswordHasherInterface $passwordHasher
   ) {
   }
 
@@ -42,36 +45,105 @@ class CheckoutController extends AbstractController {
     }
 
     $user = $this->getUser();
-    $form = $this->createForm(CheckoutType::class, null, [
-      'user' => $user,
-    ]);
 
-    $form->handleRequest($request);
+    if ($user) {
+      $form = $this->createForm(CheckoutType::class, null, [
+        'user' => $user,
+      ]);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-      $formData = $form->getData();
+      $form->handleRequest($request);
 
-      $order = $this->orderService->createOrderFromCart(
-        $cart,
-        $formData['shipping_address'],
-        $formData['different_billing_address'] ? $formData['billing_address'] : null
-      );
+      if ($form->isSubmitted() && $form->isValid()) {
+        $formData = $form->getData();
 
-      try {
-        $session = $this->stripeService->createCheckoutSession($order);
+        $shippingAddress = $formData['shipping_address'];
+
+        if (!$user->getPrimaryAddress()) {
+          foreach ($user->getAddresses() as $address) {
+            $address->setIsPrimary(false);
+          }
+
+          $shippingAddress->setIsPrimary(true);
+          $this->entityManager->flush();
+        }
+
+        $order = $this->orderService->createOrderFromCart(
+          $cart,
+          $formData['shipping_address'],
+          $formData['different_billing_address'] ? $formData['billing_address'] : null
+        );
+
+        try {
+          $session = $this->stripeService->createCheckoutSession($order);
+          $this->entityManager->flush();
+
+          return $this->redirect($session->url);
+        } catch (ApiErrorException $e) {
+          $this->addFlash('error', 'Une erreur est survenue lors de la création de la session de paiement: ' . $e->getMessage());
+          return $this->redirectToRoute('app_checkout');
+        }
+      }
+
+      return $this->render('checkout/index.html.twig', [
+        'cart' => $cart,
+        'form' => $form->createView(),
+      ]);
+    } else {
+      $form = $this->createForm(CheckoutGuestType::class);
+
+      $form->handleRequest($request);
+
+      if ($form->isSubmitted() && $form->isValid()) {
+        $formData = $form->getData();
+
+        $user = new User();
+        $user->setEmail($formData['email']);
+        $user->setFirstName($formData['firstName']);
+        $user->setLastName($formData['lastName']);
+        $user->setPhone($formData['phone'] ?? null);
+
+        $randomPassword = ByteString::fromRandom(12)->toString();
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $randomPassword);
+        $user->setPassword($hashedPassword);
+
+        $shippingAddress = $formData['shipping_address'];
+        $shippingAddress->setIsPrimary(true); // Toujours définir l'adresse de livraison comme principale
+        $user->addAddress($shippingAddress);
+
+        if ($formData['different_billing_address'] && $formData['billing_address']) {
+          $billingAddress = $formData['billing_address'];
+          $billingAddress->setIsPrimary(false); // L'adresse de facturation n'est jamais principale si elle est différente
+          $user->addAddress($billingAddress);
+        }
+
+        $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        return $this->redirect($session->url);
-      } catch (ApiErrorException $e) {
-        $this->addFlash('error', 'Une erreur est survenue lors de la création de la session de paiement: ' . $e->getMessage());
-        return $this->redirectToRoute('app_checkout');
-      }
-    }
+        $cart->setUser($user);
+        $this->entityManager->flush();
 
-    return $this->render('checkout/index.html.twig', [
-      'cart' => $cart,
-      'form' => $form->createView(),
-    ]);
+        $order = $this->orderService->createOrderFromCart(
+          $cart,
+          $shippingAddress,
+          $formData['different_billing_address'] ? $formData['billing_address'] : null
+        );
+
+        try {
+          $session = $this->stripeService->createCheckoutSession($order);
+          $this->entityManager->flush();
+
+          return $this->redirect($session->url);
+        } catch (ApiErrorException $e) {
+          $this->addFlash('error', 'Une erreur est survenue lors de la création de la session de paiement: ' . $e->getMessage());
+          return $this->redirectToRoute('app_checkout');
+        }
+      }
+
+      return $this->render('checkout/guest.html.twig', [
+        'cart' => $cart,
+        'form' => $form->createView(),
+      ]);
+    }
   }
 
   #[Route('/success', name: 'app_checkout_success')]
@@ -109,9 +181,8 @@ class CheckoutController extends AbstractController {
   public function cancel(string $order_id): Response {
     $order = $this->orderRepository->find($order_id);
 
-    if ($order && $order->getUser() === $this->getUser()) {
+    if ($order) {
       $this->orderService->cancelOrder($order);
-
       $this->addFlash('info', 'Votre commande a été annulée');
     }
 
@@ -119,9 +190,19 @@ class CheckoutController extends AbstractController {
   }
 
   #[Route('/order/{id}', name: 'app_checkout_order_details')]
-  public function orderDetails(Order $order): Response {
-    if ($order->getUser() !== $this->getUser()) {
+  public function orderDetails(Request $request, Order $order): Response {
+    $currentUser = $this->getUser();
+
+    if ($currentUser && $order->getUser() !== $currentUser) {
       throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette commande');
+    }
+
+    if (!$currentUser) {
+      $orderToken = $request->query->get('token');
+
+      if (!$orderToken || $orderToken !== $order->getToken()) {
+        throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à accéder à cette commande');
+      }
     }
 
     return $this->render('checkout/order_details.html.twig', [

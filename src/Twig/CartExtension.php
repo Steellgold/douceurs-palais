@@ -17,6 +17,8 @@ class CartExtension extends AbstractExtension {
     return [
       new TwigFunction('cart_item_count', [$this, 'getCartItemCount']),
       new TwigFunction('cart_total', [$this, 'getCartTotal']),
+      new TwigFunction('cart_bakery_id', [$this, 'getCurrentCartBakeryId']),
+      new TwigFunction('can_add_to_cart', [$this, 'canAddToCart']),
     ];
   }
 
@@ -26,5 +28,14 @@ class CartExtension extends AbstractExtension {
 
   public function getCartTotal(): float {
     return $this->cartService->getTotalPrice();
+  }
+
+  public function getCurrentCartBakeryId(): ?string {
+    return $this->cartService->getCurrentCartBakeryId();
+  }
+
+  public function canAddToCart(string $productId): bool {
+    $result = $this->cartService->canAddToCart($productId);
+    return $result === true;
   }
 }

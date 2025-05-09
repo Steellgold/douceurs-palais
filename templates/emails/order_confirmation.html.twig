@@ -1,0 +1,12 @@
+{# templates/emails/order_confirmation.html.twig #}
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
+  <h1>Merci pour votre commande!</h1>
+  <p>Votre commande #{{ order.reference }} a bien été confirmée.</p>
+  <p>Montant total: {{ order.totalAmount|number_format(2, ',', ' ') }} €</p>
+  <p>Vous pouvez suivre votre commande en cliquant sur ce lien:
+    <a href="{{ url('app_checkout_order_details', {'id': order.id, 'token': order.token}) }}">Voir ma commande</a>
+  </p>
+  <p>Merci pour votre confiance!</p>
+{% endblock %}

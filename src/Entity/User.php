@@ -241,7 +241,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
       }
     }
 
-    return $this->addresses->isEmpty() ? null : $this->addresses->first();
+    if (!$this->addresses->isEmpty()) {
+      $firstAddress = $this->addresses->first();
+      $firstAddress->setIsPrimary(true);
+      return $firstAddress;
+    }
+
+    return null;
+  }
+
+  public function hasAddresses(): bool {
+    return !$this->addresses->isEmpty();
+  }
+
+  public function setAddressAsPrimary(Address $primaryAddress): self {
+    if (!$this->addresses->contains($primaryAddress)) {
+      throw new \InvalidArgumentException('Cette adresse n\'appartient pas à cet utilisateur');
+    }
+
+    foreach ($this->addresses as $address) {
+      $address->setIsPrimary(false);
+    }
+
+    $primaryAddress->setIsPrimary(true);
+    return $this;
   }
 
   public function isIsVerified(): ?bool {

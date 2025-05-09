@@ -10,13 +10,17 @@ use App\Entity\User;
 use App\Repository\OrderItemRepository;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
 class OrderService {
+
   public function __construct(
     private EntityManagerInterface $entityManager,
     private OrderRepository        $orderRepository,
     private OrderItemRepository    $orderItemRepository,
-    private CartService            $cartService
+    private readonly CartService   $cartService,
+    private MailerInterface        $mailer,
+    private EmailService  $emailService,
   ) {
   }
 
@@ -77,13 +81,33 @@ class OrderService {
     $order->setStatus(Order::STATUS_PAID);
     $this->entityManager->flush();
 
-    if ($order->getUser()) {
-      // Bon ça fonctionne 1 fois sur 2 le clear du cart donc.. je vais pas insister
+    $user = $order->getUser();
+
+    $this->sendOrderConfirmationEmail($order);
+
+    if ($user) {
       $cart = $this->cartService->getCart();
-      $cart->clear();
-      $this->entityManager->persist($cart);
-      $this->entityManager->flush();
+      if ($cart->getUser() && $cart->getUser()->getId() === $user->getId()) {
+        $cart->clear();
+        $this->entityManager->persist($cart);
+        $this->entityManager->flush();
+      }
     }
+  }
+
+  private function sendOrderConfirmationEmail(Order $order): void {
+    $user = $order->getUser();
+
+    if (!$user) {
+      return;
+    }
+
+    $this->emailService->sendTemplate(
+      $user->getEmail(),
+      'Confirmation de votre commande #' . $order->getReference(),
+      'emails/order_confirmation.html.twig',
+      ['order' => $order]
+    );
   }
 
   public function cancelOrder(Order $order): void {

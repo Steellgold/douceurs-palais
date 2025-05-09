@@ -27,11 +27,11 @@ class CartService {
 
     if ($request && $request->hasSession()) {
       $session = $request->getSession();
-    
+
       if (!$session->has('cart_id')) {
         $session->set('cart_id', uniqid());
       }
-    
+
       $this->sessionId = $session->get('cart_id');
     } else {
       $this->sessionId = uniqid('cli_', true);
@@ -64,12 +64,50 @@ class CartService {
     }
   }
 
+  public function canAddToCart(string $productId): bool|string {
+    $cart = $this->getCart();
+    $product = $this->productRepository->find($productId);
+
+    if (!$product) {
+      return "Produit non trouvé";
+    }
+
+    if ($cart->getItems()->isEmpty()) {
+      return true;
+    }
+
+    $firstItem = $cart->getItems()->first();
+    $cartBakery = $firstItem->getProduct()->getBakery();
+
+    if ($product->getBakery()->getId() !== $cartBakery->getId()) {
+      return "Vous ne pouvez pas ajouter des produits de différentes boulangeries dans le même panier";
+    }
+
+    return true;
+  }
+
+  public function getCurrentCartBakeryId(): ?string {
+    $cart = $this->getCart();
+
+    if ($cart->getItems()->isEmpty()) {
+      return null;
+    }
+
+    $firstItem = $cart->getItems()->first();
+    return $firstItem->getProduct()->getBakery()->getId();
+  }
+
   public function addItem(string $productId, int $quantity = 1): Cart {
     $cart = $this->getCart();
     $product = $this->productRepository->find($productId);
 
     if (!$product) {
       throw new \InvalidArgumentException("Product not found");
+    }
+
+    $canAdd = $this->canAddToCart($productId);
+    if ($canAdd !== true) {
+      throw new \InvalidArgumentException($canAdd);
     }
 
     $item = $cart->getItemByProduct($product);

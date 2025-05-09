@@ -1,0 +1,42 @@
+{# templates/emails/base.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+      body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+      }
+      a {
+          color: #EDA239;
+      }
+      .footer {
+          margin-top: 30px;
+          padding-top: 20px;
+          border-top: 1px solid #eee;
+          font-size: 12px;
+          color: #999;
+      }
+  </style>
+</head>
+<body>
+<div class="header" style="text-align: center; margin-bottom: 30px;">
+  <img src="https://cdn.douceurs-palais.fr/icon-title.png" alt="Aux Douceurs du Palais" width="150">
+</div>
+
+<div class="content">
+  {% block content %}{% endblock %}
+</div>
+
+<div class="footer">
+  <p>© {{ "now"|date("Y") }} Aux Douceurs du Palais. Tous droits réservés.</p>
+  <p>123 Rue de la Boulangerie, 68100 Mulhouse, France</p>
+</div>
+</body>
+</html>

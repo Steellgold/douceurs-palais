@@ -59,11 +59,15 @@ class Order {
   #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'order', cascade: ['persist'], orphanRemoval: true)]
   private Collection $items;
 
+  #[ORM\Column(length: 64, nullable: true)]
+  private ?string $token = null;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
     $this->reference = $this->generateReference();
     $this->items = new ArrayCollection();
+    $this->token = bin2hex(random_bytes(32));
   }
 
   #[ORM\PreUpdate]
@@ -201,6 +205,16 @@ class Order {
         $item->setOrder(null);
       }
     }
+
+    return $this;
+  }
+
+  public function getToken(): ?string {
+    return $this->token;
+  }
+
+  public function setToken(?string $token): static {
+    $this->token = $token;
 
     return $this;
   }

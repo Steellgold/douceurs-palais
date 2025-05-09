@@ -1,0 +1,385 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-3xl font-playfair mb-8">Finaliser votre commande</h1>
+
+      {% for label, messages in app.flashes %}
+        {% for message in messages %}
+          <div class="mb-6 p-4 rounded-md {% if label == 'success' %}bg-green-100 border border-green-400 text-green-700{% else %}bg-red-100 border border-red-400 text-red-700{% endif %}">
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endfor %}
+
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="md:w-2/3">
+          <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6">
+            <h2 class="text-xl font-playfair mb-6">Vos informations</h2>
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <i data-lucide="info" class="h-5 w-5 text-blue-400"></i>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm text-blue-700">
+                    Vous n'êtes pas connecté. Remplissez vos informations ci-dessous pour continuer.
+                    <a href="{{ path('app_login') }}" class="font-medium underline text-blue-700 hover:text-blue-600">Se connecter</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="{{ form.firstName.vars.id }}" class="block text-sm font-medium text-gray-700">{{ form.firstName.vars.label }}</label>
+                <div class="mt-1">
+                  {{ form_widget(form.firstName, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.firstName) }}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="{{ form.lastName.vars.id }}" class="block text-sm font-medium text-gray-700">{{ form.lastName.vars.label }}</label>
+                <div class="mt-1">
+                  {{ form_widget(form.lastName, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.lastName) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="{{ form.email.vars.id }}" class="block text-sm font-medium text-gray-700">{{ form.email.vars.label }}</label>
+                <div class="mt-1">
+                  {{ form_widget(form.email, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.email) }}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="{{ form.phone.vars.id }}" class="block text-sm font-medium text-gray-700">{{ form.phone.vars.label }}</label>
+                <div class="mt-1">
+                  {{ form_widget(form.phone, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.phone) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-b border-gray-200 my-6"></div>
+
+            <h3 class="text-lg font-medium mb-4">Adresse de livraison</h3>
+            <div class="space-y-4">
+              <div>
+                <label for="{{ form.shipping_address.label.vars.id }}" class="block text-sm font-medium text-gray-700">Libellé</label>
+                <div class="mt-1">
+                  {{ form_widget(form.shipping_address.label, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                      'placeholder': 'Ex: Domicile, Bureau, etc.'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.shipping_address.label) }}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="{{ form.shipping_address.street.vars.id }}" class="block text-sm font-medium text-gray-700">Adresse</label>
+                <div class="mt-1">
+                  {{ form_widget(form.shipping_address.street, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                      'placeholder': 'Numéro et nom de rue'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.shipping_address.street) }}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="{{ form.shipping_address.complement.vars.id }}" class="block text-sm font-medium text-gray-700">Complément d'adresse</label>
+                <div class="mt-1">
+                  {{ form_widget(form.shipping_address.complement, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                      'placeholder': 'Appartement, étage, etc.'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.shipping_address.complement) }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="{{ form.shipping_address.postalCode.vars.id }}" class="block text-sm font-medium text-gray-700">Code postal</label>
+                  <div class="mt-1">
+                    {{ form_widget(form.shipping_address.postalCode, {
+                      'attr': {
+                        'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                        'placeholder': 'Code postal'
+                      }
+                    }) }}
+                    <div class="text-red-500 text-xs mt-1">
+                      {{ form_errors(form.shipping_address.postalCode) }}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="{{ form.shipping_address.city.vars.id }}" class="block text-sm font-medium text-gray-700">Ville</label>
+                  <div class="mt-1">
+                    {{ form_widget(form.shipping_address.city, {
+                      'attr': {
+                        'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                        'placeholder': 'Ville'
+                      }
+                    }) }}
+                    <div class="text-red-500 text-xs mt-1">
+                      {{ form_errors(form.shipping_address.city) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <div class="flex items-center">
+                {{ form_widget(form.different_billing_address, {
+                  'attr': {
+                    'class': 'h-4 w-4 text-[#EDA239] focus:ring-[#EDA239] border-gray-300 rounded'
+                  }
+                }) }}
+                <label for="{{ form.different_billing_address.vars.id }}" class="ml-2 block text-sm text-gray-700">
+                  {{ form.different_billing_address.vars.label }}
+                </label>
+              </div>
+            </div>
+
+            <div id="billing-address-container" class="hidden space-y-4 mt-4 p-4 bg-gray-50 rounded-md">
+              <h3 class="text-lg font-medium mb-2">Adresse de facturation</h3>
+              <div>
+                <label for="{{ form.billing_address.label.vars.id }}" class="block text-sm font-medium text-gray-700">Libellé</label>
+                <div class="mt-1">
+                  {{ form_widget(form.billing_address.label, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                      'placeholder': 'Ex: Domicile, Bureau, etc.'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.billing_address.label) }}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="{{ form.billing_address.street.vars.id }}" class="block text-sm font-medium text-gray-700">Adresse</label>
+                <div class="mt-1">
+                  {{ form_widget(form.billing_address.street, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                      'placeholder': 'Numéro et nom de rue'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.billing_address.street) }}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="{{ form.billing_address.complement.vars.id }}" class="block text-sm font-medium text-gray-700">Complément d'adresse</label>
+                <div class="mt-1">
+                  {{ form_widget(form.billing_address.complement, {
+                    'attr': {
+                      'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                      'placeholder': 'Appartement, étage, etc.'
+                    }
+                  }) }}
+                  <div class="text-red-500 text-xs mt-1">
+                    {{ form_errors(form.billing_address.complement) }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="{{ form.billing_address.postalCode.vars.id }}" class="block text-sm font-medium text-gray-700">Code postal</label>
+                  <div class="mt-1">
+                    {{ form_widget(form.billing_address.postalCode, {
+                      'attr': {
+                        'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                        'placeholder': 'Code postal'
+                      }
+                    }) }}
+                    <div class="text-red-500 text-xs mt-1">
+                      {{ form_errors(form.billing_address.postalCode) }}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label for="{{ form.billing_address.city.vars.id }}" class="block text-sm font-medium text-gray-700">Ville</label>
+                  <div class="mt-1">
+                    {{ form_widget(form.billing_address.city, {
+                      'attr': {
+                        'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                        'placeholder': 'Ville'
+                      }
+                    }) }}
+                    <div class="text-red-500 text-xs mt-1">
+                      {{ form_errors(form.billing_address.city) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <div class="flex items-center">
+                {{ form_widget(form.create_account, {
+                  'attr': {
+                    'class': 'h-4 w-4 text-[#EDA239] focus:ring-[#EDA239] border-gray-300 rounded'
+                  }
+                }) }}
+                <label for="{{ form.create_account.vars.id }}" class="ml-2 block text-sm text-gray-700">
+                  {{ form.create_account.vars.label }}
+                </label>
+              </div>
+              <p class="text-xs text-gray-500 mt-1 ml-6">
+                Un mot de passe provisoire sera généré et vous sera envoyé par email.
+              </p>
+            </div>
+
+            <div class="mt-6">
+              <div class="flex items-center">
+                {{ form_widget(form.terms, {
+                  'attr': {
+                    'class': 'h-4 w-4 text-[#EDA239] focus:ring-[#EDA239] border-gray-300 rounded'
+                  }
+                }) }}
+                <label for="{{ form.terms.vars.id }}" class="ml-2 block text-sm text-gray-700">
+                  {{ form.terms.vars.label }}
+                </label>
+              </div>
+              <div class="text-red-500 text-xs mt-1 ml-6">
+                {{ form_errors(form.terms) }}
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+                Procéder au paiement
+              </button>
+            </div>
+            {{ form_end(form) }}
+          </div>
+        </div>
+
+        <div class="md:w-1/3">
+          <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-6 sticky top-24">
+            <h2 class="text-xl font-playfair mb-6">Résumé de la commande</h2>
+
+            <div class="space-y-4">
+              {% for item in cart.items %}
+                <div class="flex items-center py-2 {% if not loop.last %}border-b border-gray-100{% endif %}">
+                  <div class="flex-shrink-0 w-16 h-16">
+                    {% if item.product.mainImage %}
+                      <img src="{{ item.product.mainImage }}" alt="{{ item.product.name }}" class="w-full h-full object-cover rounded-md">
+                    {% else %}
+                      <div class="w-full h-full bg-gray-100 rounded-md flex items-center justify-center">
+                        <i data-lucide="image" class="h-6 w-6 text-gray-400"></i>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="ml-4 flex-1">
+                    <h3 class="text-sm font-medium text-gray-900">{{ item.product.name }}</h3>
+                    <p class="text-xs text-gray-500">Quantité: {{ item.quantity }}</p>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-sm font-medium">{{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }} €</span>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-gray-100">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm text-gray-600">Sous-total</span>
+                <span class="text-sm font-medium">{{ cart.totalPrice|number_format(2, ',', ' ') }} €</span>
+              </div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm text-gray-600">Livraison</span>
+                <span class="text-sm font-medium">Gratuite</span>
+              </div>
+              <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+                <span class="text-base font-medium">Total</span>
+                <span class="text-lg font-bold">{{ cart.totalPrice|number_format(2, ',', ' ') }} €</span>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <a href="{{ path('app_cart_index') }}" class="block text-center text-sm text-gray-600 hover:text-gray-900">
+                Retour au panier
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Gestion de l'affichage de l'adresse de facturation
+      const differentBillingCheckbox = document.getElementById('{{ form.different_billing_address.vars.id }}');
+      const billingAddressContainer = document.getElementById('billing-address-container');
+
+      function toggleBillingAddress() {
+        if (differentBillingCheckbox.checked) {
+          billingAddressContainer.classList.remove('hidden');
+        } else {
+          billingAddressContainer.classList.add('hidden');
+        }
+      }
+
+      differentBillingCheckbox.addEventListener('change', toggleBillingAddress);
+      toggleBillingAddress(); // Init
+    });
+  </script>
+{% endblock %}
