@@ -28,3 +28,6 @@ yarn-error.log
 .env
 .env.dev
 .env.test
+src/Controller/TestEmailController.php
+templates/emails/test.html.twig
+templates/admin/test_email.html.twig
