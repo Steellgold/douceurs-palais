@@ -144,6 +144,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-menu" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-menu-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/stripe/stripe-php" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/async-aws/core" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/async-aws/ses" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/amazon-mailer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
