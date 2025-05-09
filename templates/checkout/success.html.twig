@@ -22,7 +22,7 @@
           <p class="text-gray-600 text-sm mb-4">Un récapitulatif de commande a été envoyé à votre adresse email.</p>
 
           <div class="flex flex-col sm:flex-row gap-4 mt-2">
-            <a href="{{ path('app_checkout_order_details', {'id': order.id}) }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+            <a href="{{ path('app_checkout_order_details', {'id': order.id, 'token': order.token}) }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
               Voir le détail de la commande
             </a>
             <a href="{{ path('app_index_page') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
@@ -143,6 +143,23 @@
           </div>
         </div>
       </div>
+
+      {% if not app.user %}
+        <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-100 mt-6">
+          <div class="px-6 py-4 bg-gray-50 border-b border-gray-100">
+            <h2 class="text-lg font-playfair">Créer un compte</h2>
+          </div>
+          <div class="p-6">
+            <p class="text-gray-600 mb-4">Un compte a été créé pour vous afin de suivre votre commande.</p>
+            <p class="text-gray-600 mb-4">Si vous souhaitez définir un mot de passe pour accéder à votre compte, utilisez la fonction "Mot de passe oublié" avec votre adresse email.</p>
+            <div class="flex justify-center">
+              <a href="{{ path('app_forgot_password') }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+                Créer mon mot de passe
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

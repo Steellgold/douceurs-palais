@@ -95,17 +95,6 @@
           </div>
         </div>
 
-        <div class="flex items-center">
-          {{ form_widget(form.isPrimary, {
-            'attr': {
-              'class': 'h-4 w-4 text-[#EDA239] focus:ring-[#EDA239] border-gray-300 rounded'
-            }
-          }) }}
-          <label for="{{ form.isPrimary.vars.id }}" class="ml-2 block text-sm text-gray-700">
-            Définir comme adresse principale
-          </label>
-        </div>
-
         <div class="pt-4">
           <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
             {% if edit is defined and edit %}

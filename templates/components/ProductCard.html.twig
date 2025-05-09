@@ -2,9 +2,9 @@
   <div class="bg-[#FEFDFB] rounded-lg p-2 w-full max-w-xs flex flex-row items-center shadow-md h-auto">
     <a href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir le produit {{ name }}">
       <img
-        src="{{ imageUrl }}"
-        alt="Product Image"
-        class="w-16 h-16 object-cover rounded-lg"
+          src="{{ imageUrl }}"
+          alt="Product Image"
+          class="w-16 h-16 object-cover rounded-lg"
       />
 
       <div class="flex flex-col ml-3 flex-grow">
@@ -21,12 +21,21 @@
     </div>
   </div>
 {% else %}
+  {% set canAddToCart = true %}
+  {% set cartBakeryId = cart_bakery_id() %}
+
+  {% if cartBakeryId is not null and bakeryId is defined and bakeryId is not null %}
+    {% if cartBakeryId != bakeryId %}
+      {% set canAddToCart = false %}
+    {% endif %}
+  {% endif %}
+
   <div class="bg-[#FEFDFB] rounded-lg p-3 w-full max-w-xs flex flex-col shadow-lg h-auto">
     <a href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir le produit {{ name }}">
       <img
-        src="{{ imageUrl }}"
-        alt="Product Image"
-        class="w-full h-48 object-cover rounded-lg mb-3"
+          src="{{ imageUrl }}"
+          alt="Product Image"
+          class="w-full h-48 object-cover rounded-lg mb-3"
       />
     </a>
 
@@ -43,25 +52,38 @@
       </a>
 
       <div class="w-full flex flex-col sm:flex-row gap-2 mt-3">
-        <twig:Button
-          label="Ajouter"
-          variant="primary"
-          fullWidth
-          iconLeft="shopping-bag"
-          size="sm"
-          class="w-full"
-          addCart
-          productId="{{ productId }}"
-        />
+        {% if canAddToCart %}
+          <twig:Button
+              label="Ajouter"
+              variant="primary"
+              fullWidth
+              iconLeft="shopping-bag"
+              size="sm"
+              class="w-full"
+              addCart
+              productId="{{ productId }}"
+          />
+        {% else %}
+          <twig:Button
+              label="Boutique différente"
+              variant="dark"
+              fullWidth
+              iconLeft="shopping-bag"
+              size="sm"
+              class="w-full opacity-50 cursor-not-allowed"
+              disabled="true"
+              title="Vous avez déjà des produits d'une autre boutique dans votre panier"
+          />
+        {% endif %}
 
         <twig:Button
-          label="Détails"
-          variant="dark"
-          href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}"
-          fullWidth
-          iconLeft="book-image"
-          size="sm"
-          class="w-full"
+            label="Détails"
+            variant="dark"
+            href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}"
+            fullWidth
+            iconLeft="book-image"
+            size="sm"
+            class="w-full"
         />
       </div>
     </div>
