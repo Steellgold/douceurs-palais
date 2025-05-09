@@ -90,15 +90,18 @@ class AccountController extends AbstractController {
 
   #[Route('/addresses/new', name: 'app_account_address_new')]
   public function newAddress(Request $request, EntityManagerInterface $entityManager): Response {
+    $user = $this->getUser();
     $address = new Address();
-    $address->setUser($this->getUser());
+    $address->setUser($user);
 
     $form = $this->createForm(AddressType::class, $address);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-      if ($this->getUser()->getAddresses()->isEmpty()) {
+      if ($user->getAddresses()->isEmpty()) {
         $address->setIsPrimary(true);
+      } else {
+        $address->setIsPrimary(false);
       }
 
       $entityManager->persist($address);
