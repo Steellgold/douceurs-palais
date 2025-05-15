@@ -67,6 +67,12 @@ class Product {
   // #[ORM\Column(length: 255, nullable: true)]
   // private ?string $category = null;
 
+  #[ORM\Column(nullable: true)]
+  private ?int $requiredPoints = null;
+
+  #[ORM\Column(options: ['default' => false])]
+  private bool $redeemedWithPoints = false;
+
   #[ORM\ManyToOne(inversedBy: 'products')]
   private ?Category $category = null;
 
@@ -275,6 +281,28 @@ class Product {
   public function setCategory(?Category $category): static {
     $this->category = $category;
 
+    return $this;
+  }
+
+  public function getRequiredPoints(): ?int {
+    return $this->requiredPoints;
+  }
+
+  public function setRequiredPoints(?int $requiredPoints): static {
+    $this->requiredPoints = $requiredPoints;
+    return $this;
+  }
+
+  public function isAvailableWithPoints(): bool {
+    return $this->requiredPoints !== null;
+  }
+
+  public function isRedeemedWithPoints(): bool {
+    return $this->redeemedWithPoints;
+  }
+
+  public function setRedeemedWithPoints(bool $redeemedWithPoints): static {
+    $this->redeemedWithPoints = $redeemedWithPoints;
     return $this;
   }
 }

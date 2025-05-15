@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Cart;
 use App\Entity\CartItem;
+use App\Entity\Product;
 use App\Entity\User;
 use App\Repository\CartItemRepository;
 use App\Repository\CartRepository;
@@ -126,12 +127,35 @@ class CartService {
     return $cart;
   }
 
+  public function addRedeemItem(Product $product): Cart {
+    $cart = $this->getCart();
+
+    $normalItem = $cart->getItemByProduct($product);
+    if ($normalItem && !$normalItem->isRedeemedWithPoints()) {
+      throw new \InvalidArgumentException("Ce produit est déjà dans votre panier. Veuillez le retirer avant d'utiliser vos points.");
+    }
+
+    $item = new CartItem();
+    $item->setProduct($product);
+    $item->setQuantity(1);
+    $item->setRedeemedWithPoints(true);
+    $cart->addItem($item);
+
+    $this->cartRepository->save($cart, true);
+
+    return $cart;
+  }
+
   public function updateItemQuantity(string $itemId, int $quantity): Cart {
     $cart = $this->getCart();
     $item = $this->cartItemRepository->find($itemId);
 
     if (!$item || $item->getCart()->getId() !== $cart->getId()) {
       throw new \InvalidArgumentException("Item not found in cart");
+    }
+
+    if ($item->isRedeemedWithPoints()) {
+      throw new \InvalidArgumentException("La quantité des produits obtenus avec des points ne peut pas être modifiée");
     }
 
     if ($quantity <= 0) {
@@ -152,6 +176,16 @@ class CartService {
 
     if (!$item || $item->getCart()->getId() !== $cart->getId()) {
       throw new \InvalidArgumentException("Item not found in cart");
+    }
+
+    if ($item->isRedeemedWithPoints()) {
+      $user = $this->security->getUser();
+      if ($user instanceof User) {
+        $product = $item->getProduct();
+        $requiredPoints = $product->getRequiredPoints();
+        $user->addLoyaltyPoints($requiredPoints);
+        $this->entityManager->flush();
+      }
     }
 
     $cart->removeItem($item);

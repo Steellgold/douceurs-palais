@@ -79,6 +79,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
   #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
   private Collection $orders;
 
+  #[ORM\Column(options: ['default' => 0])]
+  private int $loyaltyPoints = 0;
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
@@ -395,6 +398,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
       }
     }
 
+    return $this;
+  }
+
+  public function getLoyaltyPoints(): int {
+    return $this->loyaltyPoints;
+  }
+
+  public function setLoyaltyPoints(int $loyaltyPoints): static {
+    $this->loyaltyPoints = $loyaltyPoints;
+    return $this;
+  }
+
+  public function addLoyaltyPoints(int $points): static {
+    $this->loyaltyPoints += $points;
+    return $this;
+  }
+
+  public function spendLoyaltyPoints(int $points): static {
+    if ($this->loyaltyPoints < $points) {
+      throw new \InvalidArgumentException('Pas assez de points de fidélité');
+    }
+    $this->loyaltyPoints -= $points;
     return $this;
   }
 }

@@ -182,4 +182,14 @@ class ProductRepository extends ServiceEntityRepository {
       $this->getEntityManager()->flush();
     }
   }
+
+  public function findAvailableWithPointsByBakery(Bakery $bakery): array {
+    return $this->createQueryBuilder('p')
+      ->andWhere('p.bakery = :bakery')
+      ->andWhere('p.requiredPoints IS NOT NULL')
+      ->setParameter('bakery', $bakery)
+      ->orderBy('p.requiredPoints', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
 }

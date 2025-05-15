@@ -30,6 +30,10 @@ class CartItem {
   #[ORM\Column(nullable: true)]
   private ?\DateTimeImmutable $updatedAt = null;
 
+  #[ORM\Column(options: ['default' => false])]
+  private bool $redeemedWithPoints = false;
+
+
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
@@ -107,6 +111,15 @@ class CartItem {
   public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static {
     $this->updatedAt = $updatedAt;
 
+    return $this;
+  }
+
+  public function isRedeemedWithPoints(): bool {
+    return $this->redeemedWithPoints;
+  }
+
+  public function setRedeemedWithPoints(bool $redeemedWithPoints): static {
+    $this->redeemedWithPoints = $redeemedWithPoints;
     return $this;
   }
 }

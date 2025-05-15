@@ -130,14 +130,6 @@ class Cart {
     return $total;
   }
 
-  public function getTotalPrice(): float {
-    $total = 0;
-    foreach ($this->items as $item) {
-      $total += $item->getProduct()->getPrice() * $item->getQuantity();
-    }
-    return $total;
-  }
-
   public function isEmpty(): bool {
     return $this->items->isEmpty();
   }
@@ -167,5 +159,15 @@ class Cart {
 
   public function hasMultipleShops(): bool {
     return count($this->getUniqueShops()) > 1;
+  }
+
+  public function getTotalPrice(): float {
+    $total = 0;
+    foreach ($this->items as $item) {
+      if (!$item->isRedeemedWithPoints()) {
+        $total += $item->getProduct()->getPrice() * $item->getQuantity();
+      }
+    }
+    return $total;
   }
 }

@@ -33,7 +33,7 @@ class OrderService {
   public function createOrderFromCart(Cart $cart, Address $shippingAddress, ?Address $billingAddress = null): Order {
     $order = new Order();
     $order->setUser($cart->getUser());
-    $order->setTotalAmount($cart->getTotalPrice());
+    $totalAmount = 0;
 
     $order->setShippingAddress($this->addressToArray($shippingAddress));
 
@@ -44,9 +44,19 @@ class OrderService {
       $orderItem = new OrderItem();
       $orderItem->setProduct($cartItem->getProduct());
       $orderItem->setQuantity($cartItem->getQuantity());
-      $orderItem->setPrice($cartItem->getProduct()->getPrice());
+
+      if ($cartItem->isRedeemedWithPoints()) {
+        $orderItem->setPrice(0);
+        $orderItem->setRedeemedWithPoints(true);
+      } else {
+        $orderItem->setPrice($cartItem->getProduct()->getPrice());
+        $totalAmount += $orderItem->getPrice() * $orderItem->getQuantity();
+      }
+
       $order->addItem($orderItem);
     }
+
+    $order->setTotalAmount($totalAmount);
 
     $this->entityManager->persist($order);
     $this->entityManager->flush();
@@ -82,7 +92,12 @@ class OrderService {
     $this->entityManager->flush();
 
     $user = $order->getUser();
+    if ($user) {
+      $pointsToAdd = (int)$order->getTotalAmount();
+      $user->addLoyaltyPoints($pointsToAdd);
+    }
 
+    $this->entityManager->flush();
     $this->sendOrderConfirmationEmail($order);
 
     if ($user) {
