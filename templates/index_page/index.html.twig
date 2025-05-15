@@ -25,6 +25,31 @@
   {# ------------------------------------------------ #}
 
   <div class="w-full py-24">
+    <h1 class="text-5xl text-center font-playfair">Nos Produits Populaires</h1>
+    <p class="text-lg mt-1 text-center">Découvrez nos créations les plus appréciées par nos clients</p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-2 md:gap-4">
+      {% if popularProducts is defined and popularProducts is not empty %}
+        {% for product in popularProducts %}
+          <twig:ProductCard
+              imageUrl="{{ product.mainImage ?: 'https://via.placeholder.com/400x250' }}"
+              price="{{ product.price|number_format(2, '.', ',') }}"
+              category="{{ product.category.name ?: 'Pâtisserie' }}"
+              name="{{ product.name }}"
+              description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
+              productId="{{ product.id }}"
+          />
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-gray-500">Aucun produit populaire trouvé</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {# ------------------------------------------------ #}
+
+  <div class="w-full py-24 bg-[#FFFFFF]">
+
     <h1 class="text-5xl text-center font-playfair">Pourquoi nous choisir</h1>
     <p class="text-lg mt-1 text-center">Nous combinons tradition et innovation pour vous offrir une expérience gustative exceptionnelle</p>
 
@@ -49,30 +74,6 @@
         icon: 'clock',
         variant: 'big'
       }) }}
-    </div>
-  </div>
-
-  {# ------------------------------------------------ #}
-
-  <div class="w-full py-24 bg-[#FFFFFF]">
-    <h1 class="text-5xl text-center font-playfair">Nos Produits Populaires</h1>
-    <p class="text-lg mt-1 text-center">Découvrez nos créations les plus appréciées par nos clients</p>
-
-    <div class="mt-8 flex flex-wrap justify-center gap-2 md:gap-4">
-      {% if popularProducts is defined and popularProducts is not empty %}
-        {% for product in popularProducts %}
-          <twig:ProductCard
-              imageUrl="{{ product.mainImage ?: 'https://via.placeholder.com/400x250' }}"
-              price="{{ product.price|number_format(2, '.', ',') }}"
-              category="{{ product.category.name ?: 'Pâtisserie' }}"
-              name="{{ product.name }}"
-              description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
-              productId="{{ product.id }}"
-          />
-        {% endfor %}
-      {% else %}
-        <p class="text-center text-gray-500">Aucun produit populaire trouvé</p>
-      {% endif %}
     </div>
   </div>
 
