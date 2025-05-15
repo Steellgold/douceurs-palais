@@ -78,6 +78,39 @@
   </div>
 
   <div class="w-full py-24">
+    <h1 class="text-5xl text-center font-playfair">Nos Boulangeries</h1>
+    <p class="text-lg mt-1 text-center">Découvrez nos partenaires locaux pour une livraison de qualité à domicile</p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-2 md:gap-4">
+      {% if popularBakeries is defined and popularBakeries is not empty %}
+        {% for bakery in popularBakeries %}
+          <twig:BakeryCard
+              imageUrl="{{ bakery.mainImage ?: 'https://via.placeholder.com/400x250' }}"
+              location="{{ bakery.city }}"
+              name="{{ bakery.name }}"
+              description="{{ bakery.description|striptags|slice(0, 100) ~ (bakery.description|length > 100 ? '...' : '') }}"
+              address="{{ bakery.address }}"
+              note="{{ bakery.rating }}"
+              bakeryId="{{ bakery.id }}"
+              isFavorite="{{ app.user ? app.user.hasFavoriteBakery(bakery) : false }}"
+          />
+        {% endfor %}
+      {% else %}
+        <div class="text-center py-12 bg-white rounded-lg shadow-md w-full">
+          <i class="[&>svg]:h-16 [&>svg]:w-16 text-gray-300 mx-auto mb-4 lucide lucide-package-x"></i>
+          <p class="text-gray-500 mb-4">Aucune boulangerie partenaire n'a été trouvée</p>
+          <a href="{{ path('app_bakery_list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D]">
+            Voir toutes les boutiques
+          </a>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  {# ------------------------------------------------ #}
+
+  <div class="w-full py-24 bg-[#FFFFFF]">
     <h1 class="text-5xl text-center font-playfair">Ce Que Disent Nos Clients</h1>
     <p class="text-lg mt-1 text-center">Découvrez les témoignages de nos clients satisfaits</p>
 
@@ -133,38 +166,5 @@
         }
       ]
     }) }}
-  </div>
-
-  {# ------------------------------------------------ #}
-
-  <div class="w-full py-24 bg-[#FFFFFF]">
-    <h1 class="text-5xl text-center font-playfair">Nos Boulangeries</h1>
-    <p class="text-lg mt-1 text-center">Découvrez nos partenaires locaux pour une livraison de qualité à domicile</p>
-
-    <div class="mt-8 flex flex-wrap justify-center gap-2 md:gap-4">
-      {% if popularBakeries is defined and popularBakeries is not empty %}
-        {% for bakery in popularBakeries %}
-          <twig:BakeryCard
-              imageUrl="{{ bakery.mainImage ?: 'https://via.placeholder.com/400x250' }}"
-              location="{{ bakery.city }}"
-              name="{{ bakery.name }}"
-              description="{{ bakery.description|striptags|slice(0, 100) ~ (bakery.description|length > 100 ? '...' : '') }}"
-              address="{{ bakery.address }}"
-              note="{{ bakery.rating }}"
-              bakeryId="{{ bakery.id }}"
-              isFavorite="{{ app.user ? app.user.hasFavoriteBakery(bakery) : false }}"
-          />
-        {% endfor %}
-      {% else %}
-        <div class="text-center py-12 bg-white rounded-lg shadow-md w-full">
-          <i class="[&>svg]:h-16 [&>svg]:w-16 text-gray-300 mx-auto mb-4 lucide lucide-package-x"></i>
-          <p class="text-gray-500 mb-4">Aucune boulangerie partenaire n'a été trouvée</p>
-          <a href="{{ path('app_bakery_list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D]">
-            Voir toutes les boutiques
-          </a>
-        </div>
-      {% endif %}
-
-    </div>
   </div>
 {% endblock %}
