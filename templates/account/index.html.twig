@@ -88,6 +88,22 @@
           {% endif %}
         </a>
       </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mt-6">
+        <div class="flex items-center mb-4">
+          <div class="rounded-full bg-[#EDA239] text-white p-3 mr-4">
+            <i data-lucide="gift" class="h-6 w-6"></i>
+          </div>
+          <h2 class="text-2xl font-playfair">Mes points de fidélité</h2>
+        </div>
+
+        {% if app.user.loyaltyPoints > 0 %}
+          <p class="text-lg font-semibold mb-2">Vous avez {{ app.user.loyaltyPoints }} points de fidélité.</p>
+          <p>Ces points peuvent être échangés contre des réductions sur vos prochaines commandes.</p>
+        {% else %}
+          <p class="text-gray-600">Vous n'avez pas encore de points de fidélité.</p>
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}

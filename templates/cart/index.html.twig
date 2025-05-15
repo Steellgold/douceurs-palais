@@ -16,6 +16,28 @@
       {% endfor %}
 
       {% if cart.items|length > 0 %}
+        {% set hasRedeemedProducts = false %}
+        {% for item in cart.items %}
+          {% if item.redeemedWithPoints %}
+            {% set hasRedeemedProducts = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% if hasRedeemedProducts %}
+          <div class="bg-[#F8F8F1] p-4 rounded-lg mb-6 border border-[#EDA239]">
+            <h2 class="text-lg font-medium flex items-center mb-2">
+              <i data-lucide="info" class="h-5 w-5 text-[#EDA239] mr-2"></i>
+              Produits obtenus avec des points de fidélité
+            </h2>
+            <p class="text-gray-700 mb-2">Les produits que vous avez obtenus avec vos points de fidélité :</p>
+            <ul class="list-disc ml-6 text-gray-700 text-sm mb-2">
+              <li>Ont un prix de 0€ et n'augmentent pas le total de votre panier</li>
+              <li>Leur quantité ne peut pas être modifiée (limité à 1 par échange)</li>
+              <li>Si vous les supprimez, vos points de fidélité vous seront automatiquement restitués</li>
+            </ul>
+          </div>
+        {% endif %}
+
         <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
           <div class="px-4 py-4 md:p-0">
             <!-- Table pour écrans larges (desktop) -->
@@ -44,7 +66,7 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
               {% for item in cart.items %}
-                <tr data-item-id="{{ item.id }}">
+                <tr data-item-id="{{ item.id }}" {% if item.redeemedWithPoints %}data-redeemed="true"{% endif %}>
                   <td class="py-4 pl-6 pr-3 whitespace-nowrap w-16">
                     <div class="h-16 w-16 flex-shrink-0 rounded-md overflow-hidden">
                       <a href="{{ path('app_product_page', {'slug': item.product.slug}) }}">
@@ -61,23 +83,44 @@
                         {{ item.product.category.name }}
                       {% endif %}
                     </p>
+                    {% if item.redeemedWithPoints %}
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#EDA239] text-white mt-1">
+                        <i data-lucide="gift" class="h-3 w-3 mr-1"></i>
+                        Obtenu avec des points
+                      </span>
+                    {% endif %}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {{ item.product.price|number_format(2, '.', ',') }}€
+                    {% if item.redeemedWithPoints %}
+                      <span class="line-through text-gray-400">{{ item.product.price|number_format(2, '.', ',') }}€</span>
+                      <span class="text-[#EDA239] font-medium ml-1">0,00€</span>
+                    {% else %}
+                      {{ item.product.price|number_format(2, '.', ',') }}€
+                    {% endif %}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-center">
-                    <div class="flex justify-center items-center">
-                      <button type="button" class="decrease-quantity rounded-l-md border border-gray-300 px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">-</button>
-                      <label for="quantity-{{ item.id }}" class="sr-only">Quantité</label>
-                      <input id="quantity-{{ item.id }}" type="number" value="{{ item.quantity }}" min="1" max="99" class="quantity-input w-12 border-t border-b border-gray-300 px-2 py-1 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                      <button type="button" class="increase-quantity rounded-r-md border border-gray-300 px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">+</button>
-                    </div>
+                    {% if item.redeemedWithPoints %}
+                      <div class="inline-flex items-center">
+                        <span class="text-sm">1</span>
+                      </div>
+                    {% else %}
+                      <div class="flex justify-center items-center">
+                        <button type="button" class="decrease-quantity rounded-l-md border border-gray-300 px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">-</button>
+                        <label for="quantity-{{ item.id }}" class="sr-only">Quantité</label>
+                        <input id="quantity-{{ item.id }}" type="number" value="{{ item.quantity }}" min="1" max="99" class="quantity-input w-12 border-t border-b border-gray-300 px-2 py-1 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <button type="button" class="increase-quantity rounded-r-md border border-gray-300 px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">+</button>
+                      </div>
+                    {% endif %}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <span class="item-total">{{ (item.product.price * item.quantity)|number_format(2, '.', ',') }}€</span>
+                    {% if item.redeemedWithPoints %}
+                      <span class="item-total text-[#EDA239] font-medium">0,00€</span>
+                    {% else %}
+                      <span class="item-total">{{ (item.product.price * item.quantity)|number_format(2, '.', ',') }}€</span>
+                    {% endif %}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                    <button type="button" class="remove-item text-red-600 hover:text-red-900">
+                    <button type="button" class="remove-item text-red-600 hover:text-red-900" aria-label="Supprimer l'article">
                       <i data-lucide="trash-2" class="h-5 w-5"></i>
                     </button>
                   </td>
@@ -86,10 +129,10 @@
               </tbody>
             </table>
 
-            <!-- Affichage mobile, même si pas nécessaire en sois d'après consignes ? -->
+            <!-- Affichage mobile -->
             <div class="md:hidden space-y-6">
               {% for item in cart.items %}
-                <div class="pb-4 border-b border-gray-200 last:border-0" data-item-id="{{ item.id }}">
+                <div class="pb-4 border-b border-gray-200 last:border-0" data-item-id="{{ item.id }}" {% if item.redeemedWithPoints %}data-redeemed="true"{% endif %}>
                   <div class="flex items-center mb-3">
                     <div class="h-16 w-16 flex-shrink-0 rounded-md overflow-hidden mr-3">
                       <a href="{{ path('app_product_page', {'slug': item.product.slug}) }}">
@@ -105,6 +148,12 @@
                           {{ item.product.category.name }}
                         {% endif %}
                       </p>
+                      {% if item.redeemedWithPoints %}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[#EDA239] text-white mt-1">
+                          <i data-lucide="gift" class="h-3 w-3 mr-1"></i>
+                          Obtenu avec des points
+                        </span>
+                      {% endif %}
                     </div>
                     <button type="button" class="remove-item text-red-600 hover:text-red-900 ml-2">
                       <i data-lucide="trash-2" class="h-5 w-5"></i>
@@ -113,20 +162,39 @@
 
                   <div class="grid grid-cols-2 gap-2">
                     <div class="text-sm text-gray-600">Prix unitaire</div>
-                    <div class="text-sm font-medium text-right">{{ item.product.price|number_format(2, '.', ',') }}€</div>
+                    <div class="text-sm font-medium text-right">
+                      {% if item.redeemedWithPoints %}
+                        <span class="line-through text-gray-400">{{ item.product.price|number_format(2, '.', ',') }}€</span>
+                        <span class="text-[#EDA239] font-medium ml-1">0,00€</span>
+                      {% else %}
+                        {{ item.product.price|number_format(2, '.', ',') }}€
+                      {% endif %}
+                    </div>
 
                     <div class="text-sm text-gray-600">Quantité</div>
                     <div class="flex justify-end">
-                      <div class="inline-flex items-center">
-                        <button type="button" class="decrease-quantity rounded-l-md border border-gray-300 px-2 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">-</button>
-                        <label for="quantity-{{ item.id }}" class="sr-only">Quantité</label>
-                        <input id="quantity-{{ item.id }}" type="number" value="{{ item.quantity }}" min="1" max="99" class="quantity-input w-10 border-t border-b border-gray-300 px-1 py-1 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                        <button type="button" class="increase-quantity rounded-r-md border border-gray-300 px-2 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">+</button>
-                      </div>
+                      {% if item.redeemedWithPoints %}
+                        <div class="inline-flex items-center">
+                          <span class="text-sm">1</span>
+                        </div>
+                      {% else %}
+                        <div class="inline-flex items-center">
+                          <button type="button" class="decrease-quantity rounded-l-md border border-gray-300 px-2 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">-</button>
+                          <label for="quantity-{{ item.id }}" class="sr-only">Quantité</label>
+                          <input id="quantity-{{ item.id }}" type="number" value="{{ item.quantity }}" min="1" max="99" class="quantity-input w-10 border-t border-b border-gray-300 px-1 py-1 text-center text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                          <button type="button" class="increase-quantity rounded-r-md border border-gray-300 px-2 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">+</button>
+                        </div>
+                      {% endif %}
                     </div>
 
                     <div class="text-sm font-semibold text-gray-700">Total</div>
-                    <div class="text-sm font-semibold text-right item-total">{{ (item.product.price * item.quantity)|number_format(2, '.', ',') }}€</div>
+                    <div class="text-sm font-semibold text-right item-total">
+                      {% if item.redeemedWithPoints %}
+                        <span class="text-[#EDA239] font-medium">0,00€</span>
+                      {% else %}
+                        {{ (item.product.price * item.quantity)|number_format(2, '.', ',') }}€
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
               {% endfor %}
@@ -201,7 +269,38 @@
         const removeButtons = document.querySelectorAll('.remove-item');
         const clearCartButton = document.getElementById('clear-cart-button');
 
+        // Désactiver les contrôles de quantité pour les produits obtenus avec des points
+        const redeemedItems = document.querySelectorAll('[data-redeemed="true"]');
+        redeemedItems.forEach(item => {
+          const container = item;
+          const decreaseBtn = container.querySelector('.decrease-quantity');
+          const increaseBtn = container.querySelector('.increase-quantity');
+          const quantityInput = container.querySelector('.quantity-input');
+
+          if (decreaseBtn) {
+            decreaseBtn.disabled = true;
+            decreaseBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          }
+
+          if (increaseBtn) {
+            increaseBtn.disabled = true;
+            increaseBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          }
+
+          if (quantityInput) {
+            quantityInput.disabled = true;
+            quantityInput.classList.add('opacity-50', 'cursor-not-allowed');
+          }
+        });
+
         function updateQuantity(itemId, quantity) {
+          // Vérifier si l'élément est un produit obtenu avec des points
+          const container = document.querySelector(`[data-item-id="${itemId}"]`);
+          if (container.getAttribute('data-redeemed') === 'true') {
+            alert('La quantité des produits obtenus avec des points ne peut pas être modifiée.');
+            return;
+          }
+
           fetch('{{ path("app_cart_api_update") }}', {
             method: 'POST',
             headers: {
@@ -240,7 +339,24 @@
                 if (data.success) {
                   const itemRow = document.querySelector(`[data-item-id="${itemId}"]`);
                   if (itemRow) {
+                    // Vérifier si c'était un produit obtenu avec des points
+                    const isRedeemed = itemRow.getAttribute('data-redeemed') === 'true';
                     itemRow.remove();
+
+                    if (isRedeemed) {
+                      // Afficher un message spécifique pour les produits obtenus avec des points
+                      const flashContainer = document.createElement('div');
+                      flashContainer.className = 'mb-6 p-4 rounded-md bg-green-100 border border-green-400 text-green-700';
+                      flashContainer.innerHTML = '<p>Vos points de fidélité ont été restitués.</p>';
+
+                      const containerDiv = document.querySelector('.container');
+                      containerDiv.insertBefore(flashContainer, containerDiv.firstChild.nextSibling);
+
+                      // Supprimer le message après 5 secondes
+                      setTimeout(() => {
+                        flashContainer.remove();
+                      }, 5000);
+                    }
                   }
 
                   updateCartDisplay(data);
@@ -298,7 +414,13 @@
 
         decreaseButtons.forEach(button => {
           button.addEventListener('click', function() {
+            // Vérifier si l'élément est un produit obtenu avec des points
             const container = this.closest('[data-item-id]');
+            if (container.getAttribute('data-redeemed') === 'true') {
+              alert('La quantité des produits obtenus avec des points ne peut pas être modifiée.');
+              return;
+            }
+
             const itemId = container.dataset.itemId;
             const quantityInput = container.querySelector('.quantity-input');
             let quantity = parseInt(quantityInput.value);
@@ -323,7 +445,13 @@
 
         increaseButtons.forEach(button => {
           button.addEventListener('click', function() {
+            // Vérifier si l'élément est un produit obtenu avec des points
             const container = this.closest('[data-item-id]');
+            if (container.getAttribute('data-redeemed') === 'true') {
+              alert('La quantité des produits obtenus avec des points ne peut pas être modifiée.');
+              return;
+            }
+
             const itemId = container.dataset.itemId;
             const quantityInput = container.querySelector('.quantity-input');
             let quantity = parseInt(quantityInput.value);
@@ -348,7 +476,14 @@
 
         quantityInputs.forEach(input => {
           input.addEventListener('change', function() {
+            // Vérifier si l'élément est un produit obtenu avec des points
             const container = this.closest('[data-item-id]');
+            if (container.getAttribute('data-redeemed') === 'true') {
+              alert('La quantité des produits obtenus avec des points ne peut pas être modifiée.');
+              this.value = 1; // Réinitialiser à 1
+              return;
+            }
+
             const itemId = container.dataset.itemId;
             let quantity = parseInt(this.value);
 
@@ -374,8 +509,14 @@
           button.addEventListener('click', function() {
             const container = this.closest('[data-item-id]');
             const itemId = container.dataset.itemId;
+            const isRedeemed = container.getAttribute('data-redeemed') === 'true';
 
-            if (confirm('Êtes-vous sûr de vouloir supprimer cet article du panier ?')) {
+            let confirmMessage = 'Êtes-vous sûr de vouloir supprimer cet article du panier ?';
+            if (isRedeemed) {
+              confirmMessage = 'Êtes-vous sûr de vouloir supprimer cet article obtenu avec des points ? Vos points vous seront restitués.';
+            }
+
+            if (confirm(confirmMessage)) {
               removeItem(itemId);
             }
           });
