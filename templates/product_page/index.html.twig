@@ -26,7 +26,11 @@
       </a>
 
       <div class="flex items-center">
-        <span class="text-gray-600">{{ product.bakery.name }}</span>
+        <a href="{{ path('app_bakery_show', {'slug': product.bakery.slug}) }}" class="text-[#EDA239] hover:underline">
+          {{ product.bakery.name }}
+        </a>
+
+
         <span class="mx-2 text-gray-400">/</span>
         {% if product.category %}
           <a href="{{ path('app_bakery_category', {'bakery_slug': product.bakery.slug, 'category_slug': product.category.slug}) }}" class="text-[#EDA239] hover:underline">

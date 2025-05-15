@@ -17,11 +17,7 @@
   <div class="bg-[#FEFDFB]">
     <div class="relative w-full h-96 overflow-hidden">
       {% if bakery.mainImage %}
-        <img
-            src="{{ bakery.mainImage }}"
-            alt="{{ bakery.name }}"
-            class="w-full h-96 object-cover"
-        />
+        <img src="{{ bakery.mainImage }}" alt="{{ bakery.name }}" class="w-full h-96 object-cover" />
       {% else %}
         <div class="w-full h-96 bg-gray-200 flex items-center justify-center">
           <i data-lucide="image" class="h-24 w-24 text-gray-400"></i>
@@ -147,7 +143,7 @@
         <div class="mb-16">
           <h2 class="text-3xl font-playfair text-center mb-10">Nos catégories</h2>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             {% for item in categories %}
               {% set category = item[0] %}
               {% set productCount = item.productCount %}
@@ -160,26 +156,6 @@
                   productCount="{{ productCount }}"
                   href="{{ path('app_bakery_category', {'bakery_slug': bakery.slug, 'category_slug': category.slug}) }}"
                   variant="small"
-              />
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
-
-      {% if popularProducts|length > 0 %}
-        <div class="mb-16">
-          <h2 class="text-3xl font-playfair text-center mb-10">Nos produits les plus populaires</h2>
-
-          <div class="flex flex-wrap justify-center gap-4">
-            {% for product in popularProducts %}
-              <twig:ProductCard
-                  imageUrl="{{ product.mainImage ?: 'https://via.placeholder.com/400x250' }}"
-                  price="{{ product.price|number_format(2, '.', ',') }}"
-                  category="{{ product.category is not null ? product.category.name : 'Produit' }}"
-                  name="{{ product.name }}"
-                  description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
-                  productId="{{ product.id }}"
-                  bakeryId="{{ product.bakery.id }}"
               />
             {% endfor %}
           </div>
