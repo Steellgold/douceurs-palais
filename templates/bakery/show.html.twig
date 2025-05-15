@@ -64,6 +64,11 @@
               Ajouter aux favoris
             </a>
           {% endif %}
+
+          <a href="{{ path('app_bakery_loyalty', {'slug': bakery.slug}) }}" class="flex items-center gap-2 px-4 py-2 rounded-full bg-[#EDA239] text-white">
+            <i data-lucide="gift" class="h-5 w-5"></i>
+            Programme fidélité
+          </a>
         </div>
       </div>
     </div>
