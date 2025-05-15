@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Programme de fidélité - {{ bakery.name }}{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex items-center mb-6">
+        <a href="{{ path('app_bakery_show', {'slug': bakery.slug}) }}" class="mr-4 text-gray-600 hover:text-gray-900">
+          <i data-lucide="chevron-left" class="h-5 w-5"></i>
+        </a>
+        <h1 class="text-3xl font-playfair">Programme de fidélité - {{ bakery.name }}</h1>
+      </div>
+
+      {% for label, messages in app.flashes %}
+        {% for message in messages %}
+          <div class="mb-6 p-4 rounded-md {% if label == 'success' %}bg-green-100 border border-green-400 text-green-700{% else %}bg-red-100 border border-red-400 text-red-700{% endif %}">
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endfor %}
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-8">
+        <h2 class="text-xl font-playfair mb-4">Comment ça marche ?</h2>
+        <div class="flex flex-col md:flex-row md:items-center gap-6">
+          <div class="flex-1">
+            <div class="mb-4">
+              <div class="flex items-center">
+                <div class="rounded-full bg-[#EDA239] w-8 h-8 text-white flex items-center justify-center mr-3">1</div>
+                <p class="text-gray-700 font-medium">Gagnez des points</p>
+              </div>
+              <p class="text-gray-600 ml-11">Chaque euro dépensé vous rapporte 1 point de fidélité.</p>
+            </div>
+
+            <div class="mb-4">
+              <div class="flex items-center">
+                <div class="rounded-full bg-[#EDA239] w-8 h-8 text-white flex items-center justify-center mr-3">2</div>
+                <p class="text-gray-700 font-medium">Cumulez vos points</p>
+              </div>
+              <p class="text-gray-600 ml-11">Plus vous passez de commandes, plus vous accumulez de points.</p>
+            </div>
+
+            <div>
+              <div class="flex items-center">
+                <div class="rounded-full bg-[#EDA239] w-8 h-8 text-white flex items-center justify-center mr-3">3</div>
+                <p class="text-gray-700 font-medium">Échangez-les contre des produits</p>
+              </div>
+              <p class="text-gray-600 ml-11">Utilisez vos points pour obtenir des produits gratuits !</p>
+            </div>
+          </div>
+
+          {% if app.user %}
+            <div class="min-w-56 bg-[#F8F8F1] p-5 rounded-md">
+              <p class="text-gray-700">Vos points de fidélité :</p>
+              <p class="text-3xl font-bold text-[#EDA239]">{{ app.user.loyaltyPoints }}</p>
+              <p class="text-sm text-gray-500 mt-1">Échangeables dès maintenant</p>
+            </div>
+          {% else %}
+            <div class="min-w-56 bg-blue-50 border-l-4 border-blue-400 p-4">
+              <p class="text-blue-700">
+                <a href="{{ path('app_login') }}" class="font-medium underline">Connectez-vous</a> pour consulter vos points de fidélité et bénéficier du programme.
+              </p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-playfair mb-6">Produits disponibles avec vos points</h2>
+
+      {% if loyaltyProducts|length > 0 %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {% for product in loyaltyProducts %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+              <div class="relative">
+                {% if product.mainImage %}
+                  <img src="{{ product.mainImage }}" alt="{{ product.name }}" class="w-full h-48 object-cover">
+                {% else %}
+                  <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+                    <i data-lucide="image" class="h-10 w-10 text-gray-400"></i>
+                  </div>
+                {% endif %}
+                <div class="absolute top-2 right-2 bg-[#EDA239] text-white font-bold text-sm px-3 py-1 rounded-full">
+                  {{ product.requiredPoints }} points
+                </div>
+              </div>
+
+              <div class="p-4">
+                <h3 class="text-lg font-medium mb-1">{{ product.name }}</h3>
+                {% if product.category %}
+                  <p class="text-xs text-gray-500 mb-2">{{ product.category.name }}</p>
+                {% endif %}
+                <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}</p>
+                <p class="text-gray-700 text-sm">Prix normal : <span class="font-medium">{{ product.price|number_format(2, ',', ' ') }} €</span></p>
+
+                {% if app.user %}
+                  {% if app.user.loyaltyPoints >= product.requiredPoints %}
+                    <form method="post" action="{{ path('app_loyalty_redeem', {'id': product.id}) }}">
+                      <button type="submit" class="mt-4 w-full py-2 px-4 bg-[#EDA239] text-white rounded-md hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239] flex items-center justify-center">
+                        <i data-lucide="gift" class="h-4 w-4 mr-2"></i>
+                        Échanger mes points
+                      </button>
+                    </form>
+                  {% else %}
+                    <div class="mt-4 relative">
+                      <button type="button" class="w-full py-2 px-4 bg-gray-200 text-gray-500 rounded-md cursor-not-allowed" disabled>
+                        Points insuffisants
+                      </button>
+                      <div class="absolute -bottom-1 left-0 w-full bg-gray-100 rounded-full h-1">
+                        <div class="bg-[#EDA239] h-1 rounded-full" style="width: {{ (app.user.loyaltyPoints / product.requiredPoints * 100)|round }}%"></div>
+                      </div>
+                      <p class="text-xs text-gray-500 text-center mt-1">{{ app.user.loyaltyPoints }} / {{ product.requiredPoints }} points</p>
+                    </div>
+                  {% endif %}
+                {% else %}
+                  <a href="{{ path('app_login') }}" class="mt-4 w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 block text-center">
+                    Se connecter pour échanger
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="bg-white shadow-md rounded-lg p-8 text-center">
+          <i data-lucide="gift" class="h-16 w-16 text-gray-400 mx-auto mb-4"></i>
+          <h3 class="text-xl font-medium text-gray-900 mb-2">Aucun produit disponible</h3>
+          <p class="text-gray-500">Cette boulangerie n'a pas encore de produits disponibles avec des points de fidélité.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
