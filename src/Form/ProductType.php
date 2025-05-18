@@ -16,9 +16,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
 
+/**
+ * Formulaire de gestion des produits.
+ * Permet de créer ou modifier les informations d'un produit,
+ * y compris ses détails nutritionnels et son prix.
+ */
 class ProductType extends AbstractType {
+  /**
+   * Construit le formulaire de produit avec tous les champs nécessaires.
+   *
+   * @param FormBuilderInterface $builder Constructeur de formulaire Symfony
+   * @param array $options Options supplémentaires pour la configuration du formulaire
+   * @return void
+   */
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
+      // Informations de base du produit
       ->add('name', TextType::class, [
         'label' => 'Nom',
         'required' => true,
@@ -46,6 +59,7 @@ class ProductType extends AbstractType {
           ]),
         ],
       ])
+      // Classification du produit
       ->add('category', EntityType::class, [
         'class' => Category::class,
         'choice_label' => 'name',
@@ -53,6 +67,7 @@ class ProductType extends AbstractType {
         'required' => false,
         'placeholder' => 'Choisir une catégorie',
       ])
+      // Informations nutritionnelles
       ->add('nutriscore', ChoiceType::class, [
         'label' => 'Nutriscore',
         'required' => true,
@@ -70,6 +85,7 @@ class ProductType extends AbstractType {
         'required' => false,
         'attr' => ['rows' => 2],
       ])
+      // Système de fidélité
       ->add('requiredPoints', IntegerType::class, [
         'label' => 'Points de fidélité requis',
         'required' => false,
@@ -80,6 +96,13 @@ class ProductType extends AbstractType {
       ]);
   }
 
+  /**
+   * Configure les options globales du formulaire.
+   * Définit notamment la classe de données associée au formulaire.
+   *
+   * @param OptionsResolver $resolver Résolveur d'options pour le formulaire
+   * @return void
+   */
   public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefaults([
       'data_class' => Product::class,

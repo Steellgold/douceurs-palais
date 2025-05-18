@@ -11,7 +11,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Formulaire de gestion des boulangeries.
+ * Permet de créer ou modifier les informations d'une boulangerie,
+ * y compris ses détails de contact et son adresse.
+ */
 class BakeryType extends AbstractType {
+  /**
+   * Construit le formulaire de boulangerie avec tous les champs nécessaires.
+   *
+   * @param FormBuilderInterface $builder Constructeur de formulaire Symfony
+   * @param array $options Options supplémentaires pour la configuration du formulaire
+   * @return void
+   */
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
       ->add('name', TextType::class, [
@@ -64,6 +76,13 @@ class BakeryType extends AbstractType {
       ]);
   }
 
+  /**
+   * Configure les options globales du formulaire.
+   * Définit notamment la classe de données associée au formulaire.
+   *
+   * @param OptionsResolver $resolver Résolveur d'options pour le formulaire
+   * @return void
+   */
   public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefaults([
       'data_class' => Bakery::class,

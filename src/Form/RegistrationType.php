@@ -17,9 +17,22 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
+/**
+ * Formulaire d'inscription utilisateur.
+ * Permet aux visiteurs de créer un compte en fournissant leurs informations personnelles,
+ * une adresse et en acceptant les conditions d'utilisation.
+ */
 class RegistrationType extends AbstractType {
+  /**
+   * Construit le formulaire d'inscription avec tous les champs nécessaires.
+   *
+   * @param FormBuilderInterface $builder Constructeur de formulaire Symfony
+   * @param array $options Options supplémentaires pour la configuration du formulaire
+   * @return void
+   */
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
+      // Informations personnelles de base
       ->add('firstName', TextType::class, [
         'label' => 'Prénom',
         'attr' => [
@@ -53,6 +66,7 @@ class RegistrationType extends AbstractType {
           ]),
         ],
       ])
+      // Mot de passe avec confirmation
       ->add('plainPassword', RepeatedType::class, [
         'type' => PasswordType::class,
         'mapped' => false,
@@ -79,6 +93,7 @@ class RegistrationType extends AbstractType {
         ],
         'invalid_message' => 'Les mots de passe ne correspondent pas',
       ])
+      // Informations de contact supplémentaires
       ->add('phone', TextType::class, [
         'label' => 'Téléphone',
         'required' => false,
@@ -86,11 +101,13 @@ class RegistrationType extends AbstractType {
           'placeholder' => 'Numéro de téléphone',
         ],
       ])
+      // Adresse de l'utilisateur
       ->add('address', AddressType::class, [
         'mapped' => false,
         'required' => false,
         'label' => false
       ])
+      // Acceptation des conditions d'utilisation (obligatoire)
       ->add('agreeTerms', CheckboxType::class, [
         'mapped' => false,
         'label' => 'J\'accepte les conditions d\'utilisation et la politique de confidentialité',
@@ -100,6 +117,7 @@ class RegistrationType extends AbstractType {
           ]),
         ],
       ])
+      // Token CSRF commenté
       // ->add('_token', HiddenType::class, [
       // 'mapped' => false,
       // 'error_bubbling' => true,
@@ -107,6 +125,13 @@ class RegistrationType extends AbstractType {
     ;
   }
 
+  /**
+   * Configure les options globales du formulaire.
+   * Définit notamment la classe de données associée au formulaire.
+   *
+   * @param OptionsResolver $resolver Résolveur d'options pour le formulaire
+   * @return void
+   */
   public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefaults([
       'data_class' => User::class,

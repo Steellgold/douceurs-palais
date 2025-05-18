@@ -11,7 +11,19 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
+/**
+ * Formulaire de changement de mot de passe.
+ * Permet à l'utilisateur de modifier son mot de passe en fournissant
+ * son mot de passe actuel et un nouveau mot de passe (avec confirmation).
+ */
 class ChangePasswordType extends AbstractType {
+  /**
+   * Construit le formulaire de changement de mot de passe avec les champs nécessaires.
+   *
+   * @param FormBuilderInterface $builder Constructeur de formulaire Symfony
+   * @param array $options Options supplémentaires pour la configuration du formulaire
+   * @return void
+   */
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
       ->add('currentPassword', PasswordType::class, [
@@ -49,6 +61,13 @@ class ChangePasswordType extends AbstractType {
       ]);
   }
 
+  /**
+   * Configure les options globales du formulaire.
+   * Ce formulaire n'est pas lié à une entité spécifique.
+   *
+   * @param OptionsResolver $resolver Résolveur d'options pour le formulaire
+   * @return void
+   */
   public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefaults([]);
   }

@@ -10,7 +10,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
+/**
+ * Formulaire d'adresse simplifié.
+ * Version allégée du formulaire d'adresse sans certaines fonctionnalités comme l'option "adresse principale".
+ * Utilisé principalement pour les adresses temporaires ou dans des contextes simplifiés.
+ */
 class AddressSimpleType extends AbstractType {
+  /**
+   * Construit le formulaire d'adresse simplifié avec tous les champs nécessaires.
+   *
+   * @param FormBuilderInterface $builder Constructeur de formulaire Symfony
+   * @param array $options Options supplémentaires pour la configuration du formulaire
+   * @return void
+   */
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
       ->add('label', TextType::class, [
@@ -66,6 +78,13 @@ class AddressSimpleType extends AbstractType {
       ]);
   }
 
+  /**
+   * Configure les options globales du formulaire.
+   * Définit notamment la classe de données associée au formulaire.
+   *
+   * @param OptionsResolver $resolver Résolveur d'options pour le formulaire
+   * @return void
+   */
   public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefaults([
       'data_class' => Address::class,

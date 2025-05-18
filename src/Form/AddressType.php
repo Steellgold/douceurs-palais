@@ -12,7 +12,20 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
+/**
+ * Formulaire complet d'adresse.
+ * Permet de gérer toutes les informations relatives à une adresse utilisateur,
+ * incluant l'option pour définir une adresse comme principale.
+ */
 class AddressType extends AbstractType {
+  /**
+   * Construit le formulaire d'adresse avec tous les champs nécessaires.
+   * Inclut tous les champs du formulaire simple plus l'option "adresse principale".
+   *
+   * @param FormBuilderInterface $builder Constructeur de formulaire Symfony
+   * @param array $options Options supplémentaires pour la configuration du formulaire
+   * @return void
+   */
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
       ->add('label', TextType::class, [
@@ -72,6 +85,13 @@ class AddressType extends AbstractType {
       ]);
   }
 
+  /**
+   * Configure les options globales du formulaire.
+   * Définit notamment la classe de données associée au formulaire.
+   *
+   * @param OptionsResolver $resolver Résolveur d'options pour le formulaire
+   * @return void
+   */
   public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefaults([
       'data_class' => Address::class,

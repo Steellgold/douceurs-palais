@@ -12,9 +12,23 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Formulaire de paiement pour les utilisateurs non connectés (invités).
+ * Permet de recueillir les informations nécessaires pour finaliser une commande
+ * sans nécessiter la création préalable d'un compte.
+ */
 class CheckoutGuestType extends AbstractType {
+  /**
+   * Construit le formulaire de paiement invité avec tous les champs nécessaires.
+   * Inclut les informations personnelles, adresses de livraison/facturation et options.
+   *
+   * @param FormBuilderInterface $builder Constructeur de formulaire Symfony
+   * @param array $options Options supplémentaires pour la configuration du formulaire
+   * @return void
+   */
   public function buildForm(FormBuilderInterface $builder, array $options): void {
     $builder
+      // Informations personnelles
       ->add('firstName', TextType::class, [
         'label' => 'Prénom',
         'required' => true,
@@ -49,10 +63,12 @@ class CheckoutGuestType extends AbstractType {
         'label' => 'Téléphone',
         'required' => false,
       ])
+      // Adresse de livraison obligatoire
       ->add('shipping_address', AddressSimpleType::class, [
         'label' => 'Adresse de livraison',
         'required' => true,
       ])
+      // Option pour utiliser une adresse de facturation différente
       ->add('different_billing_address', CheckboxType::class, [
         'label' => 'Utiliser une adresse de facturation différente',
         'required' => false,
@@ -60,10 +76,12 @@ class CheckoutGuestType extends AbstractType {
           'class' => 'h-4 w-4 text-[#EDA239] focus:ring-[#EDA239] border-gray-300 rounded'
         ],
       ])
+      // Adresse de facturation optionnelle
       ->add('billing_address', AddressSimpleType::class, [
         'label' => 'Adresse de facturation',
         'required' => false,
       ])
+      // Option pour créer un compte
       ->add('create_account', CheckboxType::class, [
         'label' => 'Créer un compte pour mémoriser mes informations',
         'required' => false,
@@ -72,6 +90,7 @@ class CheckoutGuestType extends AbstractType {
           'class' => 'h-4 w-4 text-[#EDA239] focus:ring-[#EDA239] border-gray-300 rounded'
         ],
       ])
+      // Acceptation des CGV (obligatoire)
       ->add('terms', CheckboxType::class, [
         'label' => 'J\'accepte les conditions générales de vente',
         'required' => true,
@@ -87,6 +106,13 @@ class CheckoutGuestType extends AbstractType {
       ]);
   }
 
+  /**
+   * Configure les options globales du formulaire.
+   * Ce formulaire n'est pas lié à une entité spécifique.
+   *
+   * @param OptionsResolver $resolver Résolveur d'options pour le formulaire
+   * @return void
+   */
   public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefaults([
       'data_class' => null,
