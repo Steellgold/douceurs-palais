@@ -9,7 +9,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Contrôleur pour la génération du sitemap XML
+ *
+ * Ce contrôleur génère un sitemap XML dynamique contenant les URLs
+ * des pages principales du site, des produits et des boulangeries,
+ * pour faciliter l'indexation par les moteurs de recherche.
+ */
 class SitemapController extends AbstractController {
+  /**
+   * Constructeur du contrôleur de sitemap
+   *
+   * @param ProductRepository $productRepository Repository des produits
+   * @param BakeryRepository $bakeryRepository Repository des boulangeries
+   * @param UrlGeneratorInterface $urlGenerator Générateur d'URL
+   */
   public function __construct(
     private readonly ProductRepository     $productRepository,
     private readonly BakeryRepository      $bakeryRepository,
@@ -17,10 +31,21 @@ class SitemapController extends AbstractController {
   ) {
   }
 
+  /**
+   * Génère le sitemap XML
+   *
+   * Le sitemap contient :
+   * - La page d'accueil
+   * - Les pages de produits avec leur date de dernière modification
+   * - Les pages de boulangeries avec leur date de dernière modification
+   *
+   * @return Response Sitemap au format XML
+   */
   #[Route('/sitemap.xml', name: 'app_sitemap', methods: ['GET'], format: 'xml')]
   public function index(): Response {
     $urls = [];
 
+    // Ajout de la page d'accueil
     $urls[] = [
       'loc' => str_replace('http://', 'https://',
         $this->urlGenerator->generate('app_index_page', [], UrlGeneratorInterface::ABSOLUTE_URL)
@@ -29,6 +54,7 @@ class SitemapController extends AbstractController {
       'changefreq' => 'daily'
     ];
 
+    // Ajout des pages de produits
     $products = $this->productRepository->findAll();
     foreach ($products as $product) {
       $urls[] = [
@@ -41,6 +67,7 @@ class SitemapController extends AbstractController {
       ];
     }
 
+    // Ajout des pages de boulangeries
     $bakeries = $this->bakeryRepository->findAll();
     foreach ($bakeries as $bakery) {
       $urls[] = [
@@ -53,6 +80,7 @@ class SitemapController extends AbstractController {
       ];
     }
 
+    // Génération de la réponse XML
     $response = new Response(
       $this->renderView('sitemap/index.xml.twig', ['urls' => $urls]),
       200,

@@ -11,20 +11,39 @@ use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Contrôleur gérant l'espace client des utilisateurs connectés
+ *
+ * Ce contrôleur permet aux utilisateurs connectés de gérer leur compte,
+ * consulter leurs commandes, modifier leurs informations personnelles,
+ * changer leur mot de passe et gérer leurs adresses.
+ */
 #[Route('/account')]
 #[IsGranted('ROLE_USER')]
 class AccountController extends AbstractController {
+  /**
+   * Affiche la page d'accueil de l'espace client
+   *
+   * @return Response Page d'accueil de l'espace client
+   */
   #[Route('', name: 'app_account')]
   public function index(): Response {
     return $this->render('account/index.html.twig');
   }
 
+  /**
+   * Affiche la liste des commandes de l'utilisateur
+   *
+   * @param OrderRepository $orderRepository Repository des commandes
+   * @return Response Page listant les commandes de l'utilisateur
+   */
   #[Route('/orders', name: 'app_account_orders')]
   public function orders(OrderRepository $orderRepository): Response {
     $user = $this->getUser();
@@ -35,6 +54,13 @@ class AccountController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche et traite le formulaire de modification du profil
+   *
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Formulaire ou redirection après modification
+   */
   #[Route('/profile', name: 'app_account_profile')]
   public function profile(Request $request, EntityManagerInterface $entityManager): Response {
     $user = $this->getUser();
@@ -54,6 +80,14 @@ class AccountController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche et traite le formulaire de changement de mot de passe
+   *
+   * @param Request $request Requête HTTP
+   * @param UserPasswordHasherInterface $passwordHasher Service de hachage des mots de passe
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Formulaire ou redirection après modification
+   */
   #[Route('/password', name: 'app_account_password')]
   public function changePassword(
     Request                     $request,
@@ -83,11 +117,26 @@ class AccountController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche la liste des adresses de l'utilisateur
+   *
+   * @return Response Page listant les adresses de l'utilisateur
+   */
   #[Route('/addresses', name: 'app_account_addresses')]
   public function addresses(): Response {
     return $this->render('account/addresses.html.twig');
   }
 
+  /**
+   * Affiche et traite le formulaire d'ajout d'une nouvelle adresse
+   *
+   * Si l'utilisateur n'a pas encore d'adresse, la nouvelle adresse sera
+   * automatiquement définie comme adresse principale.
+   *
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Formulaire ou redirection après ajout
+   */
   #[Route('/addresses/new', name: 'app_account_address_new')]
   public function newAddress(Request $request, EntityManagerInterface $entityManager): Response {
     $user = $this->getUser();
@@ -118,6 +167,15 @@ class AccountController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche et traite le formulaire de modification d'une adresse
+   *
+   * @param Address $address L'adresse à modifier
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Formulaire ou redirection après modification
+   * @throws AccessDeniedException Si l'adresse n'appartient pas à l'utilisateur
+   */
   #[Route('/addresses/{id}/edit', name: 'app_account_address_edit')]
   public function editAddress(
     Address                $address,
@@ -146,6 +204,18 @@ class AccountController extends AbstractController {
     ]);
   }
 
+  /**
+   * Traite la suppression d'une adresse
+   *
+   * Si l'adresse supprimée était l'adresse principale et qu'il reste d'autres adresses,
+   * la première adresse restante sera définie comme adresse principale.
+   *
+   * @param Address $address L'adresse à supprimer
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Redirection après suppression
+   * @throws AccessDeniedException Si l'adresse n'appartient pas à l'utilisateur
+   */
   #[Route('/addresses/{id}/delete', name: 'app_account_address_delete', methods: ['POST'])]
   public function deleteAddress(Address $address, Request $request, EntityManagerInterface $entityManager): Response {
     if ($address->getUser() !== $this->getUser()) {
@@ -169,6 +239,15 @@ class AccountController extends AbstractController {
     return $this->redirectToRoute('app_account_addresses');
   }
 
+  /**
+   * Définit une adresse comme adresse principale
+   *
+   * @param Address $address L'adresse à définir comme principale
+   * @param Request $request Requête HTTP
+   * @param AddressRepository $addressRepository Repository des adresses
+   * @return Response Redirection après modification
+   * @throws AccessDeniedException Si l'adresse n'appartient pas à l'utilisateur
+   */
   #[Route('/addresses/{id}/primary', name: 'app_account_address_primary', methods: ['POST'])]
   public function setPrimaryAddress(
     Address $address, Request $request, AddressRepository $addressRepository

@@ -10,20 +10,40 @@ use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
+/**
+ * Contrôleur pour la gestion de l'espace boulanger
+ *
+ * Ce contrôleur permet aux utilisateurs ayant le rôle ROLE_BAKER de :
+ * - Gérer les informations de leur boulangerie
+ * - Gérer leurs produits (ajouter, modifier, supprimer)
+ * - Gérer leurs commandes (consulter, modifier le statut)
+ */
 #[Route('/baker')]
 #[IsGranted('ROLE_BAKER')]
 class BakerController extends AbstractController {
+  /**
+   * Constructeur du contrôleur boulanger
+   *
+   * @param SluggerInterface $slugger Service de génération de slugs
+   */
   public function __construct(
     private readonly SluggerInterface $slugger
   ) {
   }
 
+  /**
+   * Affiche le tableau de bord du boulanger
+   *
+   * @return Response Page du tableau de bord
+   * @throws AccessDeniedException Si l'utilisateur n'est pas associé à une boulangerie
+   */
   #[Route('', name: 'app_baker')]
   public function index(): Response {
     $user = $this->getUser();
@@ -38,6 +58,12 @@ class BakerController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche les détails de la boulangerie gérée
+   *
+   * @return Response Page des détails de la boulangerie
+   * @throws AccessDeniedException Si l'utilisateur n'est pas associé à une boulangerie
+   */
   #[Route('/bakery', name: 'app_baker_bakery_details')]
   public function bakeryDetails(): Response {
     $user = $this->getUser();
@@ -52,6 +78,13 @@ class BakerController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche la liste des produits de la boulangerie
+   *
+   * @param ProductRepository $productRepository Repository des produits
+   * @return Response Page listant les produits
+   * @throws AccessDeniedException Si l'utilisateur n'est pas associé à une boulangerie
+   */
   #[Route('/products', name: 'app_baker_products')]
   public function products(ProductRepository $productRepository): Response {
     $user = $this->getUser();
@@ -69,6 +102,14 @@ class BakerController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche et traite le formulaire d'ajout d'un nouveau produit
+   *
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Formulaire ou redirection après ajout
+   * @throws AccessDeniedException Si l'utilisateur n'est pas associé à une boulangerie
+   */
   #[Route('/products/new', name: 'app_baker_product_new')]
   public function newProduct(Request $request, EntityManagerInterface $entityManager): Response {
     $user = $this->getUser();
@@ -85,6 +126,7 @@ class BakerController extends AbstractController {
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      // Génération du slug à partir du nom du produit
       $product->setSlug(strtolower($this->slugger->slug($product->getName())->toString()));
 
       $entityManager->persist($product);
@@ -101,6 +143,15 @@ class BakerController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche et traite le formulaire de modification d'un produit
+   *
+   * @param Product $product Le produit à modifier
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Formulaire ou redirection après modification
+   * @throws AccessDeniedException Si le produit n'appartient pas à la boulangerie gérée par l'utilisateur
+   */
   #[Route('/products/{id}/edit', name: 'app_baker_product_edit')]
   public function editProduct(Product $product, Request $request, EntityManagerInterface $entityManager): Response {
     $user = $this->getUser();
@@ -114,6 +165,7 @@ class BakerController extends AbstractController {
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      // Mise à jour du slug à partir du nom modifié
       $product->setSlug(strtolower($this->slugger->slug($product->getName())->toString()));
 
       $entityManager->flush();
@@ -131,6 +183,15 @@ class BakerController extends AbstractController {
     ]);
   }
 
+  /**
+   * Traite la suppression d'un produit
+   *
+   * @param Product $product Le produit à supprimer
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Redirection après suppression
+   * @throws AccessDeniedException Si le produit n'appartient pas à la boulangerie gérée par l'utilisateur
+   */
   #[Route('/products/{id}/delete', name: 'app_baker_product_delete', methods: ['POST'])]
   public function deleteProduct(Product $product, Request $request, EntityManagerInterface $entityManager): Response {
     $user = $this->getUser();
@@ -150,6 +211,14 @@ class BakerController extends AbstractController {
     return $this->redirectToRoute('app_baker_products');
   }
 
+  /**
+   * Affiche et traite le formulaire de modification de la boulangerie
+   *
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Formulaire ou redirection après modification
+   * @throws AccessDeniedException Si l'utilisateur n'est pas associé à une boulangerie
+   */
   #[Route('/bakery/edit', name: 'app_baker_bakery_edit')]
   public function editBakery(Request $request, EntityManagerInterface $entityManager): Response {
     $user = $this->getUser();
@@ -163,6 +232,7 @@ class BakerController extends AbstractController {
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      // Mise à jour du slug à partir du nom modifié
       $bakery->setSlug(strtolower($this->slugger->slug($bakery->getName())->toString()));
 
       $entityManager->flush();
@@ -178,6 +248,16 @@ class BakerController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche la liste des commandes contenant des produits de la boulangerie
+   *
+   * Permet de filtrer les commandes par statut.
+   *
+   * @param Request $request Requête HTTP
+   * @param OrderRepository $orderRepository Repository des commandes
+   * @return Response Page listant les commandes
+   * @throws AccessDeniedException Si l'utilisateur n'est pas associé à une boulangerie
+   */
   #[Route('/orders', name: 'app_baker_orders')]
   public function orders(Request $request, OrderRepository $orderRepository): Response {
     $user = $this->getUser();
@@ -196,6 +276,13 @@ class BakerController extends AbstractController {
     ]);
   }
 
+  /**
+   * Affiche les détails d'une commande
+   *
+   * @param Order $order La commande à afficher
+   * @return Response Page des détails de la commande
+   * @throws AccessDeniedException Si la commande ne contient pas de produits de la boulangerie gérée
+   */
   #[Route('/orders/{id}/details', name: 'app_baker_order_details')]
   public function orderDetails(Order $order): Response {
     list($bakery, $hasProductsFromBakery) = $this->extracted($order);
@@ -210,6 +297,18 @@ class BakerController extends AbstractController {
     ]);
   }
 
+  /**
+   * Met à jour le statut d'une commande
+   *
+   * Vérifie que la transition de statut est valide selon le workflow défini.
+   *
+   * @param Order $order La commande à mettre à jour
+   * @param string $status Le nouveau statut
+   * @param Request $request Requête HTTP
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @return Response Redirection après mise à jour
+   * @throws AccessDeniedException Si la commande ne contient pas de produits de la boulangerie gérée
+   */
   #[Route('/orders/{id}/update-status/{status}', name: 'app_baker_order_update_status', methods: ['POST'])]
   public function updateOrderStatus(Order $order, string $status, Request $request, EntityManagerInterface $entityManager): Response {
     list($bakery, $hasProductsFromBakery) = $this->extracted($order);
@@ -223,6 +322,7 @@ class BakerController extends AbstractController {
       return $this->redirectToRoute('app_baker_orders');
     }
 
+    // Définition des transitions de statut valides
     $validTransitions = [
       'paid' => ['preparing', 'cancelled'],
       'preparing' => ['shipped', 'cancelled'],
@@ -243,8 +343,11 @@ class BakerController extends AbstractController {
   }
 
   /**
-   * @param Order $order
-   * @return array
+   * Méthode utilitaire pour extraire la boulangerie et vérifier si une commande contient ses produits
+   *
+   * @param Order $order La commande à vérifier
+   * @return array Tableau contenant la boulangerie et un booléen indiquant si la commande contient ses produits
+   * @throws AccessDeniedException Si l'utilisateur n'est pas associé à une boulangerie
    */
   public function extracted(Order $order): array {
     $user = $this->getUser();
