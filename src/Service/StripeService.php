@@ -9,7 +9,19 @@ use Stripe\Stripe;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * Service d'intégration avec l'API Stripe.
+ * Gère l'interaction avec Stripe pour le traitement des paiements,
+ * y compris la création de sessions de paiement et la vérification des paiements.
+ */
 readonly class StripeService {
+  /**
+   * Constructeur du service Stripe.
+   * Initialise l'API Stripe avec la clé secrète.
+   *
+   * @param ParameterBagInterface $parameterBag Gestionnaire de paramètres pour accéder aux clés API
+   * @param UrlGeneratorInterface $urlGenerator Générateur d'URL pour les redirections
+   */
   public function __construct(
     private ParameterBagInterface $parameterBag,
     private UrlGeneratorInterface $urlGenerator
@@ -18,9 +30,12 @@ readonly class StripeService {
   }
 
   /**
-   * @param Order $order
-   * @return Session
-   * @throws ApiErrorException
+   * Crée une session de paiement Stripe pour une commande.
+   * Configure les articles à payer, les URLs de redirection et les métadonnées.
+   *
+   * @param Order $order Commande pour laquelle créer une session de paiement
+   * @return Session Session de paiement Stripe créée
+   * @throws ApiErrorException En cas d'erreur avec l'API Stripe
    */
   public function createCheckoutSession(Order $order): Session {
     $lineItems = [];
@@ -65,9 +80,12 @@ readonly class StripeService {
   }
 
   /**
-   * @param Order $order
-   * @return bool
-   * @throws ApiErrorException
+   * Vérifie si un paiement a été effectué avec succès.
+   * Interroge Stripe pour connaître l'état du paiement.
+   *
+   * @param Order $order Commande à vérifier
+   * @return bool Vrai si le paiement a été effectué, faux sinon
+   * @throws ApiErrorException En cas d'erreur avec l'API Stripe
    */
   public function verifyPayment(Order $order): bool {
     if (!$order->getStripeSessionId()) {
@@ -85,7 +103,9 @@ readonly class StripeService {
   }
 
   /**
-   * @return string The public key
+   * Récupère la clé publique Stripe à utiliser côté client.
+   *
+   * @return string Clé publique Stripe
    */
   public function getPublicKey(): string {
     return $this->parameterBag->get('stripe_public_key');

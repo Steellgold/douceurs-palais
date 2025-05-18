@@ -12,8 +12,23 @@ use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
+/**
+ * Service de gestion des commandes.
+ * Gère la création, le suivi et la finalisation des commandes,
+ * ainsi que l'envoi des emails de confirmation.
+ */
 class OrderService {
 
+  /**
+   * Constructeur du service de commande.
+   *
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @param OrderRepository $orderRepository Dépôt des commandes
+   * @param OrderItemRepository $orderItemRepository Dépôt des articles de commande
+   * @param CartService $cartService Service de gestion des paniers
+   * @param MailerInterface $mailer Service d'envoi d'emails Symfony
+   * @param EmailService $emailService Service personnalisé d'envoi d'emails
+   */
   public function __construct(
     private EntityManagerInterface $entityManager,
     private OrderRepository        $orderRepository,
@@ -25,10 +40,13 @@ class OrderService {
   }
 
   /**
-   * @param Cart $cart
-   * @param Address $shippingAddress
-   * @param Address|null $billingAddress
-   * @return Order
+   * Crée une nouvelle commande à partir d'un panier.
+   * Transfère tous les articles du panier vers la commande et calcule le montant total.
+   *
+   * @param Cart $cart Panier source pour la commande
+   * @param Address $shippingAddress Adresse de livraison
+   * @param Address|null $billingAddress Adresse de facturation (utilise l'adresse de livraison si non fournie)
+   * @return Order Commande nouvellement créée
    */
   public function createOrderFromCart(Cart $cart, Address $shippingAddress, ?Address $billingAddress = null): Order {
     $order = new Order();
@@ -64,6 +82,12 @@ class OrderService {
     return $order;
   }
 
+  /**
+   * Convertit une entité Address en tableau associatif pour stockage dans la commande.
+   *
+   * @param Address $address Adresse à convertir
+   * @return array Tableau associatif des propriétés de l'adresse
+   */
   private function addressToArray(Address $address): array {
     return [
       'label' => $address->getLabel(),
@@ -75,18 +99,43 @@ class OrderService {
     ];
   }
 
+  /**
+   * Récupère toutes les commandes d'un utilisateur.
+   *
+   * @param User $user Utilisateur dont on veut récupérer les commandes
+   * @return array Liste des commandes de l'utilisateur
+   */
   public function getOrdersByUser(User $user): array {
     return $this->orderRepository->findByUser($user);
   }
 
+  /**
+   * Récupère une commande par son identifiant.
+   *
+   * @param string $id Identifiant de la commande
+   * @return Order|null Commande trouvée ou null si non trouvée
+   */
   public function getOrderById(string $id): ?Order {
     return $this->orderRepository->find($id);
   }
 
+  /**
+   * Récupère une commande par l'identifiant de session Stripe.
+   *
+   * @param string $sessionId Identifiant de la session Stripe
+   * @return Order|null Commande trouvée ou null si non trouvée
+   */
   public function getOrderByStripeSessionId(string $sessionId): ?Order {
     return $this->orderRepository->findByStripeSessionId($sessionId);
   }
 
+  /**
+   * Finalise une commande après paiement réussi.
+   * Met à jour le statut, attribue des points de fidélité et envoie la confirmation.
+   *
+   * @param Order $order Commande à finaliser
+   * @return void
+   */
   public function completeOrder(Order $order): void {
     $order->setStatus(Order::STATUS_PAID);
     $this->entityManager->flush();
@@ -110,6 +159,12 @@ class OrderService {
     }
   }
 
+  /**
+   * Envoie un email de confirmation de commande à l'utilisateur.
+   *
+   * @param Order $order Commande confirmée
+   * @return void
+   */
   private function sendOrderConfirmationEmail(Order $order): void {
     $user = $order->getUser();
 
@@ -125,6 +180,13 @@ class OrderService {
     );
   }
 
+  /**
+   * Annule une commande.
+   * Met à jour le statut de la commande à "annulée".
+   *
+   * @param Order $order Commande à annuler
+   * @return void
+   */
   public function cancelOrder(Order $order): void {
     $order->setStatus(Order::STATUS_CANCELLED);
     $this->entityManager->flush();
