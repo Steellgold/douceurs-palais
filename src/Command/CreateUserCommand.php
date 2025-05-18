@@ -13,10 +13,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
- * Commande de création d'un utilisateur via la console
- *
- * Cette commande permet de créer rapidement un utilisateur (avec possibilité de créer un admin)
- * directement depuis la ligne de commande.
+ * Commande Symfony permettant de créer un nouvel utilisateur via la console.
+ * Cette commande est utile pour créer des utilisateurs administrateurs
+ * ou des comptes de test rapidement sans passer par l'interface web.
  */
 #[AsCommand(
   name: 'app:create-user',
@@ -25,10 +24,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class CreateUserCommand extends Command
 {
   /**
-   * Constructeur de la commande
+   * Constructeur de la commande CreateUserCommand.
    *
-   * @param EntityManagerInterface $entityManager Interface de gestion des entités Doctrine
-   * @param UserPasswordHasherInterface $passwordHasher Service de hachage des mots de passe
+   * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine pour persister l'utilisateur
+   * @param UserPasswordHasherInterface $passwordHasher Service de hachage de mot de passe
    */
   public function __construct(
     private readonly EntityManagerInterface $entityManager,
@@ -39,14 +38,9 @@ class CreateUserCommand extends Command
   }
 
   /**
-   * Configure les arguments de la commande
+   * Configure la commande en définissant les arguments attendus.
    *
-   * Définit tous les paramètres nécessaires pour créer un utilisateur:
-   * - email (obligatoire)
-   * - mot de passe (obligatoire)
-   * - prénom (obligatoire)
-   * - nom (obligatoire)
-   * - statut administrateur (optionnel, par défaut: true)
+   * @return void
    */
   protected function configure(): void
   {
@@ -60,14 +54,13 @@ class CreateUserCommand extends Command
   }
 
   /**
-   * Exécute la commande pour créer un utilisateur
+   * Exécute la commande de création d'utilisateur.
+   * Vérifie d'abord si l'utilisateur existe déjà, puis crée un nouvel utilisateur
+   * avec les informations fournies si l'email n'est pas déjà utilisé.
    *
-   * Vérifie d'abord si l'utilisateur existe déjà (par email).
-   * Si non, crée un nouvel utilisateur avec les données fournies.
-   *
-   * @param InputInterface $input Interface pour récupérer les arguments
-   * @param OutputInterface $output Interface pour afficher des messages
-   * @return int Code de retour (SUCCESS ou FAILURE)
+   * @param InputInterface $input Interface d'entrée pour récupérer les arguments
+   * @param OutputInterface $output Interface de sortie pour afficher les messages
+   * @return int Code de retour de la commande (SUCCESS ou FAILURE)
    */
   protected function execute(InputInterface $input, OutputInterface $output): int
   {
@@ -99,7 +92,7 @@ class CreateUserCommand extends Command
     $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
     $user->setPassword($hashedPassword);
 
-    // Persistance en base de données
+    // Persistance de l'utilisateur en base de données
     $this->entityManager->persist($user);
     $this->entityManager->flush();
 
