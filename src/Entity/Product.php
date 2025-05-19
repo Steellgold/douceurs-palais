@@ -157,6 +157,12 @@ class Product {
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
     $this->createdAt = new \DateTimeImmutable();
+
+    $this->images = [];
+    $this->ingredients = [];
+    $this->allergenes = [];
+    $this->nutritionalValues = [];
+    $this->pairings = [];
   }
 
   /**
@@ -164,8 +170,8 @@ class Product {
    *
    * @param SluggerInterface $slugger Service de génération de slugs
    */
-  public function computeSlug(SluggerInterface $slugger) {
-    if (!$this->slug || $this->slug === '') {
+  public function computeSlug(SluggerInterface $slugger): void {
+    if (!$this->slug) {
       $this->slug = strtolower($slugger->slug($this->getName())->toString());
     }
   }
