@@ -8,6 +8,7 @@ use App\Form\BakeryType;
 use App\Form\ProductType;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
+use App\Service\CloudflareR2Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
@@ -107,11 +108,12 @@ class BakerController extends AbstractController {
    *
    * @param Request $request Requête HTTP
    * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @param CloudflareR2Service $r2Service Service pour le stockage des images
    * @return Response Formulaire ou redirection après ajout
    * @throws AccessDeniedException Si l'utilisateur n'est pas associé à une boulangerie
    */
   #[Route('/products/new', name: 'app_baker_product_new')]
-  public function newProduct(Request $request, EntityManagerInterface $entityManager): Response {
+  public function newProduct(Request $request, EntityManagerInterface $entityManager, CloudflareR2Service $r2Service): Response {
     $user = $this->getUser();
     $bakery = $user->getManagedBakery();
 
@@ -128,6 +130,26 @@ class BakerController extends AbstractController {
     if ($form->isSubmitted() && $form->isValid()) {
       // Génération du slug à partir du nom du produit
       $product->setSlug(strtolower($this->slugger->slug($product->getName())->toString()));
+
+      // Traitement des images
+      $imageFiles = $form->get('imageFiles')->getData();
+
+      if ($imageFiles) {
+        $images = [];
+
+        foreach ($imageFiles as $imageFile) {
+          // Upload vers Cloudflare R2
+          $imageUrl = $r2Service->uploadFile($imageFile);
+          $images[] = $imageUrl;
+
+          // Limite à 3 images
+          if (count($images) >= 3) {
+            break;
+          }
+        }
+
+        $product->setImages($images);
+      }
 
       $entityManager->persist($product);
       $entityManager->flush();
@@ -149,11 +171,16 @@ class BakerController extends AbstractController {
    * @param Product $product Le produit à modifier
    * @param Request $request Requête HTTP
    * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @param CloudflareR2Service $r2Service Service pour le stockage des images
    * @return Response Formulaire ou redirection après modification
    * @throws AccessDeniedException Si le produit n'appartient pas à la boulangerie gérée par l'utilisateur
    */
   #[Route('/products/{id}/edit', name: 'app_baker_product_edit')]
-  public function editProduct(Product $product, Request $request, EntityManagerInterface $entityManager): Response {
+  public function editProduct(
+    Product $product, Request $request,
+    EntityManagerInterface $entityManager,
+    CloudflareR2Service $r2Service
+  ): Response {
     $user = $this->getUser();
     $bakery = $user->getManagedBakery();
 
@@ -164,9 +191,63 @@ class BakerController extends AbstractController {
     $form = $this->createForm(ProductType::class, $product);
     $form->handleRequest($request);
 
+    // Gestion de la suppression d'images
+    if ($request->isMethod('POST') && $request->request->has('delete_image')) {
+      $imageToDelete = $request->request->get('delete_image');
+      $images = $product->getImages();
+
+      if (in_array($imageToDelete, $images)) {
+        // Supprimer de Cloudflare R2
+        $r2Service->deleteFile($imageToDelete);
+
+        // Retirer de l'array des images du produit
+        $images = array_filter($images, function($image) use ($imageToDelete) {
+          return $image !== $imageToDelete;
+        });
+
+        $product->setImages(array_values($images));
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Image supprimée avec succès.');
+      }
+
+      return $this->redirectToRoute('app_baker_product_edit', ['id' => $product->getId()]);
+    }
+
     if ($form->isSubmitted() && $form->isValid()) {
       // Mise à jour du slug à partir du nom modifié
       $product->setSlug(strtolower($this->slugger->slug($product->getName())->toString()));
+
+      // Traitement des images
+      $imageFiles = $form->get('imageFiles')->getData();
+
+      if ($imageFiles) {
+        $images = $product->getImages();
+
+        // Vérifier qu'on ne dépasse pas 3 images
+        $remainingSlots = 3 - count($images);
+
+        if ($remainingSlots > 0) {
+          $uploadCount = 0;
+
+          foreach ($imageFiles as $imageFile) {
+            // Upload vers Cloudflare R2
+            $imageUrl = $r2Service->uploadFile($imageFile);
+            $images[] = $imageUrl;
+
+            $uploadCount++;
+
+            // Limite aux emplacements restants
+            if ($uploadCount >= $remainingSlots) {
+              break;
+            }
+          }
+
+          $product->setImages($images);
+        } else {
+          $this->addFlash('error', 'Vous ne pouvez pas ajouter plus de 3 images. Supprimez d\'abord une image existante.');
+        }
+      }
 
       $entityManager->flush();
 
@@ -189,11 +270,16 @@ class BakerController extends AbstractController {
    * @param Product $product Le produit à supprimer
    * @param Request $request Requête HTTP
    * @param EntityManagerInterface $entityManager Gestionnaire d'entités Doctrine
+   * @param CloudflareR2Service $r2Service Service pour le stockage des images
    * @return Response Redirection après suppression
    * @throws AccessDeniedException Si le produit n'appartient pas à la boulangerie gérée par l'utilisateur
    */
   #[Route('/products/{id}/delete', name: 'app_baker_product_delete', methods: ['POST'])]
-  public function deleteProduct(Product $product, Request $request, EntityManagerInterface $entityManager): Response {
+  public function deleteProduct(
+    Product $product, Request $request,
+    EntityManagerInterface $entityManager,
+    CloudflareR2Service $r2Service
+  ): Response {
     $user = $this->getUser();
     $bakery = $user->getManagedBakery();
 
@@ -202,6 +288,13 @@ class BakerController extends AbstractController {
     }
 
     if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
+      // Supprimer toutes les images de Cloudflare R2
+      foreach ($product->getImages() as $image) {
+        if (!empty($image)) {
+          $r2Service->deleteFile($image);
+        }
+      }
+
       $entityManager->remove($product);
       $entityManager->flush();
 
