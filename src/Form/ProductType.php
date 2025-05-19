@@ -5,9 +5,12 @@ namespace App\Form;
 use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\DBAL\Types\IntegerType;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -84,6 +87,32 @@ class ProductType extends AbstractType {
         'label' => 'Conservation',
         'required' => false,
         'attr' => ['rows' => 2],
+      ])
+      // Images du produit (R2)
+      ->add('imageFiles', FileType::class, [
+        'label' => 'Images (Max 3)',
+        'multiple' => true,
+        'mapped' => false,
+        'required' => false,
+        'constraints' => [
+          new Count([
+            'max' => 3,
+            'maxMessage' => 'Vous ne pouvez pas télécharger plus de 3 images',
+          ]),
+          new File([
+            'maxSize' => '2M',
+            'mimeTypes' => [
+              'image/jpeg',
+              'image/png',
+              'image/webp',
+            ],
+            'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG, WEBP)',
+          ]),
+        ],
+        'attr' => [
+          'accept' => 'image/jpeg,image/png,image/webp',
+          'class' => 'w-full',
+        ],
       ])
       // Système de fidélité
       ->add('requiredPoints', IntegerType::class, [
