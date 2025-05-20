@@ -308,7 +308,6 @@ class Product {
    */
   public function setImages(?array $images): static {
     $this->images = $images ?? [];
-
     return $this;
   }
 

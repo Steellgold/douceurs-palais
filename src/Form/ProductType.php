@@ -90,29 +90,13 @@ class ProductType extends AbstractType {
       ])
       // Images du produit (R2)
       ->add('imageFiles', FileType::class, [
-        'label' => 'Images (Max 3)',
+        'label' => 'Images du produit (max 3)',
         'multiple' => true,
         'mapped' => false,
         'required' => false,
-        'constraints' => [
-          new Count([
-            'max' => 3,
-            'maxMessage' => 'Vous ne pouvez pas télécharger plus de 3 images',
-          ]),
-          new File([
-            'maxSize' => '2M',
-            'mimeTypes' => [
-              'image/jpeg',
-              'image/png',
-              'image/webp',
-            ],
-            'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG, WEBP)',
-          ]),
-        ],
         'attr' => [
-          'accept' => 'image/jpeg,image/png,image/webp',
-          'class' => 'w-full',
-        ],
+          'accept' => 'image/jpeg,image/png,image/webp'
+        ]
       ])
       // Système de fidélité
       ->add('requiredPoints', IntegerType::class, [

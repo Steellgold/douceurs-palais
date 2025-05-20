@@ -133,6 +133,9 @@ class BakerController extends AbstractController {
 
       // Traitement des images
       $imageFiles = $form->get('imageFiles')->getData();
+      dump($imageFiles);
+      dump($form->get('requiredPoints')->getData());
+
 
       if ($imageFiles) {
         $images = [];
@@ -140,14 +143,8 @@ class BakerController extends AbstractController {
         foreach ($imageFiles as $imageFile) {
           // Upload vers Cloudflare R2
           $imageUrl = $r2Service->uploadFile($imageFile);
-          $images[] = $imageUrl;
-
-          // Limite à 3 images
-          if (count($images) >= 3) {
-            break;
-          }
+          $images[] = $imageUrl; // Assurez-vous que $imageUrl est une chaîne de caractères
         }
-
         $product->setImages($images);
       }
 
