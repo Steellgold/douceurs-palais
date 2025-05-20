@@ -6,17 +6,16 @@ use Aws\S3\S3Client;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class CloudflareR2Service
-{
+class CloudflareR2Service {
   private S3Client $client;
   private string $bucket;
   private SluggerInterface $slugger;
 
   public function __construct(
-    string $accountId,
-    string $accessKey,
-    string $secretKey,
-    string $bucket,
+    string           $accountId,
+    string           $accessKey,
+    string           $secretKey,
+    string           $bucket,
     SluggerInterface $slugger
   ) {
     $this->bucket = $bucket;
@@ -25,7 +24,7 @@ class CloudflareR2Service
     $this->client = new S3Client([
       'version' => 'latest',
       'region' => 'auto',
-      'endpoint' => "https://{$accountId}.r2.cloudflarestorage.com",
+      'endpoint' => "https://cdn.douceurs-palais.fr/",
       'credentials' => [
         'key' => $accessKey,
         'secret' => $secretKey,
@@ -33,8 +32,7 @@ class CloudflareR2Service
     ]);
   }
 
-  public function uploadFile(UploadedFile $file, string $directory = 'products'): string
-  {
+  public function uploadFile(UploadedFile $file, string $directory = 'products'): string {
     // Création d'un nom de fichier unique
     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
     $safeFilename = $this->slugger->slug($originalFilename);
@@ -53,8 +51,7 @@ class CloudflareR2Service
     return $result['ObjectURL'];
   }
 
-  public function deleteFile(string $url): bool
-  {
+  public function deleteFile(string $url): bool {
     // Extraction de la clé depuis l'URL
     $parsedUrl = parse_url($url);
     $path = $parsedUrl['path'] ?? '';
