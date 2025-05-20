@@ -49,7 +49,7 @@ class CreateUserCommand extends Command
       ->addArgument('password', InputArgument::REQUIRED, 'The password of the admin')
       ->addArgument('firstName', InputArgument::REQUIRED, 'The first name of the admin')
       ->addArgument('lastName', InputArgument::REQUIRED, 'The last name of the admin')
-      ->addArgument('isAdmin', InputArgument::OPTIONAL, 'Is the user an admin?', true)
+      ->addArgument('isAdmin', InputArgument::OPTIONAL, 'Is the user an admin?',false)
     ;
   }
 
