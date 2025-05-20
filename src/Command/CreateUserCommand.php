@@ -21,8 +21,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
   name: 'app:create-user',
   description: 'Creates a new user',
 )]
-class CreateUserCommand extends Command
-{
+class CreateUserCommand extends Command {
   /**
    * Constructeur de la commande CreateUserCommand.
    *
@@ -30,7 +29,7 @@ class CreateUserCommand extends Command
    * @param UserPasswordHasherInterface $passwordHasher Service de hachage de mot de passe
    */
   public function __construct(
-    private readonly EntityManagerInterface $entityManager,
+    private readonly EntityManagerInterface      $entityManager,
     private readonly UserPasswordHasherInterface $passwordHasher
 
   ) {
@@ -42,15 +41,13 @@ class CreateUserCommand extends Command
    *
    * @return void
    */
-  protected function configure(): void
-  {
+  protected function configure(): void {
     $this
       ->addArgument('email', InputArgument::REQUIRED, 'The email of the admin')
       ->addArgument('password', InputArgument::REQUIRED, 'The password of the admin')
       ->addArgument('firstName', InputArgument::REQUIRED, 'The first name of the admin')
       ->addArgument('lastName', InputArgument::REQUIRED, 'The last name of the admin')
-      ->addArgument('isAdmin', InputArgument::OPTIONAL, 'Is the user an admin?',false)
-    ;
+      ->addArgument('isAdmin', InputArgument::OPTIONAL, 'Is the user an admin?', false);
   }
 
   /**
@@ -61,9 +58,9 @@ class CreateUserCommand extends Command
    * @param InputInterface $input Interface d'entrée pour récupérer les arguments
    * @param OutputInterface $output Interface de sortie pour afficher les messages
    * @return int Code de retour de la commande (SUCCESS ou FAILURE)
+   * @throws \Exception
    */
-  protected function execute(InputInterface $input, OutputInterface $output): int
-  {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $io = new SymfonyStyle($input, $output);
     $email = $input->getArgument('email');
     $password = $input->getArgument('password');
