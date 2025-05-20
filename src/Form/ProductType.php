@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use Doctrine\DBAL\Types\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Count;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

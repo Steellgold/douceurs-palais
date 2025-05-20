@@ -7,6 +7,10 @@ parameters:
     stripe_public_key: '%env(STRIPE_PUBLIC_KEY)%'
     stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
     stripe_webhook_secret: '%env(STRIPE_WEBHOOK_SECRET)%'
+    cloudflare.account_id: '%env(CLOUDFLARE_ACCOUNT_ID)%'
+    cloudflare.r2.access_key: '%env(CLOUDFLARE_R2_ACCESS_KEY)%'
+    cloudflare.r2.secret_key: '%env(CLOUDFLARE_R2_SECRET_KEY)%'
+    cloudflare.r2.bucket: '%env(CLOUDFLARE_R2_BUCKET)%'
 
 services:
     # default configuration for services in *this* file
@@ -22,6 +26,12 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    App\Service\CloudflareR2Service:
+        arguments:
+            $accountId: '%cloudflare.account_id%'
+            $accessKey: '%cloudflare.r2.access_key%'
+            $secretKey: '%cloudflare.r2.secret_key%'
+            $bucket: '%cloudflare.r2.bucket%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
