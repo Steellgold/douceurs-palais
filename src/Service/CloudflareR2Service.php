@@ -57,7 +57,6 @@ class CloudflareR2Service {
 
     var_dump($imgp);
     dump($result);
-    die();
 
     // Retourne l'URL complète du fichier
     return str_replace(
