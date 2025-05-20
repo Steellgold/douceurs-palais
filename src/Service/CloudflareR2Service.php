@@ -49,6 +49,16 @@ class CloudflareR2Service {
       'ContentType' => $file->getMimeType(),
     ]);
 
+    $imgp = str_replace(
+      `https://{$this->accountId}.r2.cloudflarestorage.com`,
+      'https://cdn.douceurs-palais.fr/',
+      $result['ObjectURL']
+    );
+
+    var_dump($imgp);
+    dump($result);
+    die();
+
     // Retourne l'URL complète du fichier
     return str_replace(
       `https://{$this->accountId}.r2.cloudflarestorage.com`,

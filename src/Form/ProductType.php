@@ -49,7 +49,7 @@ class ProductType extends AbstractType {
         'required' => false,
         'attr' => ['rows' => 3],
       ])
-      ->add('price', MoneyType::class, [
+      ->add('price', IntegerType::class, [
         'label' => 'Prix',
         'required' => true,
         'currency' => 'EUR',
