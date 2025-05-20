@@ -24,7 +24,7 @@ class CloudflareR2Service {
     $this->client = new S3Client([
       'version' => 'latest',
       'region' => 'auto',
-      'endpoint' => "https://cdn.douceurs-palais.fr/",
+      'endpoint' => "https://{$accountId}.r2.cloudflarestorage.com",
       'credentials' => [
         'key' => $accessKey,
         'secret' => $secretKey,
@@ -48,7 +48,11 @@ class CloudflareR2Service {
     ]);
 
     // Retourne l'URL complète du fichier
-    return $result['ObjectURL'];
+    return str_replace(
+      'https://' . $this->client->getEndpoint() . '/' . $this->bucket . '/',
+      'https://cdn.douceurs-palais.fr/',
+      $result['ObjectURL']
+    );
   }
 
   public function deleteFile(string $url): bool {
