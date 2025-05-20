@@ -10,6 +10,7 @@ class CloudflareR2Service {
   private S3Client $client;
   private string $bucket;
   private SluggerInterface $slugger;
+  private string $accountId;
 
   public function __construct(
     string           $accountId,
@@ -20,6 +21,7 @@ class CloudflareR2Service {
   ) {
     $this->bucket = $bucket;
     $this->slugger = $slugger;
+    $this->accountId = $accountId;
 
     $this->client = new S3Client([
       'version' => 'latest',
@@ -49,7 +51,7 @@ class CloudflareR2Service {
 
     // Retourne l'URL complète du fichier
     return str_replace(
-      'https://' . $this->client->getEndpoint() . '/' . $this->bucket . '/',
+      `https://{$this->accountId}.r2.cloudflarestorage.com`,
       'https://cdn.douceurs-palais.fr/',
       $result['ObjectURL']
     );
