@@ -41,7 +41,7 @@ class CloudflareR2Service {
     $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
 
     // Upload vers R2
-    $result = $this->client->putObject([
+    $this->client->putObject([
       'Bucket' => $this->bucket,
       'Key' => "{$directory}/{$fileName}",
       'Body' => fopen($file->getPathname(), 'rb'),
@@ -49,23 +49,7 @@ class CloudflareR2Service {
       'ContentType' => $file->getMimeType(),
     ]);
 
-    $imgp = str_replace(
-      `https://{$this->accountId}.r2.cloudflarestorage.com`,
-      'https://cdn.douceurs-palais.fr/',
-      $result['ObjectURL']
-    );
-
-    var_dump($imgp);
-    dump($result);
-    // wait 30s
-    sleep(30);
-
-    // Retourne l'URL complète du fichier
-    return str_replace(
-      `https://{$this->accountId}.r2.cloudflarestorage.com`,
-      'https://cdn.douceurs-palais.fr/',
-      $result['ObjectURL']
-    );
+    return "https://cdn.douceurs-palais.fr/{$directory}/{$fileName}";
   }
 
   public function deleteFile(string $url): bool {
