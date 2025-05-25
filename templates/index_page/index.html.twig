@@ -2,22 +2,14 @@
 
 {% block body %}
   <div class="w-full relative">
-    <img
-        src="{{ asset('images/header-background.png') }}"
-        alt="Header Background"
-        class="w-full h-auto object-cover min-h-64 max-h-screen"
-    />
+    <img src="{{ asset('images/header-background.png') }}" alt="Header Background" class="w-full h-auto object-cover min-h-64 max-h-screen" />
 
-    <div class="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black/30">
-      <h1 class="text-5xl text-[#FEFDFB] font-semibold text-center font-playfair">Savourez l'Excellence Artisanale</h1>
-      <p class="text-lg text-[#FEFDFB] mt-1 text-center">Des pains et pâtisseries artisanaux livrés directement chez vous</p>
+    <div class="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black/30 px-4">
+      <h1 class="text-3xl md:text-5xl text-[#FEFDFB] font-semibold text-center font-playfair">Savourez l'Excellence Artisanale</h1>
+      <p class="text-base md:text-lg text-[#FEFDFB] mt-1 text-center">Des pains et pâtisseries artisanaux livrés directement chez vous</p>
 
-      <div class="mt-4">
-        {{ component('Button', {
-          label: 'Découvrir nos produits',
-          variant: 'primary',
-          href: '/produits'
-        }) }}
+      <div class="mt-8 w-full max-w-md relative">
+        <twig:SearchInput placeholder="Entrez votre code postal ou votre ville..." />
       </div>
     </div>
   </div>
