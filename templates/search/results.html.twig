@@ -1,99 +1,320 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Résultats de recherche{% endblock %}
+{% block title %}
+  {% if searchPerformed %}
+    Boulangeries près de {{ location ?: (city ~ ' ' ~ postalCode) }}
+  {% else %}
+    Recherche de boulangeries
+  {% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+      #search-results-map {
+          height: 60vh;
+          width: 100%;
+          border-radius: 0.5rem;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .bakery-info-window {
+          max-width: 300px;
+          padding: 10px;
+      }
+
+      .bakery-info-window h3 {
+          margin: 0 0 8px 0;
+          font-size: 16px;
+          font-weight: bold;
+          color: #121212;
+      }
+
+      .bakery-info-window p {
+          margin: 4px 0;
+          font-size: 14px;
+          color: #666;
+      }
+
+      .bakery-info-window a {
+          color: #EDA239;
+          text-decoration: none;
+          font-weight: medium;
+      }
+
+      .bakery-info-window a:hover {
+          text-decoration: underline;
+      }
+
+      .rating {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          margin: 8px 0;
+      }
+
+      .search-center-marker {
+          background: #EDA239;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          border: 3px solid white;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      }
+  </style>
+{% endblock %}
 
 {% block body %}
-  <div class="bg-[#FEFDFB] py-12 min-h-screen">
+  <div class="bg-[#FEFDFB] py-8">
     <div class="container mx-auto px-4">
-      <div class="text-center mb-12">
-        <h1 class="text-4xl font-playfair mb-4">Résultats de recherche</h1>
-        {% if location %}
-          <p class="text-gray-600">Recherche pour : <span class="font-semibold">{{ location }}</span></p>
-        {% elseif city and postalCode %}
-          <p class="text-gray-600">Recherche pour : <span class="font-semibold">{{ city }} ({{ postalCode }})</span></p>
-        {% elseif city %}
-          <p class="text-gray-600">Recherche pour : <span class="font-semibold">{{ city }}</span></p>
-        {% elseif postalCode %}
-          <p class="text-gray-600">Recherche pour : <span class="font-semibold">{{ postalCode }}</span></p>
-        {% endif %}
+
+      <!-- Nouvelle recherche -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-playfair mb-4">
+          {% if searchPerformed %}
+            Boulangeries près de {{ location ?: (city ~ ' ' ~ postalCode) }}
+          {% else %}
+            Où souhaitez-vous commander ?
+          {% endif %}
+        </h1>
       </div>
 
-      {% if not searchPerformed %}
-        <div class="text-center py-12">
-          <i data-lucide="search" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
-          <p class="text-gray-500 mb-6">Veuillez entrer une ville ou un code postal pour rechercher des boulangeries</p>
-          <twig:SearchInput class="mx-auto" />
-        </div>
-      {% elseif bakeries|length > 0 %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {% for bakery in bakeries %}
-            <div class="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg">
-              <a href="{{ path('app_bakery_show', {'slug': bakery.slug}) }}" class="block">
-                <div class="h-40 bg-gray-200 relative">
-                  {% if bakery.mainImage %}
-                    <img src="{{ bakery.mainImage }}" alt="{{ bakery.name }}" class="w-full h-full object-cover" />
-                  {% else %}
-                    <div class="w-full h-full flex items-center justify-center bg-gray-200">
-                      <i data-lucide="cake" class="h-12 w-12 text-gray-400"></i>
-                    </div>
-                  {% endif %}
-                  <div class="absolute top-0 right-0 m-2">
-                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-white shadow-sm">
-                      <i data-lucide="star" class="h-4 w-4 text-yellow-400 mr-1"></i>
-                      {{ bakery.rating|number_format(1) }}
-                    </span>
-                  </div>
-
-                  {% if app.user %}
-                    <div class="absolute top-2 left-2">
-                      <form method="post" action="{{ path('app_bakery_toggle_favorite', {'id': bakery.id}) }}">
-                        <input type="hidden" name="_token" value="{{ csrf_token('favorite-bakery' ~ bakery.id) }}">
-                        <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-sm">
-                          {% if app.user.hasFavoriteBakery(bakery) %}
-                            <i data-lucide="heart" class="h-5 w-5 text-red-500 fill-red-500"></i>
-                          {% else %}
-                            <i data-lucide="heart" class="h-5 w-5 text-gray-400 hover:text-red-500"></i>
-                          {% endif %}
-                        </button>
-                      </form>
-                    </div>
-                  {% endif %}
-                </div>
-                <div class="p-4">
-                  <h3 class="text-xl font-playfair mb-2">{{ bakery.name }}</h3>
-                  <p class="text-gray-600 text-sm line-clamp-2 mb-3">{{ bakery.description|striptags|slice(0, 100) ~ (bakery.description|length > 100 ? '...' : '') }}</p>
-                  <div class="flex items-center text-sm text-gray-500">
-                    <i data-lucide="map-pin" class="h-4 w-4 mr-1"></i>
-                    <span>
-                     {% if bakery.city %}
-                       {{ bakery.city }}{% if bakery.postalCode %} ({{ bakery.postalCode }}){% endif %}
-                     {% else %}
-                       {{ bakery.address|slice(0, 30) ~ (bakery.address|length > 30 ? '...' : '') }}
-                     {% endif %}
-                    </span>
-                  </div>
-                </div>
-              </a>
+      {% if searchPerformed %}
+        {% if bakeries|length > 0 %}
+          <!-- Résultats avec carte -->
+          <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-2xl font-playfair">{{ bakeries|length }} boulangerie{{ bakeries|length > 1 ? 's' : '' }} trouvée{{ bakeries|length > 1 ? 's' : '' }}</h2>
+              <div class="text-sm text-gray-600">
+                <i data-lucide="map-pin" class="h-4 w-4 inline mr-1"></i>
+                Zone de recherche : {{ location ?: (city ~ ' ' ~ postalCode) }}
+              </div>
             </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <div class="text-center py-12 bg-white rounded-lg shadow-md">
-          <i data-lucide="map-pin-off" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
-          <p class="text-gray-500 mb-4">Aucune boulangerie trouvée dans cette zone</p>
-          <p class="text-sm text-gray-400 mb-6">Essayez une recherche dans une ville voisine</p>
 
-          <div class="max-w-md mx-auto">
-            <twig:SearchInput />
+            <!-- Carte des résultats -->
+            <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+              <div id="search-results-map"></div>
+              <p class="text-xs text-gray-500 mt-2 text-center">
+                <i data-lucide="info" class="h-3 w-3 inline mr-1"></i>
+                Cliquez sur les marqueurs pour plus d'informations
+              </p>
+            </div>
+
+            <!-- Liste des boulangeries -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {% for bakery in bakeries %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                  <a href="{{ path('app_bakery_show', {'slug': bakery.slug}) }}" class="block">
+                    <div class="h-40 bg-gray-200 relative">
+                      {% if bakery.mainImage %}
+                        <img src="{{ bakery.mainImage }}" alt="{{ bakery.name }}" class="w-full h-full object-cover" />
+                      {% else %}
+                        <div class="w-full h-full flex items-center justify-center bg-gray-200">
+                          <i data-lucide="cake" class="h-12 w-12 text-gray-400"></i>
+                        </div>
+                      {% endif %}
+                      <div class="absolute top-0 right-0 m-2">
+                        <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-white shadow-sm">
+                          <i data-lucide="star" class="h-4 w-4 text-yellow-400 mr-1"></i>
+                          {{ bakery.rating|number_format(1) }}
+                        </span>
+                      </div>
+
+                      {% if app.user %}
+                        <div class="absolute top-2 left-2">
+                          <form method="post" action="{{ path('app_bakery_toggle_favorite', {'id': bakery.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('favorite-bakery' ~ bakery.id) }}">
+                            <button type="submit" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white shadow-sm">
+                              {% if app.user.hasFavoriteBakery(bakery) %}
+                                <i data-lucide="heart" class="h-5 w-5 text-red-500 fill-red-500"></i>
+                              {% else %}
+                                <i data-lucide="heart" class="h-5 w-5 text-gray-400 hover:text-red-500"></i>
+                              {% endif %}
+                            </button>
+                          </form>
+                        </div>
+                      {% endif %}
+                    </div>
+                    <div class="p-4">
+                      <h3 class="text-lg font-playfair mb-2">{{ bakery.name }}</h3>
+                      <p class="text-gray-600 text-sm line-clamp-2 mb-3">{{ bakery.description|striptags|slice(0, 80) ~ (bakery.description|length > 80 ? '...' : '') }}</p>
+
+                      <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center text-gray-500">
+                          <i data-lucide="map-pin" class="h-4 w-4 mr-1"></i>
+                          <span>
+                            {% if bakery.city %}
+                              {{ bakery.city }}
+                            {% else %}
+                              {{ bakery.address|slice(0, 25) ~ (bakery.address|length > 25 ? '...' : '') }}
+                            {% endif %}
+                          </span>
+                        </div>
+
+                        <div class="flex items-center">
+                          <span class="text-[#EDA239] font-medium">{{ bakery.products|length }} produits</span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
           </div>
 
-          <div class="mt-8">
-            <a href="{{ path('app_bakery_list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D]">
-              Voir toutes nos boutiques
-            </a>
+        {% else %}
+          <!-- Aucun résultat -->
+          <div class="text-center py-16">
+            <div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
+              <i data-lucide="map-pin-off" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
+              <h3 class="text-xl font-playfair mb-2">Aucune boulangerie trouvée</h3>
+              <p class="text-gray-600 mb-6">Nous n'avons pas encore de partenaires dans la zone "{{ location ?: (city ~ ' ' ~ postalCode) }}".</p>
+
+              <div class="space-y-3">
+                <a href="{{ path('app_bakery_list') }}" class="block w-full bg-[#EDA239] text-white px-4 py-2 rounded-md hover:bg-[#EFAF7D] transition-colors">
+                  Voir toutes nos boutiques
+                </a>
+                <button onclick="searchNearby()" class="block w-full bg-white border border-[#EDA239] text-[#EDA239] px-4 py-2 rounded-md hover:bg-[#EDA239] hover:text-white transition-colors">
+                  Élargir la recherche
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+      {% else %}
+        <!-- État initial - pas de recherche -->
+        <div class="text-center py-16">
+          <div class="bg-white rounded-lg shadow-md p-8 max-w-lg mx-auto">
+            <i data-lucide="search" class="h-16 w-16 text-[#EDA239] mx-auto mb-4"></i>
+            <h3 class="text-xl font-playfair mb-2">Trouvez vos boulangeries préférées</h3>
+            <p class="text-gray-600 mb-6">Entrez votre code postal ou nom de ville pour découvrir les boulangeries près de chez vous.</p>
+
+            <div class="text-left space-y-2 text-sm text-gray-500">
+              <p><strong>Exemples de recherche :</strong></p>
+              <ul class="list-disc list-inside space-y-1">
+                <li>68260 (code postal)</li>
+                <li>Mulhouse (nom de ville)</li>
+                <li>68100 Mulhouse (code + ville)</li>
+              </ul>
+            </div>
           </div>
         </div>
       {% endif %}
     </div>
   </div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  {% if searchPerformed and bakeries|length > 0 %}
+    <script>
+      function initSearchResultsMap() {
+        const searchLocation = '{{ location|e('js') }}' || '{{ postalCode|e('js') }} {{ city|e('js') }}';
+
+        const bakeries = [
+          {% for bakery in bakeries %}
+          {
+            id: '{{ bakery.id }}',
+            name: '{{ bakery.name|e('js') }}',
+            address: '{{ bakery.address|e('js') }}',
+            city: '{{ bakery.city|e('js') }}',
+            postalCode: '{{ bakery.postalCode|e('js') }}',
+            phone: '{{ bakery.phone|e('js') }}',
+            rating: {{ bakery.rating|default(0) }},
+            description: '{{ bakery.description|striptags|slice(0, 100)|e('js') }}',
+            slug: '{{ bakery.slug|e('js') }}',
+            image: '{{ bakery.mainImage|e('js') }}',
+            productCount: {{ bakery.products|length }}
+          }{% if not loop.last %},{% endif %}
+          {% endfor %}
+        ];
+
+        const geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({ 'address': searchLocation + ', France' }, (results, status) => {
+          let mapCenter = { lat: 47.652, lng: 7.155 };
+
+          if (status === 'OK') {
+            mapCenter = results[0].geometry.location;
+          }
+
+          const map = new google.maps.Map(document.getElementById("search-results-map"), {
+            zoom: 12,
+            center: mapCenter,
+            mapTypeId: 'satellite',
+            mapTypeControl: true,
+            styles: [{ "elementType": "labels" }]
+          });
+
+          if (status === 'OK') {
+            new google.maps.Marker({
+              position: mapCenter,
+              map: map,
+              title: 'Zone de recherche: ' + searchLocation,
+              icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                fillColor: '#3B82F6',
+                fillOpacity: 0.8,
+                strokeWeight: 3,
+                strokeColor: '#FFFFFF',
+                scale: 6
+              }
+            });
+          }
+
+          bakeries.forEach(bakery => {
+            const fullAddress = `${bakery.address}, ${bakery.postalCode} ${bakery.city}, France`;
+
+            geocoder.geocode({ 'address': fullAddress }, (results, status) => {
+              if (status === 'OK') {
+                const marker = new google.maps.Marker({
+                  position: results[0].geometry.location,
+                  map: map,
+                  title: bakery.name,
+                  icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#EDA239',
+                    fillOpacity: 1,
+                    strokeWeight: 2,
+                    strokeColor: '#FFFFFF',
+                    scale: 8
+                  }
+                });
+
+                const infoContent = `
+                <div class="bakery-info-window">
+                  <h3>${bakery.name}</h3>
+                  <div class="rating">
+                    <span style="color: #FFC107;">★</span>
+                    <span>${bakery.rating}/5</span>
+                  </div>
+                  <p><strong>Adresse:</strong> ${bakery.address}</p>
+                  <p><strong>Ville:</strong> ${bakery.city}</p>
+                  ${bakery.phone ? `<p><strong>Téléphone:</strong> ${bakery.phone}</p>` : ''}
+                  <p><strong>Produits:</strong> ${bakery.productCount}</p>
+                  <p style="margin: 8px 0;">${bakery.description}...</p>
+                  <a href="/b/${bakery.slug}" target="_blank">Voir la boutique →</a>
+                </div>
+              `;
+
+                const infoWindow = new google.maps.InfoWindow({
+                  content: infoContent
+                });
+
+                marker.addListener('click', () => {
+                  infoWindow.open(map, marker);
+                });
+              }
+            });
+          });
+        });
+      }
+
+      window.initSearchResultsMap = initSearchResultsMap;
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA31TY77JjCtZ49ZwrGL1N3ePzrNFJ6KY0&callback=initSearchResultsMap"></script>
+  {% endif %}
 {% endblock %}
