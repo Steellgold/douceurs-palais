@@ -1,7 +1,17 @@
-{% set links = [
-  { 'name': 'Nos boulangeries', 'url': '/#bakeries' },
-  { 'name': 'Catégories', 'url': '/categories' }
-] %}
+{% set links = [] %}
+
+{% if app.request.get('_route') == 'app_bakery_show' %}
+  {% set links = [
+    { 'name': 'Retour au boulangeries', 'url': '/#bakeries', 'icon': 'arrow-left' },
+  ] %}
+{% else %}
+  {% set links = [
+    { 'name': 'Nos boulangeries', 'url': '/#bakeries' },
+    { 'name': 'Catégories', 'url': '/categories' }
+    ] %}
+{% endif %}
+
+{% set isBakeryPage = app.request.get('_route') == 'app_bakery_show' %}
 
 <nav id="main-navbar" class="relative flex flex-col md:flex-row md:justify-between bg-[#FBFBFB]/60 p-4 shadow-md transition-all duration-300 ease-in-out">
   <!-- Mobile layout -->
@@ -13,9 +23,19 @@
           <i data-lucide="x" class="close-icon hidden w-6 h-6"></i>
         </button>
       </div>
-      <a href="/">
-        <img src="https://cdn.douceurs-palais.fr/icon-title.png" alt="Logo" height="140px" width="140px" />
-      </a>
+      {% if isBakeryPage and bakery is not null and bakery.logo %}
+        <div class="flex items-center gap-3">
+          <img src="{{ bakery.logo }}" alt="Logo {{ bakery.name }}" class="w-10 h-10 rounded-full object-cover border-2 border-[#EDA239] bakery-logo" />
+          <div class="flex flex-col">
+            <span class="text-sm font-playfair font-semibold text-gray-800">{{ bakery.name }}</span>
+            <span class="text-xs text-gray-500">Boulangerie</span>
+          </div>
+        </div>
+      {% else %}
+        <a href="/">
+          <img src="https://cdn.douceurs-palais.fr/icon-title.png" alt="Logo" height="140px" width="140px" />
+        </a>
+      {% endif %}
     </div>
     <div class="flex items-center gap-2">
       <div class="relative">
@@ -44,7 +64,10 @@
   <div id="mobile-menu" class="hidden w-full md:hidden">
     <div class="flex flex-col w-full py-4">
       {% for link in links %}
-        <a href="{{ link.url }}" class="text-gray-800 py-3 px-4 hover:text-gray-600 transition duration-300 ease-in-out border-b border-gray-200">
+        <a href="{{ link.url }}" class="text-gray-800 py-3 px-4 hover:text-gray-600 transition duration-300 ease-in-out border-b border-gray-200 flex items-center">
+          {% if link.icon is defined %}
+            <i data-lucide="{{ link.icon }}" class="w-4 h-4 mr-2"></i>
+          {% endif %}
           {{ link.name }}
         </a>
       {% endfor %}
@@ -63,23 +86,38 @@
   <div class="hidden md:flex items-center px-8">
     <div class="flex items-center gap-6">
       {% for link in links %}
-        <a href="{{ link.url }}" class="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out hover:border-b-2 hover:border-black">
+        <a href="{{ link.url }}" class="text-gray-800 hover:text-gray-600 transition duration-300 ease-in-out hover:border-b-2 hover:border-black flex items-center">
+          {% if link.icon is defined %}
+            <i data-lucide="{{ link.icon }}" class="w-4 h-4 mr-2"></i>
+          {% endif %}
           {{ link.name }}
         </a>
       {% endfor %}
     </div>
   </div>
 
-  <a href="/" class="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-    <img src="https://cdn.douceurs-palais.fr/icon-title.png" alt="Logo" height="190px" width="190px" />
-  </a>
+  {% if isBakeryPage and bakery is not null and bakery.logo %}
+    <div class="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <div class="flex items-center gap-4">
+        <img src="{{ bakery.logo }}" alt="Logo {{ bakery.name }}" class="w-16 h-16 rounded-full object-cover border-3 border-[#EDA239] bakery-logo" />
+        <div class="flex flex-col">
+          <span class="text-xl font-playfair font-bold text-gray-800">{{ bakery.name }}</span>
+          <span class="text-sm text-gray-600">Boulangerie artisanale</span>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <a href="/" class="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <img src="https://cdn.douceurs-palais.fr/icon-title.png" alt="Logo" height="190px" width="190px" />
+    </a>
+  {% endif %}
 
   <div class="hidden md:flex items-center gap-4 px-8">
     <div class="relative">
       <a href="{{ path('app_cart_index') }}" class="rounded-full p-2 flex items-center justify-center cursor-pointer">
         <i data-lucide="shopping-bag" class="w-6 h-6"></i>
-          {% set itemCount = cart_item_count() %}
-          <span class="cart-count absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center {{ itemCount > 0 ? '' : 'hidden' }}">
+        {% set itemCount = cart_item_count() %}
+        <span class="cart-count absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center {{ itemCount > 0 ? '' : 'hidden' }}">
           {{ itemCount }}
         </span>
       </a>
