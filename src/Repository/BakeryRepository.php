@@ -152,4 +152,31 @@ class BakeryRepository extends ServiceEntityRepository {
       ->getQuery()
       ->getResult();
   }
+
+  /**
+   * Recherche des boulangeries par ville et/ou code postal
+   *
+   * @param string|null $city Nom de la ville
+   * @param string|null $postalCode Code postal
+   * @return Bakery[] Tableau des boulangeries correspondantes
+   */
+  public function findByLocation(?string $city, ?string $postalCode): array {
+    $qb = $this->createQueryBuilder('b');
+
+    if ($city && $postalCode) {
+      $qb->where('LOWER(b.city) = LOWER(:city) OR b.postalCode = :postalCode')
+        ->setParameter('city', $city)
+        ->setParameter('postalCode', $postalCode);
+    } elseif ($city) {
+      $qb->where('LOWER(b.city) = LOWER(:city)')
+        ->setParameter('city', $city);
+    } elseif ($postalCode) {
+      $qb->where('b.postalCode = :postalCode')
+        ->setParameter('postalCode', $postalCode);
+    }
+
+    return $qb->orderBy('b.name', 'ASC')
+      ->getQuery()
+      ->getResult();
+  }
 }
