@@ -104,9 +104,17 @@ class Bakery {
   private array $images = [];
 
   /**
+   * Logo de la boulangerie
+   *
+   * @var string|null URL de l'image du logo
+   */
+  #[ORM\Column(length: 300, nullable: false)]
+  private ?string $logo = '';
+
+  /**
    * Horaires d'ouverture de la boulangerie
    *
-   * @var array<string, string> Tableau associatif jour => horaires
+   * @var array<string, string> Tableau associatif jour → horaires
    */
   #[ORM\Column(type: Types::JSON, nullable: true)]
   private array $openingHours = [];
@@ -429,6 +437,15 @@ class Bakery {
   public function setImages(?array $images): static {
     $this->images = $images ?? [];
 
+    return $this;
+  }
+
+  public function getLogo(): ?string {
+    return $this->logo;
+  }
+
+  public function setLogo(?string $logo): static {
+    $this->logo = $logo;
     return $this;
   }
 

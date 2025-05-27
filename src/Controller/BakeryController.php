@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -63,6 +64,7 @@ class BakeryController extends AbstractController {
       'popularProducts' => $popularProducts,
       'allProducts' => $allProducts,
       'categories' => $categories,
+      'isBakeryPage' => true,
     ]);
   }
 
