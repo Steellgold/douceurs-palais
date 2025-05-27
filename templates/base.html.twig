@@ -1,3 +1,6 @@
+{% set isBakeryPage = app.request.attributes.get('_route') == 'app_bakery_show' %}
+{% set bakeryProp = isBakeryPage ? bakery : null %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -28,8 +31,12 @@
     {{ encore_entry_script_tags('cart') }}
   {% endblock %}
 </head>
+
 <body class="bg-[#FEFDFB] flex flex-col min-h-screen">
-  <twig:Navbar class="flex-shrink-0" />
+  {% block navbar %}
+    <twig:Navbar class="flex-shrink-0" :bakery="bakeryProp" />
+  {% endblock %}
+
   <main class="flex-grow">
     {% block body %}{% endblock %}
 
