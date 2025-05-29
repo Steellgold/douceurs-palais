@@ -1,0 +1,322 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Foire Aux Questions{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-playfair mb-8 text-center">Foire Aux Questions</h1>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100 mb-8">
+        <p class="text-center text-gray-600 mb-8">Retrouvez ici les réponses aux questions les plus fréquemment posées. Si vous ne trouvez pas la réponse à votre question, n'hésitez pas à <a href="/contact" class="text-[#EDA239] hover:underline">nous contacter</a>.</p>
+
+        <div class="space-y-6">
+          <!-- Section Commandes -->
+          <div>
+            <h2 class="text-2xl font-playfair mb-4 pb-2 border-b border-gray-200">Commandes</h2>
+
+            <div class="space-y-4">
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Comment passer une commande sur votre site ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Pour passer une commande, suivez ces étapes simples :</p>
+                  <ol class="list-decimal ml-5 mt-2 space-y-1">
+                    <li>Choisissez une boulangerie près de chez vous</li>
+                    <li>Sélectionnez les produits qui vous intéressent</li>
+                    <li>Ajoutez-les à votre panier</li>
+                    <li>Validez votre panier et procédez au paiement</li>
+                    <li>Indiquez votre adresse de livraison</li>
+                    <li>Choisissez votre moyen de paiement et confirmez votre commande</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Puis-je modifier ou annuler ma commande ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Une fois votre commande validée, il n'est plus possible de la modifier directement sur le site. Pour toute demande de modification ou d'annulation, veuillez nous contacter dans les plus brefs délais :</p>
+                  <ul class="list-disc ml-5 mt-2">
+                    <li>Par téléphone au 03 89 45 67 89 (du lundi au vendredi de 9h à 18h)</li>
+                    <li>Par email à contact@douceurs-palais.fr</li>
+                  </ul>
+                  <p class="mt-2">Veuillez noter que les modifications ou annulations ne sont possibles que si votre commande n'a pas encore été préparée par la boulangerie.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Puis-je commander des produits de différentes boulangeries en même temps ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Pour garantir la fraîcheur et optimiser la livraison, vous ne pouvez commander que dans une seule boulangerie à la fois. Si vous souhaitez des produits de différentes boulangeries, vous devrez passer des commandes séparées.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Comment suivre ma commande ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Vous pouvez suivre l'état de votre commande à tout moment en vous connectant à votre compte client et en allant dans la section "Mes commandes". Vous recevrez également des notifications par email à chaque étape de votre commande (confirmation, préparation, expédition, livraison).</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Livraison -->
+          <div>
+            <h2 class="text-2xl font-playfair mb-4 pb-2 border-b border-gray-200">Livraison</h2>
+
+            <div class="space-y-4">
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Quelles sont les zones de livraison ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Nous livrons actuellement dans plusieurs villes de France. Pour savoir si votre zone est desservie, entrez votre code postal sur notre page d'accueil ou dans la barre de recherche. Si aucune boulangerie n'apparaît, c'est que nous ne livrons pas encore dans votre secteur, mais nous travaillons continuellement à étendre notre réseau.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Quels sont les délais de livraison ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Nos livraisons sont généralement effectuées le jour même ou le lendemain de votre commande, selon les disponibilités et les horaires de la boulangerie choisie. Lors de votre commande, vous pourrez choisir un créneau horaire spécifique pour votre livraison.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Combien coûte la livraison ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Nous offrons la livraison gratuite pour toutes les commandes. C'est notre façon de vous remercier de votre confiance et de rendre l'expérience Aux Douceurs du Palais encore plus agréable.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Que faire si je ne suis pas disponible lors de la livraison ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Si vous n'êtes pas disponible au moment de la livraison, notre livreur essaiera de vous contacter par téléphone. Vous pouvez également indiquer des instructions spécifiques pour la livraison (laisser chez un voisin, etc.) dans les commentaires lors de votre commande. Si la livraison n'est pas possible, nous vous contacterons pour reprogrammer celle-ci.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Paiement -->
+          <div>
+            <h2 class="text-2xl font-playfair mb-4 pb-2 border-b border-gray-200">Paiement</h2>
+
+            <div class="space-y-4">
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Quels moyens de paiement acceptez-vous ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Nous acceptons les modes de paiement suivants :</p>
+                  <ul class="list-disc ml-5 mt-2">
+                    <li>Cartes bancaires (Visa, Mastercard, American Express)</li>
+                    <li>Apple Pay</li>
+                    <li>Google Pay</li>
+                  </ul>
+                  <p class="mt-2">Tous les paiements sont sécurisés par notre partenaire Stripe.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Le paiement sur votre site est-il sécurisé ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Oui, absolument. Nous utilisons Stripe, l'un des leaders mondiaux du paiement en ligne, pour traiter toutes les transactions. Vos informations bancaires sont chiffrées selon les normes les plus strictes (TLS) et nous ne stockons jamais vos données de carte bancaire sur nos serveurs.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>À quel moment suis-je débité ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Le débit est effectué au moment de la validation de votre commande. Si, pour une raison quelconque, votre commande ne pouvait pas être honorée, vous seriez intégralement remboursé.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Comment puis-je obtenir une facture ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Une facture électronique est automatiquement générée pour chaque commande. Vous pouvez la consulter et la télécharger à tout moment dans votre espace client, rubrique "Mes commandes".</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Produits -->
+          <div>
+            <h2 class="text-2xl font-playfair mb-4 pb-2 border-b border-gray-200">Produits</h2>
+
+            <div class="space-y-4">
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Les produits sont-ils frais ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Oui, tous nos produits sont préparés quotidiennement par nos artisans boulangers-pâtissiers. Nous garantissons la fraîcheur de nos produits au moment de la livraison.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Proposez-vous des produits pour les régimes spéciaux (sans gluten, végétalien, etc.) ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Certaines de nos boulangeries partenaires proposent des produits adaptés aux régimes spéciaux. Vous pouvez filtrer les produits par type ou vérifier les informations sur les allergènes et les ingrédients disponibles sur chaque fiche produit.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Comment conserver les produits ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Les conseils de conservation sont indiqués sur les fiches produits. En général :</p>
+                  <ul class="list-disc ml-5 mt-2">
+                    <li>Le pain se conserve à température ambiante dans un sac en papier ou une boîte à pain</li>
+                    <li>Les viennoiseries se consomment de préférence le jour même</li>
+                    <li>Les pâtisseries doivent être conservées au réfrigérateur et consommées dans les 24-48h</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Que faire si je ne suis pas satisfait d'un produit ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Votre satisfaction est notre priorité. Si vous n'êtes pas satisfait d'un produit, veuillez nous contacter dans les 24 heures suivant la livraison avec une photo du produit. Nous traiterons votre réclamation dans les meilleurs délais et pourrons procéder à un remboursement ou à un avoir selon les cas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section Compte et Fidélité -->
+          <div>
+            <h2 class="text-2xl font-playfair mb-4 pb-2 border-b border-gray-200">Compte et Programme de Fidélité</h2>
+
+            <div class="space-y-4">
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Comment créer un compte ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Pour créer un compte, cliquez sur "Se connecter" en haut à droite de la page, puis sur "Créer un compte". Remplissez le formulaire avec vos informations personnelles et créez votre mot de passe. Vous recevrez un email de confirmation pour valider votre compte.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Comment fonctionne le programme de fidélité ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Notre programme de fidélité vous permet de gagner des points à chaque achat :</p>
+                  <ul class="list-disc ml-5 mt-2">
+                    <li>1€ dépensé = 1 point de fidélité</li>
+                    <li>Les points sont cumulés automatiquement sur votre compte</li>
+                    <li>Vous pouvez échanger vos points contre des produits gratuits</li>
+                  </ul>
+                  <p class="mt-2">Consultez la page de chaque boulangerie pour voir les produits disponibles avec vos points.</p>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Comment utiliser mes points de fidélité ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Pour utiliser vos points :</p>
+                  <ol class="list-decimal ml-5 mt-2">
+                    <li>Connectez-vous à votre compte</li>
+                    <li>Accédez à la page de fidélité d'une boulangerie</li>
+                    <li>Choisissez un produit disponible avec vos points</li>
+                    <li>Cliquez sur "Échanger mes points"</li>
+                    <li>Le produit sera ajouté gratuitement à votre panier</li>
+                  </ol>
+                </div>
+              </div>
+
+              <div class="border-b border-gray-100 pb-4">
+                <button class="faq-question w-full flex justify-between items-center text-left font-medium text-gray-900 focus:outline-none">
+                  <span>Quelle est la durée de validité des points de fidélité ?</span>
+                  <i data-lucide="chevron-down" class="faq-icon h-5 w-5 text-gray-500 transition-transform"></i>
+                </button>
+                <div class="faq-answer hidden mt-2 text-gray-600">
+                  <p>Vos points de fidélité sont valables pendant 12 mois à compter de la date d'achat. N'attendez pas pour les utiliser !</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100">
+        <h2 class="text-2xl font-playfair mb-4 text-center">Vous n'avez pas trouvé de réponse à votre question ?</h2>
+        <p class="text-center text-gray-600 mb-6">Notre équipe du service client est à votre disposition pour vous aider.</p>
+        <div class="flex justify-center">
+          <a href="/contact" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+            Contactez-nous
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const faqQuestions = document.querySelectorAll('.faq-question');
+
+      faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+          const answer = this.nextElementSibling;
+          const icon = this.querySelector('.faq-icon');
+
+          // Toggle answer visibility
+          answer.classList.toggle('hidden');
+
+          // Rotate icon
+          if (answer.classList.contains('hidden')) {
+            icon.style.transform = 'rotate(0deg)';
+          } else {
+            icon.style.transform = 'rotate(180deg)';
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}

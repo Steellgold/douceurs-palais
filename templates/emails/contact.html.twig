@@ -1,0 +1,18 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
+  <h1>Nouveau message de contact</h1>
+
+  <div style="margin-top: 20px; padding: 15px; border-left: 4px solid #EDA239; background-color: #FEFDFB;">
+    <p><strong>Nom :</strong> {{ name }}</p>
+    <p><strong>Email :</strong> {{ email }}</p>
+    {% if phone %}
+      <p><strong>Téléphone :</strong> {{ phone }}</p>
+    {% endif %}
+    <p><strong>Sujet :</strong> {{ subject }}</p>
+    <p><strong>Message :</strong></p>
+    <p style="white-space: pre-line;">{{ message }}</p>
+  </div>
+
+  <p style="margin-top: 20px;">Ce message a été envoyé depuis le formulaire de contact du site web.</p>
+{% endblock %}

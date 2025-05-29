@@ -1,0 +1,138 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos de nous{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-playfair mb-8 text-center">À propos de nous</h1>
+
+      <div class="bg-white shadow-md rounded-lg p-8 border border-gray-100 mb-8">
+        <div class="flex flex-col md:flex-row items-center mb-8">
+          <div class="md:w-1/2 mb-6 md:mb-0 md:pr-8">
+            <img src="https://cdn.douceurs-palais.fr/about-team.jpg" alt="Notre équipe" class="rounded-lg shadow-md w-full h-auto">
+          </div>
+          <div class="md:w-1/2">
+            <h2 class="text-2xl font-playfair mb-4">Notre histoire</h2>
+            <p class="text-gray-700 mb-4">Fondé en 2019, Aux Douceurs du Palais est né d'une passion partagée pour l'excellence pâtissière et d'une vision commune : rendre accessible les produits de boulangerie artisanale au plus grand nombre.</p>
+            <p class="text-gray-700">Notre fondateur, Pierre Moreau, maître boulanger depuis plus de 15 ans, a voulu créer une plateforme qui réunit les meilleurs artisans boulangers et pâtissiers de France pour proposer leurs créations directement aux gourmands et gourmets.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-8 border border-gray-100 mb-8">
+        <h2 class="text-2xl font-playfair mb-6 text-center">Notre mission</h2>
+        <div class="flex flex-col md:flex-row gap-8">
+          <div class="md:w-1/3 flex flex-col items-center text-center">
+            <div class="w-16 h-16 bg-[#EDA239] rounded-full flex items-center justify-center mb-4">
+              <i data-lucide="award" class="h-8 w-8 text-white"></i>
+            </div>
+            <h3 class="text-xl font-medium mb-2">Excellence</h3>
+            <p class="text-gray-600">Nous sélectionnons rigoureusement nos partenaires artisans pour leur savoir-faire et leur engagement envers la qualité.</p>
+          </div>
+          <div class="md:w-1/3 flex flex-col items-center text-center">
+            <div class="w-16 h-16 bg-[#EDA239] rounded-full flex items-center justify-center mb-4">
+              <i data-lucide="heart" class="h-8 w-8 text-white"></i>
+            </div>
+            <h3 class="text-xl font-medium mb-2">Passion</h3>
+            <p class="text-gray-600">Nous partageons tous un amour profond pour les saveurs authentiques et les traditions boulangères françaises.</p>
+          </div>
+          <div class="md:w-1/3 flex flex-col items-center text-center">
+            <div class="w-16 h-16 bg-[#EDA239] rounded-full flex items-center justify-center mb-4">
+              <i data-lucide="truck" class="h-8 w-8 text-white"></i>
+            </div>
+            <h3 class="text-xl font-medium mb-2">Service</h3>
+            <p class="text-gray-600">Nous nous engageons à offrir une expérience client exceptionnelle, de la commande à la livraison.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-8 border border-gray-100 mb-8">
+        <h2 class="text-2xl font-playfair mb-6">Notre engagement qualité</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex items-start">
+            <div class="flex-shrink-0 mt-1">
+              <div class="w-10 h-10 bg-[#F8F8F1] rounded-full flex items-center justify-center">
+                <i data-lucide="wheat" class="h-5 w-5 text-[#EDA239]"></i>
+              </div>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-medium mb-2">Ingrédients sélectionnés</h3>
+              <p class="text-gray-600">Nous utilisons exclusivement des ingrédients de première qualité, locaux et de saison quand c'est possible.</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="flex-shrink-0 mt-1">
+              <div class="w-10 h-10 bg-[#F8F8F1] rounded-full flex items-center justify-center">
+                <i data-lucide="sparkles" class="h-5 w-5 text-[#EDA239]"></i>
+              </div>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-medium mb-2">Fraîcheur garantie</h3>
+              <p class="text-gray-600">Nos produits sont préparés quotidiennement pour garantir une fraîcheur et une saveur optimales.</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="flex-shrink-0 mt-1">
+              <div class="w-10 h-10 bg-[#F8F8F1] rounded-full flex items-center justify-center">
+                <i data-lucide="clipboard-check" class="h-5 w-5 text-[#EDA239]"></i>
+              </div>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-medium mb-2">Traçabilité</h3>
+              <p class="text-gray-600">Nous assurons une traçabilité complète de nos produits, de l'origine des ingrédients jusqu'à votre table.</p>
+            </div>
+          </div>
+          <div class="flex items-start">
+            <div class="flex-shrink-0 mt-1">
+              <div class="w-10 h-10 bg-[#F8F8F1] rounded-full flex items-center justify-center">
+                <i data-lucide="recycle" class="h-5 w-5 text-[#EDA239]"></i>
+              </div>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg font-medium mb-2">Éco-responsabilité</h3>
+              <p class="text-gray-600">Nous privilégions les emballages éco-responsables et travaillons à réduire notre impact environnemental.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-8 border border-gray-100 mb-8">
+        <h2 class="text-2xl font-playfair mb-6 text-center">Notre équipe</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 border-4 border-[#EDA239]">
+              <img src="https://cdn.douceurs-palais.fr/team-pierre.jpg" alt="Pierre Moreau" class="w-full h-full object-cover">
+            </div>
+            <h3 class="text-lg font-medium">Pierre Moreau</h3>
+            <p class="text-[#EDA239]">Fondateur & Maître Boulanger</p>
+          </div>
+          <div class="text-center">
+            <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 border-4 border-[#EDA239]">
+              <img src="https://cdn.douceurs-palais.fr/team-sophie.jpg" alt="Sophie Lambert" class="w-full h-full object-cover">
+            </div>
+            <h3 class="text-lg font-medium">Sophie Lambert</h3>
+            <p class="text-[#EDA239]">Directrice des Opérations</p>
+          </div>
+          <div class="text-center">
+            <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 border-4 border-[#EDA239]">
+              <img src="https://cdn.douceurs-palais.fr/team-thomas.jpg" alt="Thomas Dubois" class="w-full h-full object-cover">
+            </div>
+            <h3 class="text-lg font-medium">Thomas Dubois</h3>
+            <p class="text-[#EDA239]">Responsable Qualité</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-md rounded-lg p-8 border border-gray-100">
+        <h2 class="text-2xl font-playfair mb-6 text-center">Rejoignez l'aventure</h2>
+        <p class="text-gray-700 text-center mb-6">Vous êtes artisan boulanger-pâtissier et souhaitez rejoindre notre réseau ? Nous sommes toujours à la recherche de nouveaux talents passionnés pour enrichir notre offre.</p>
+        <div class="flex justify-center">
+          <a href="/contact" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+            Contactez-nous
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
