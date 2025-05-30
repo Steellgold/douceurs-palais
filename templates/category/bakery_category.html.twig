@@ -30,6 +30,7 @@
                 description="{{ product.description|striptags|slice(0, 100) ~ (product.description|length > 100 ? '...' : '') }}"
                 productId="{{ product.id }}"
                 bakeryId="{{ product.bakery.id }}"
+                slug="{{ product.slug }}"
             />
           {% endfor %}
         </div>
