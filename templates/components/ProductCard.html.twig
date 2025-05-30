@@ -1,6 +1,6 @@
 {% if variant is defined and variant == 'small' %}
   <div class="bg-[#FEFDFB] rounded-lg p-2 w-full max-w-xs flex flex-row items-center shadow-md h-auto">
-    <a href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir le produit {{ name }}">
+    <a href="{{ path('app_product_page', { slug }) }}" aria-label="Voir le produit {{ name }}">
       <img
           src="{{ imageUrl }}"
           alt="Product Image"
@@ -31,7 +31,7 @@
   {% endif %}
 
   <div class="bg-[#FEFDFB] rounded-lg p-3 w-full max-w-xs flex flex-col shadow-lg h-auto">
-    <a href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir le produit {{ name }}">
+    <a href="{{ path('app_product_page', { slug }) }}" aria-label="Voir le produit {{ name }}">
       <img
           src="{{ imageUrl }}"
           alt="Product Image"
@@ -40,7 +40,7 @@
     </a>
 
     <div class="flex flex-col flex-grow">
-      <a href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}" aria-label="Voir le produit {{ name }}" class="flex flex-col flex-grow">
+      <a href="{{ path('app_product_page', { slug }) }}" aria-label="Voir le produit {{ name }}" class="flex flex-col flex-grow">
         <span class="text-xs font-normal text-gray-800">{{ category }}</span>
 
         <div class="w-full flex flex-row items-center justify-between mt-1">
@@ -79,7 +79,7 @@
         <twig:Button
             label="Détails"
             variant="dark"
-            href="{{ path('app_product_page', { slug: name|lower|replace({' ': '-'}) }) }}"
+            href="{{ path('app_product_page', { slug }) }}"
             fullWidth
             iconLeft="book-image"
             size="sm"
