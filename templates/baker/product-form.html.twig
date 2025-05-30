@@ -147,23 +147,6 @@
                     </div>
                     <div class="ml-3 text-sm">
                       <label for="{{ child.vars.id }}" class="font-medium text-gray-700">{{ child.vars.label }}</label>
-
-                      {% set ingredient = child.vars.data %}
-                      {% if ingredient.allergens|length > 0 %}
-                        <div class="flex flex-wrap gap-1 mt-1">
-                          {% for allergen in ingredient.allergens %}
-                            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                              {{ allergen }}
-                            </span>
-                          {% endfor %}
-                        </div>
-                      {% endif %}
-
-                      {% if ingredient.isVegan %}
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-1">
-                          <i data-lucide="leaf" class="h-3 w-3 mr-1"></i> Végan
-                        </span>
-                      {% endif %}
                     </div>
                   </div>
                 {% endfor %}
