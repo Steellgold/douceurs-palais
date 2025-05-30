@@ -156,6 +156,14 @@ class Bakery {
   private Collection $bakers;
 
   /**
+   * Ingrédients de la boulangerie
+   *
+   * @var Collection<int, Ingredient>
+   */
+  #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'bakery', orphanRemoval: true)]
+  private Collection $ingredients;
+
+  /**
    * Constructeur de la boulangerie
    *
    * Initialise une nouvelle boulangerie avec un UUID, une date de création,
@@ -167,6 +175,7 @@ class Bakery {
     $this->products = new ArrayCollection();
     $this->favoriteByUsers = new ArrayCollection();
     $this->bakers = new ArrayCollection();
+    $this->ingredients = new ArrayCollection();
   }
 
   /**
@@ -656,11 +665,51 @@ class Bakery {
         $user->setManagedBakery(null);
 
         // Suppression du rôle ROLE_BAKER
-        $roles = array_filter($user->getRoles(), function($role) {
+        $roles = array_filter($user->getRoles(), function ($role) {
           return $role !== 'ROLE_BAKER';
         });
 
         $user->setRoles($roles);
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * Récupère les ingrédients de la boulangerie
+   *
+   * @return Collection<int, Ingredient> Collection d'objets Ingredient
+   */
+  public function getIngredients(): Collection {
+    return $this->ingredients;
+  }
+
+  /**
+   * Ajoute un ingrédient à la boulangerie
+   *
+   * @param Ingredient $ingredient L'ingrédient à ajouter
+   * @return static L'instance de la boulangerie
+   */
+  public function addIngredient(Ingredient $ingredient): static {
+    if (!$this->ingredients->contains($ingredient)) {
+      $this->ingredients->add($ingredient);
+      $ingredient->setBakery($this);
+    }
+
+    return $this;
+  }
+
+  /**
+   * Retire un ingrédient de la boulangerie
+   *
+   * @param Ingredient $ingredient L'ingrédient à retirer
+   * @return static L'instance de la boulangerie
+   */
+  public function removeIngredient(Ingredient $ingredient): static {
+    if ($this->ingredients->removeElement($ingredient)) {
+      if ($ingredient->getBakery() === $this) {
+        $ingredient->setBakery(null);
       }
     }
 
