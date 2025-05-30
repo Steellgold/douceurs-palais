@@ -156,6 +156,19 @@ class ProductType extends AbstractType {
         'attr' => [
           'class' => 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
         ]
+      ])
+      ->add('taxRate', ChoiceType::class, [
+        'label' => 'Taux de TVA (%)',
+        'required' => true,
+        'choices' => [
+          '20% (Taux normal)' => 20.0,
+          '10% (Taux intermédiaire)' => 10.0,
+          '5,5% (Taux réduit)' => 5.5,
+          '2,1% (Taux super réduit)' => 2.1,
+        ],
+        'attr' => [
+          'class' => 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+        ]
       ]);
 
     // Gérer le statut végan automatiquement en fonction des ingrédients sélectionnés

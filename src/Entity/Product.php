@@ -166,6 +166,12 @@ class Product {
   private bool $isVegan = false;
 
   /**
+   * Taux de TVA du produit (en pourcentage)
+   */
+  #[ORM\Column]
+  private ?float $taxRate = 5.5;
+
+  /**
    * Constructeur du produit
    *
    * Initialise un nouveau produit avec un UUID et une date de création.
@@ -742,4 +748,29 @@ class Product {
 
     return true;
   }
+
+  // Getter et setter pour Product.php :
+  public function getTaxRate(): ?float {
+    return $this->taxRate;
+  }
+
+  public function setTaxRate(float $taxRate): static {
+    $this->taxRate = $taxRate;
+    return $this;
+  }
+
+  /**
+   * Calcule le prix HT du produit
+   */
+  public function getPriceExcludingTax(): float {
+    return $this->price / (1 + ($this->taxRate / 100));
+  }
+
+  /**
+   * Calcule le montant de TVA pour ce produit
+   */
+  public function getTaxAmount(): float {
+    return $this->price - $this->getPriceExcludingTax();
+  }
+
 }

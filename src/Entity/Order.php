@@ -6,6 +6,7 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Random\RandomException;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -118,11 +119,30 @@ class Order {
   private ?string $token = null;
 
   /**
+   * Taux de TVA appliqué à la commande (en pourcentage)
+   */
+  #[ORM\Column]
+  private ?float $taxRate = 5.5;
+
+  /**
+   * Montant de la TVA
+   */
+  #[ORM\Column]
+  private ?float $taxAmount = 0;
+
+  /**
+   * Montant HT de la commande
+   */
+  #[ORM\Column]
+  private ?float $subtotalAmount = 0;
+
+  /**
    * Constructeur de la commande
    *
    * Initialise une nouvelle commande avec un UUID, une date de création,
    * une référence générée automatiquement, un jeton unique pour l'accès anonyme,
    * et une collection vide pour les éléments.
+   * @throws RandomException
    */
   public function __construct() {
     $this->id = Uuid::v4()->toRfc4122();
@@ -492,5 +512,36 @@ class Order {
       self::STATUS_CANCELLED => 'bg-red-100 text-red-800',
       default => 'bg-gray-100 text-gray-800',
     };
+  }
+
+  public function setTaxRate(float $taxRate): static {
+    $this->taxRate = $taxRate;
+    return $this;
+  }
+
+  public function getTaxAmount(): ?float {
+    return $this->taxAmount;
+  }
+
+  public function setTaxAmount(float $taxAmount): static {
+    $this->taxAmount = $taxAmount;
+    return $this;
+  }
+
+  public function getSubtotalAmount(): ?float {
+    return $this->subtotalAmount;
+  }
+
+  public function setSubtotalAmount(float $subtotalAmount): static {
+    $this->subtotalAmount = $subtotalAmount;
+    return $this;
+  }
+
+  /**
+   * Calcule automatiquement les montants HT, TVA et TTC
+   */
+  public function calculateTaxAmounts(): void {
+    $this->subtotalAmount = $this->totalAmount / (1 + ($this->taxRate / 100));
+    $this->taxAmount = $this->totalAmount - $this->subtotalAmount;
   }
 }

@@ -48,10 +48,13 @@ class OrderService {
    * @param Address|null $billingAddress Adresse de facturation (utilise l'adresse de livraison si non fournie)
    * @return Order Commande nouvellement créée
    */
-  public function createOrderFromCart(Cart $cart, Address $shippingAddress, ?Address $billingAddress = null): Order {
+  public function createOrderFromCart(Cart $cart, Address $shippingAddress, ?Address $billingAddress = null): Order
+  {
     $order = new Order();
     $order->setUser($cart->getUser());
     $totalAmount = 0;
+    $totalTaxAmount = 0;
+    $totalSubtotalAmount = 0;
 
     $order->setShippingAddress($this->addressToArray($shippingAddress));
 
@@ -68,13 +71,30 @@ class OrderService {
         $orderItem->setRedeemedWithPoints(true);
       } else {
         $orderItem->setPrice($cartItem->getProduct()->getPrice());
-        $totalAmount += $orderItem->getPrice() * $orderItem->getQuantity();
+        $itemTotal = $orderItem->getPrice() * $orderItem->getQuantity();
+        $totalAmount += $itemTotal;
+
+        // Calcul de la TVA pour cet article
+        $product = $cartItem->getProduct();
+        $itemSubtotal = $product->getPriceExcludingTax() * $orderItem->getQuantity();
+        $itemTax = $itemTotal - $itemSubtotal;
+
+        $totalSubtotalAmount += $itemSubtotal;
+        $totalTaxAmount += $itemTax;
       }
 
       $order->addItem($orderItem);
     }
 
     $order->setTotalAmount($totalAmount);
+    $order->setSubtotalAmount($totalSubtotalAmount);
+    $order->setTaxAmount($totalTaxAmount);
+
+    // Déterminer le taux de TVA moyen (ou utiliser 20% par défaut)
+    if ($totalSubtotalAmount > 0) {
+      $averageTaxRate = ($totalTaxAmount / $totalSubtotalAmount) * 100;
+      $order->setTaxRate($averageTaxRate);
+    }
 
     $this->entityManager->persist($order);
     $this->entityManager->flush();
