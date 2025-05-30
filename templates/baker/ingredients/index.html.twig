@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ingrédients - {{ bakery.name }}{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+          <a href="{{ path('app_baker') }}" class="mr-4 text-gray-600 hover:text-gray-900">
+            <i data-lucide="chevron-left" class="h-5 w-5"></i>
+          </a>
+          <h1 class="text-3xl font-playfair">Bibliothèque d'ingrédients</h1>
+        </div>
+        <a href="{{ path('app_baker_ingredient_new') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+          <i data-lucide="plus" class="h-5 w-5 mr-2"></i>
+          Ajouter un ingrédient
+        </a>
+      </div>
+
+      <p class="text-gray-600 mb-6">
+        Gérez votre bibliothèque d'ingrédients pour faciliter la création de produits et la gestion des allergènes.
+        Ces ingrédients seront disponibles lors de la création ou modification de vos produits.
+      </p>
+
+      {% for label, messages in app.flashes %}
+        {% for message in messages %}
+          <div class="mb-6 p-4 rounded-md {% if label == 'success' %}bg-green-100 border border-green-400 text-green-700{% else %}bg-red-100 border border-red-400 text-red-700{% endif %}">
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endfor %}
+
+      {% if ingredients|length > 0 %}
+        <!-- Vue tableau pour écrans larges (desktop) -->
+        <div class="hidden md:block bg-white shadow-md rounded-lg overflow-hidden">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Allergènes</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            {% for ingredient in ingredients %}
+              <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900">{{ ingredient.name }}</div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex flex-wrap gap-1">
+                    {% if ingredient.allergens|length > 0 %}
+                      {% for allergen in ingredient.allergens %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                          {{ allergen }}
+                        </span>
+                      {% endfor %}
+                    {% else %}
+                      <span class="text-sm text-gray-500">Aucun allergène</span>
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  {% if ingredient.isVegan %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <i data-lucide="leaf" class="h-3 w-3 mr-1"></i> Végan
+                    </span>
+                  {% else %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      Non végan
+                    </span>
+                  {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <a href="{{ path('app_baker_ingredient_edit', {'id': ingredient.id}) }}" class="text-[#EDA239] hover:text-[#EFAF7D] mr-3">Modifier</a>
+                  <form method="post" action="{{ path('app_baker_ingredient_delete', {'id': ingredient.id}) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet ingrédient ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ingredient.id) }}">
+                    <button type="submit" class="text-red-600 hover:text-red-900 bg-transparent border-none p-0 inline cursor-pointer font-medium">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Vue carte pour écrans mobiles -->
+        <div class="md:hidden space-y-4">
+          {% for ingredient in ingredients %}
+            <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-100">
+              <div class="p-4">
+                <div class="flex justify-between items-start mb-3">
+                  <div class="text-lg font-medium text-gray-900">{{ ingredient.name }}</div>
+                  {% if ingredient.isVegan %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <i data-lucide="leaf" class="h-3 w-3 mr-1"></i> Végan
+                    </span>
+                  {% endif %}
+                </div>
+
+                <div class="mb-4">
+                  <p class="text-sm text-gray-500 mb-1">Allergènes:</p>
+                  <div class="flex flex-wrap gap-1">
+                    {% if ingredient.allergens|length > 0 %}
+                      {% for allergen in ingredient.allergens %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                          {{ allergen }}
+                        </span>
+                      {% endfor %}
+                    {% else %}
+                      <span class="text-sm text-gray-500">Aucun allergène</span>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between">
+                  <a href="{{ path('app_baker_ingredient_edit', {'id': ingredient.id}) }}" class="text-sm text-[#EDA239] hover:text-[#EFAF7D] inline-flex items-center">
+                    <i data-lucide="pencil" class="h-4 w-4 mr-1"></i>
+                    Modifier
+                  </a>
+
+                  <form method="post" action="{{ path('app_baker_ingredient_delete', {'id': ingredient.id}) }}" class="inline-flex items-center" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet ingrédient ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ingredient.id) }}">
+                    <button type="submit" class="text-sm text-red-600 hover:text-red-900 bg-transparent border-none p-0 inline-flex items-center cursor-pointer font-medium">
+                      <i data-lucide="trash-2" class="h-4 w-4 mr-1"></i>
+                      Supprimer
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="bg-white shadow-md rounded-lg p-8 text-center border border-gray-100">
+          <i data-lucide="list" class="h-12 w-12 mx-auto text-gray-400 mb-4"></i>
+          <h2 class="text-xl font-playfair mb-2">Aucun ingrédient trouvé</h2>
+          <p class="text-gray-600 mb-6">Commencez par ajouter vos ingrédients les plus utilisés pour faciliter la création de vos produits.</p>
+          <a href="{{ path('app_baker_ingredient_new') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+            <i data-lucide="plus" class="h-5 w-5 mr-2"></i>
+            Ajouter mon premier ingrédient
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

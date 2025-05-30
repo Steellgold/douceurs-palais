@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {% if ingredient is defined %}
+    Modifier l'ingrédient
+  {% else %}
+    Ajouter un ingrédient
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div class="bg-[#FEFDFB] py-10 px-4 md:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+      <div class="flex items-center mb-6">
+        <a href="{{ path('app_baker_ingredients') }}" class="mr-4 text-gray-600 hover:text-gray-900">
+          <i data-lucide="chevron-left" class="h-5 w-5"></i>
+        </a>
+        <h1 class="text-3xl font-playfair">
+          {% if ingredient is defined %}
+            Modifier l'ingrédient
+          {% else %}
+            Ajouter un ingrédient
+          {% endif %}
+        </h1>
+      </div>
+
+      {% for label, messages in app.flashes %}
+        {% for message in messages %}
+          <div class="mb-6 p-4 rounded-md {% if label == 'success' %}bg-green-100 border border-green-400 text-green-700{% else %}bg-red-100 border border-red-400 text-red-700{% endif %}">
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endfor %}
+
+      <div class="bg-white shadow-md rounded-lg p-6 border border-gray-100">
+        {{ form_start(form, {'attr': {'class': 'space-y-4'}}) }}
+
+        <div>
+          <label for="{{ form.name.vars.id }}" class="block text-sm font-medium text-gray-700">Nom de l'ingrédient</label>
+          <div class="mt-1">
+            {{ form_widget(form.name, {
+              'attr': {
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
+              }
+            }) }}
+            <div class="text-red-500 text-xs mt-1">
+              {{ form_errors(form.name) }}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Allergènes</label>
+          <div class="mt-1">
+            <div id="allergens-container" class="space-y-2"
+                 data-prototype="{{ form_widget(form.allergens.vars.prototype)|e('html_attr') }}">
+              {% for allergenField in form.allergens %}
+                <div class="allergen-item flex items-center">
+                  <div class="flex-grow">
+                    {{ form_widget(allergenField, {
+                      'attr': {
+                        'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
+                        'placeholder': 'Ex: Gluten, Lactose, Fruits à coque...'
+                      }
+                    }) }}
+                  </div>
+                  <button type="button" class="remove-allergen ml-2 text-red-600 hover:text-red-800">
+                    <i data-lucide="trash-2" class="h-5 w-5"></i>
+                  </button>
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="text-gray-500 text-xs mt-1">
+              Les allergènes permettent d'informer les clients des risques potentiels.
+            </div>
+
+            <button type="button" id="add-allergen" class="mt-2 inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+              <i data-lucide="plus" class="h-4 w-4 mr-1"></i>
+              Ajouter un allergène
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center">
+            {{ form_widget(form.isVegan, {
+              'attr': {
+                'class': 'h-4 w-4 text-[#EDA239] focus:ring-[#EDA239] border-gray-300 rounded'
+              }
+            }) }}
+            <label for="{{ form.isVegan.vars.id }}" class="ml-2 block text-sm text-gray-700">
+              Cet ingrédient est végan
+            </label>
+          </div>
+          <div class="text-gray-500 text-xs mt-1">
+            Cochez cette case si l'ingrédient est adapté aux régimes végans.
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-black bg-[#EDA239] hover:bg-[#EFAF7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EDA239]">
+            {% if ingredient is defined %}
+              Mettre à jour l'ingrédient
+            {% else %}
+              Ajouter l'ingrédient
+            {% endif %}
+          </button>
+        </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Gestion des allergènes (collection)
+      const container = document.getElementById('allergens-container');
+      const addButton = document.getElementById('add-allergen');
+
+      if (container && addButton) {
+        // Bouton pour ajouter un nouvel allergène
+        addButton.addEventListener('click', function() {
+          // Récupérer le prototype
+          const prototype = container.dataset.prototype;
+
+          // Remplacer le placeholder par l'index actuel
+          const newIndex = container.querySelectorAll('.allergen-item').length;
+          const newForm = prototype.replace(/__name__/g, newIndex);
+
+          // Créer un élément conteneur pour le nouvel allergène
+          const allergenItem = document.createElement('div');
+          allergenItem.classList.add('allergen-item', 'flex', 'items-center', 'mt-2');
+
+          // Créer un div pour le champ de texte
+          const inputWrapper = document.createElement('div');
+          inputWrapper.classList.add('flex-grow');
+          inputWrapper.innerHTML = newForm;
+
+          // Ajouter les classes au champ de texte
+          const input = inputWrapper.querySelector('input');
+          input.classList.add('w-full', 'px-3', 'py-2', 'border', 'border-gray-300', 'rounded-md', 'shadow-sm', 'placeholder-gray-400', 'focus:outline-none', 'focus:ring-[#EDA239]', 'focus:border-[#EDA239]');
+          input.placeholder = 'Ex: Gluten, Lactose, Fruits à coque...';
+
+          // Créer le bouton de suppression
+          const removeButton = document.createElement('button');
+          removeButton.type = 'button';
+          removeButton.classList.add('remove-allergen', 'ml-2', 'text-red-600', 'hover:text-red-800');
+          removeButton.innerHTML = '<i data-lucide="trash-2" class="h-5 w-5"></i>';
+
+          // Ajouter les éléments au conteneur
+          allergenItem.appendChild(inputWrapper);
+          allergenItem.appendChild(removeButton);
+          container.appendChild(allergenItem);
+
+          // Initialiser l'icône Lucide
+          if (window.lucide) {
+            window.lucide.createIcons();
+          }
+
+          // Ajouter l'événement de suppression
+          addRemoveListener(removeButton);
+        });
+
+        // Fonction pour ajouter les événements de suppression
+        function addRemoveListener(button) {
+          button.addEventListener('click', function() {
+            const item = this.closest('.allergen-item');
+            if (item) {
+              item.remove();
+            }
+          });
+        }
+
+        // Ajouter les événements de suppression aux boutons existants
+        const removeButtons = document.querySelectorAll('.remove-allergen');
+        removeButtons.forEach(function(button) {
+          addRemoveListener(button);
+        });
+      }
+    });
+  </script>
+{% endblock %}
