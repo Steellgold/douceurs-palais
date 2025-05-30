@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -62,15 +64,15 @@ class Product {
   private array $images = [];
 
   /**
-   * Ingrédients du produit
+   * Ingrédients du produit (ancien format, conservé pour compatibilité)
    *
-   * @var array<string> Liste des ingrédients
+   * @var array<string> Liste des ingrédients en texte
    */
   #[ORM\Column(type: Types::JSON, nullable: true)]
   private array $ingredients = [];
 
   /**
-   * Allergènes présents dans le produit
+   * Allergènes présents dans le produit (ancien format, conservé pour compatibilité)
    *
    * @var array<string> Liste des allergènes
    */
@@ -150,6 +152,20 @@ class Product {
   private ?Category $category = null;
 
   /**
+   * Ingrédients utilisés dans ce produit (nouvelle relation)
+   *
+   * @var Collection<int, Ingredient>
+   */
+  #[ORM\ManyToMany(targetEntity: Ingredient::class, inversedBy: 'products')]
+  private Collection $productIngredients;
+
+  /**
+   * Indique si le produit est végan
+   */
+  #[ORM\Column(options: ['default' => false])]
+  private bool $isVegan = false;
+
+  /**
    * Constructeur du produit
    *
    * Initialise un nouveau produit avec un UUID et une date de création.
@@ -163,6 +179,7 @@ class Product {
     $this->allergenes = [];
     $this->nutritionalValues = [];
     $this->pairings = [];
+    $this->productIngredients = new ArrayCollection();
   }
 
   /**
@@ -351,7 +368,7 @@ class Product {
   }
 
   /**
-   * Récupère les ingrédients du produit
+   * Récupère les ingrédients du produit (ancien format)
    *
    * @return array Liste des ingrédients
    */
@@ -360,7 +377,7 @@ class Product {
   }
 
   /**
-   * Définit les ingrédients du produit
+   * Définit les ingrédients du produit (ancien format)
    *
    * @param array|null $ingredients Les nouveaux ingrédients
    * @return static L'instance du produit
@@ -372,7 +389,7 @@ class Product {
   }
 
   /**
-   * Récupère les allergènes du produit
+   * Récupère les allergènes du produit (ancien format)
    *
    * @return array Liste des allergènes
    */
@@ -381,7 +398,7 @@ class Product {
   }
 
   /**
-   * Définit les allergènes du produit
+   * Définit les allergènes du produit (ancien format)
    *
    * @param array|null $allergenes Les nouveaux allergènes
    * @return static L'instance du produit
@@ -628,5 +645,101 @@ class Product {
   public function setRedeemedWithPoints(bool $redeemedWithPoints): static {
     $this->redeemedWithPoints = $redeemedWithPoints;
     return $this;
+  }
+
+  /**
+   * Récupère les ingrédients du produit (nouvelle relation)
+   *
+   * @return Collection<int, Ingredient> Collection d'objets Ingredient
+   */
+  public function getProductIngredients(): Collection {
+    return $this->productIngredients;
+  }
+
+  /**
+   * Ajoute un ingrédient au produit
+   *
+   * @param Ingredient $ingredient L'ingrédient à ajouter
+   * @return static L'instance du produit
+   */
+  public function addIngredient(Ingredient $ingredient): static {
+    if (!$this->productIngredients->contains($ingredient)) {
+      $this->productIngredients->add($ingredient);
+    }
+    return $this;
+  }
+
+  /**
+   * Retire un ingrédient du produit
+   *
+   * @param Ingredient $ingredient L'ingrédient à retirer
+   * @return static L'instance du produit
+   */
+  public function removeIngredient(Ingredient $ingredient): static {
+    $this->productIngredients->removeElement($ingredient);
+    return $this;
+  }
+
+  /**
+   * Récupère tous les allergènes des ingrédients du produit
+   *
+   * @return array Tableau associatif des allergènes avec leurs ingrédients source
+   */
+  public function getAllIngredientsAllergens(): array {
+    $allergens = [];
+    foreach ($this->productIngredients as $ingredient) {
+      foreach ($ingredient->getAllergens() as $allergen) {
+        if (!isset($allergens[$allergen])) {
+          $allergens[$allergen] = [];
+        }
+        $allergens[$allergen][] = $ingredient->getName();
+      }
+    }
+
+    // Dédupliquer les ingrédients pour chaque allergène
+    foreach ($allergens as $allergen => $ingredients) {
+      $allergens[$allergen] = array_unique($ingredients);
+    }
+
+    return $allergens;
+  }
+
+  /**
+   * Vérifie si le produit est végan
+   *
+   * @return bool true si le produit est végan, false sinon
+   */
+  public function isVegan(): bool {
+    return $this->isVegan;
+  }
+
+  /**
+   * Définit si le produit est végan
+   *
+   * @param bool $isVegan Le nouveau statut végan
+   * @return static L'instance du produit
+   */
+  public function setIsVegan(bool $isVegan): static {
+    $this->isVegan = $isVegan;
+    return $this;
+  }
+
+  /**
+   * Vérifie si tous les ingrédients du produit sont végans
+   *
+   * @return bool true si tous les ingrédients sont végans, false sinon
+   */
+  public function hasAllVeganIngredients(): bool {
+    if ($this->productIngredients->isEmpty()) {
+      return true;
+    }
+
+    foreach ($this->productIngredients as $ingredient) {
+      if (!$ingredient->isVegan()) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
