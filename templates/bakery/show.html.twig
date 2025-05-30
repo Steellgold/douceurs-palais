@@ -17,7 +17,7 @@
   <div class="bg-[#FEFDFB]">
     <div class="relative w-full h-96 overflow-hidden">
       {% if bakery.mainImage %}
-        <img src="{{ bakery.mainImage }}" alt="{{ bakery.name }}" class="w-full h-96 object-cover" />
+        <img src="{{ bakery.mainImage }}" alt="{{ bakery.name }}" class="w-full h-96 object-cover object-center filter blur-sm" loading="lazy">
       {% else %}
         <div class="w-full h-96 bg-gray-200 flex items-center justify-center">
           <i data-lucide="image" class="h-24 w-24 text-gray-400"></i>
@@ -40,7 +40,7 @@
           <span class="ml-2">{{ bakery.rating|number_format(1) }}/5</span>
         </div>
 
-        <div class="mt-4 flex gap-4">
+        <div class="mt-4 flex flex-col md:flex-row gap-4">
           {% if app.user %}
             <form method="post" action="{{ path('app_bakery_toggle_favorite', {'id': bakery.id}) }}">
               <input type="hidden" name="_token" value="{{ csrf_token('favorite-bakery' ~ bakery.id) }}">
