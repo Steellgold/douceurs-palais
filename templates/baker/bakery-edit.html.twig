@@ -38,31 +38,30 @@
         </div>
 
         <div>
-          <label for="{{ form.description.vars.id }}" class="block text-sm font-medium text-gray-700">Description</label>
+          <label for="{{ form.title.vars.id }}" class="block text-sm font-medium text-gray-700">Titre</label>
           <div class="mt-1">
-            {{ form_widget(form.description, {
+            {{ form_widget(form.title, {
               'attr': {
-                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
-                'rows': 3
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
               }
             }) }}
             <div class="text-red-500 text-xs mt-1">
-              {{ form_errors(form.description) }}
+              {{ form_errors(form.title) }}
             </div>
           </div>
         </div>
 
         <div>
-          <label for="{{ form.story.vars.id }}" class="block text-sm font-medium text-gray-700">Histoire</label>
+          <label for="{{ form.description.vars.id }}" class="block text-sm font-medium text-gray-700">Description détaillée</label>
           <div class="mt-1">
-            {{ form_widget(form.story, {
+            {{ form_widget(form.description, {
               'attr': {
                 'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]',
                 'rows': 5
               }
             }) }}
             <div class="text-red-500 text-xs mt-1">
-              {{ form_errors(form.story) }}
+              {{ form_errors(form.description) }}
             </div>
           </div>
         </div>

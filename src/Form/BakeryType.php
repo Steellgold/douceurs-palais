@@ -35,15 +35,19 @@ class BakeryType extends AbstractType {
           ]),
         ],
       ])
+      ->add('title', TextType::class, [
+        'label' => 'Titre',
+        'required' => true,
+        'constraints' => [
+          new NotBlank([
+            'message' => 'Veuillez saisir un titre pour la description',
+          ]),
+        ],
+      ])
       ->add('description', TextareaType::class, [
         'label' => 'Description',
         'required' => false,
         'attr' => ['rows' => 3],
-      ])
-      ->add('story', TextareaType::class, [
-        'label' => 'Histoire',
-        'required' => false,
-        'attr' => ['rows' => 5],
       ])
       ->add('address', TextType::class, [
         'label' => 'Adresse',

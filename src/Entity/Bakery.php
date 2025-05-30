@@ -41,16 +41,16 @@ class Bakery {
   private ?string $slug = null;
 
   /**
-   * Description courte de la boulangerie
+   * Titre court de la boulangerie
    */
-  #[ORM\Column(type: Types::TEXT, nullable: true)]
-  private ?string $description = null;
+  #[ORM\Column(length: 255, nullable: true)]
+  private ?string $title = null;
 
   /**
    * Histoire détaillée de la boulangerie
    */
   #[ORM\Column(type: Types::TEXT, nullable: true)]
-  private ?string $story = null;
+  private ?string $description = null;
 
   /**
    * Adresse de la boulangerie
@@ -240,6 +240,20 @@ class Bakery {
   }
 
   /**
+   * @return string|null
+   */
+  public function getTitle(): ?string {
+    return $this->title;
+  }
+
+  /**
+   * @param string|null $title
+   */
+  public function setTitle(?string $title): void {
+    $this->title = $title;
+  }
+
+  /**
    * Récupère la description de la boulangerie
    *
    * @return string|null La description
@@ -256,27 +270,6 @@ class Bakery {
    */
   public function setDescription(?string $description): static {
     $this->description = $description;
-
-    return $this;
-  }
-
-  /**
-   * Récupère l'histoire de la boulangerie
-   *
-   * @return string|null L'histoire
-   */
-  public function getStory(): ?string {
-    return $this->story;
-  }
-
-  /**
-   * Définit l'histoire de la boulangerie
-   *
-   * @param string|null $story La nouvelle histoire
-   * @return static L'instance de la boulangerie
-   */
-  public function setStory(?string $story): static {
-    $this->story = $story;
 
     return $this;
   }
