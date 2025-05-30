@@ -215,15 +215,19 @@
             <div class="bg-white rounded-lg shadow-md p-6">
               <h2 class="text-xl font-playfair mb-4">Récapitulatif</h2>
               <div class="flex justify-between py-2 border-b border-gray-200">
-                <span class="text-gray-600">Total produits</span>
-                <span class="text-gray-900 font-medium" id="subtotal">{{ cart.totalPrice|number_format(2, '.', ',') }}€</span>
+                <span class="text-gray-600">Sous-total HT</span>
+                <span class="text-gray-900 font-medium">{{ cart_subtotal_excluding_tax()|number_format(2, '.', ',') }}€</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-gray-200">
+                <span class="text-gray-600">TVA</span>
+                <span class="text-gray-900 font-medium">{{ cart_tax_amount()|number_format(2, '.', ',') }}€</span>
               </div>
               <div class="flex justify-between py-2 border-b border-gray-200">
                 <span class="text-gray-600">Frais de livraison</span>
                 <span class="text-gray-900 font-medium">0,00€</span>
               </div>
               <div class="flex justify-between py-2 mt-2">
-                <span class="text-gray-800 font-semibold">Total</span>
+                <span class="text-gray-800 font-semibold">Total TTC</span>
                 <span class="text-gray-900 font-bold text-xl" id="cart-total">{{ cart.totalPrice|number_format(2, '.', ',') }}€</span>
               </div>
 
