@@ -32,6 +32,8 @@ services:
             $accessKey: '%cloudflare.r2.access_key%'
             $secretKey: '%cloudflare.r2.secret_key%'
             $bucket: '%cloudflare.r2.bucket%'
+    App\Twig\TaxExtension:
+        tags: ['twig.extension']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
