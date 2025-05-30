@@ -4,17 +4,21 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Validator\Constraints\Count;
+use App\Entity\Ingredient;
+use App\Repository\IngredientRepository;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
@@ -22,9 +26,23 @@ use Symfony\Component\Validator\Constraints\Positive;
 /**
  * Formulaire de gestion des produits.
  * Permet de créer ou modifier les informations d'un produit,
- * y compris ses détails nutritionnels et son prix.
+ * y compris ses détails nutritionnels, son prix, et ses ingrédients.
  */
 class ProductType extends AbstractType {
+  /**
+   * Repository des ingrédients pour accéder aux ingrédients de la boulangerie
+   */
+  private IngredientRepository $ingredientRepository;
+
+  /**
+   * Constructeur du formulaire de produit
+   *
+   * @param IngredientRepository $ingredientRepository Repository des ingrédients
+   */
+  public function __construct(IngredientRepository $ingredientRepository) {
+    $this->ingredientRepository = $ingredientRepository;
+  }
+
   /**
    * Construit le formulaire de produit avec tous les champs nécessaires.
    *
@@ -70,6 +88,38 @@ class ProductType extends AbstractType {
         'required' => false,
         'placeholder' => 'Choisir une catégorie',
       ])
+      // Ingrédients du produit (nouvelle relation)
+      ->add('productIngredients', EntityType::class, [
+        'class' => Ingredient::class,
+        'choice_label' => 'name',
+        'label' => 'Ingrédients',
+        'required' => false,
+        'multiple' => true,
+        'expanded' => true,
+        'query_builder' => function (EntityRepository $er) use ($options) {
+          $product = $options['data'] ?? null;
+          $bakery = $product ? $product->getBakery() : null;
+
+          if (!$bakery && isset($options['bakery'])) {
+            $bakery = $options['bakery'];
+          }
+
+          if ($bakery) {
+            return $er->createQueryBuilder('i')
+              ->where('i.bakery = :bakery')
+              ->setParameter('bakery', $bakery)
+              ->orderBy('i.name', 'ASC');
+          }
+
+          return $er->createQueryBuilder('i')
+            ->orderBy('i.name', 'ASC');
+        },
+      ])
+      // Statut végan du produit
+      ->add('isVegan', CheckboxType::class, [
+        'label' => 'Ce produit est végan',
+        'required' => false,
+      ])
       // Informations nutritionnelles
       ->add('nutriscore', ChoiceType::class, [
         'label' => 'Nutriscore',
@@ -107,6 +157,34 @@ class ProductType extends AbstractType {
           'class' => 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#EDA239] focus:border-[#EDA239]'
         ]
       ]);
+
+    // Gérer le statut végan automatiquement en fonction des ingrédients sélectionnés
+    $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+      $data = $event->getData();
+      $form = $event->getForm();
+
+      // Si l'utilisateur a sélectionné des ingrédients
+      if (!empty($data['productIngredients'])) {
+        // Récupérer les ingrédients sélectionnés
+        $ingredientIds = $data['productIngredients'];
+
+        // Vérifier si tous les ingrédients sont végans
+        $allVegan = true;
+        foreach ($ingredientIds as $id) {
+          $ingredient = $this->ingredientRepository->find($id);
+          if ($ingredient && !$ingredient->isVegan()) {
+            $allVegan = false;
+            break;
+          }
+        }
+
+        // Si l'utilisateur n'a pas explicitement modifié le statut végan, le définir automatiquement
+        if (!isset($data['isVegan'])) {
+          $data['isVegan'] = $allVegan;
+          $event->setData($data);
+        }
+      }
+    });
   }
 
   /**
@@ -119,6 +197,9 @@ class ProductType extends AbstractType {
   public function configureOptions(OptionsResolver $resolver): void {
     $resolver->setDefaults([
       'data_class' => Product::class,
+      'bakery' => null,
     ]);
+
+    $resolver->setAllowedTypes('bakery', ['null', 'App\Entity\Bakery']);
   }
 }

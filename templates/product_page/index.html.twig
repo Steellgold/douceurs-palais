@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ product.name }}{% endblock %}
+
 {% block meta %}
   <title>{{ product.name }}</title>
   <meta name="description" content="{{ product.description }}">
@@ -44,6 +46,13 @@
 
     <div class="text-center mb-6">
       <h1 class="text-4xl font-playfair">{{ product.name }} · {{ product.price|number_format(2, '.', ',') }}€</h1>
+
+      {% if product.isVegan %}
+        <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-2">
+          <i data-lucide="leaf" class="h-3 w-3 mr-1"></i> Végan
+        </div>
+      {% endif %}
+
       <p class="mt-4 mb-6 mx-auto max-w-md text-center">{{ product.description }}</p>
 
       <div class="flex flex-col items-center mb-8">
@@ -108,19 +117,45 @@
           <h2 class="text-2xl font-playfair mb-4">Ingrédients</h2>
           <div class="bg-[#F8F8F1] p-4 rounded-md mb-8">
             <ul class="list-disc pl-5 space-y-1">
-              {% for ingredient in product.ingredients %}
-                <li>{{ ingredient }}</li>
-              {% endfor %}
+              {% if product.productIngredients|length > 0 %}
+                {% for ingredient in product.productIngredients %}
+                  <li>{{ ingredient.name }}</li>
+                {% endfor %}
+              {% elseif product.ingredients|length > 0 %}
+                {% for ingredient in product.ingredients %}
+                  <li>{{ ingredient }}</li>
+                {% endfor %}
+              {% else %}
+                <li>Ingrédients non spécifiés</li>
+              {% endif %}
             </ul>
           </div>
 
           <h2 class="text-2xl font-playfair mb-4">Allergènes</h2>
           <div class="bg-red-500/10 border border-red-500/20 p-4 rounded-md mb-8">
-            <ul class="list-disc pl-5 space-y-1">
-              {% for allergene in product.allergenes %}
-                <li>{{ allergene }}</li>
-              {% endfor %}
-            </ul>
+            {% if product.productIngredients|length > 0 %}
+              {% set allAllergens = product.getAllIngredientsAllergens() %}
+              {% if allAllergens|length > 0 %}
+                <ul class="list-disc pl-5 space-y-1">
+                  {% for allergen, ingredients in allAllergens %}
+                    <li>
+                      <strong>{{ allergen }}</strong>
+                      <span class="text-sm text-gray-600">(présent dans : {{ ingredients|join(', ') }})</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-sm text-gray-600">Aucun allergène connu pour ce produit.</p>
+              {% endif %}
+            {% elseif product.allergenes|length > 0 %}
+              <ul class="list-disc pl-5 space-y-1">
+                {% for allergene in product.allergenes %}
+                  <li>{{ allergene }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-sm text-gray-600">Allergènes non spécifiés.</p>
+            {% endif %}
           </div>
         </div>
 
