@@ -51,11 +51,13 @@
       </div>
       {% if app.user %}
         <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="{{ path('app_account') }}">
-          Mon compte
+          <span class="hidden sm:inline">{{ app.user.firstName }}</span>
+          <i data-lucide="user" class="sm:hidden w-5 h-5"></i>
         </a>
       {% else %}
         <a class="flex items-center justify-center px-4 h-10 py-2 text-white bg-black rounded-full" href="{{ path('app_login') }}">
-          Se connecter
+          <span class="hidden sm:inline">Se connecter</span>
+          <i data-lucide="log-in" class="sm:hidden w-5 h-5"></i>
         </a>
       {% endif %}
     </div>
