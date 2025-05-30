@@ -514,34 +514,59 @@ class Order {
     };
   }
 
+  /**
+   * @param float $taxRate
+   * @return $this
+   */
   public function setTaxRate(float $taxRate): static {
     $this->taxRate = $taxRate;
     return $this;
   }
 
+  /**
+   * @return float|null
+   */
   public function getTaxAmount(): ?float {
     return $this->taxAmount;
   }
 
+  /**
+   * @param float $taxAmount
+   * @return $this
+   */
   public function setTaxAmount(float $taxAmount): static {
     $this->taxAmount = $taxAmount;
     return $this;
   }
 
+  /**
+   * @return float|null
+   */
   public function getSubtotalAmount(): ?float {
     return $this->subtotalAmount;
   }
 
+  /**
+   * @param float $subtotalAmount
+   * @return $this
+   */
   public function setSubtotalAmount(float $subtotalAmount): static {
     $this->subtotalAmount = $subtotalAmount;
     return $this;
   }
 
   /**
-   * Calcule automatiquement les montants HT, TVA et TTC
+   * @return void
    */
   public function calculateTaxAmounts(): void {
-    $this->subtotalAmount = $this->totalAmount / (1 + ($this->taxRate / 100));
-    $this->taxAmount = $this->totalAmount - $this->subtotalAmount;
+    $this->taxAmount = $this->totalAmount * ($this->taxRate / 100);
+    $this->subtotalAmount = $this->totalAmount - $this->taxAmount;
+  }
+
+  /**
+   * @return float|null
+   */
+  public function getTaxRate(): ?float {
+    return $this->taxRate;
   }
 }

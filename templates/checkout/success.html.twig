@@ -130,7 +130,7 @@
               {% for rate, data in order_tax_breakdown(order) %}
                 <div class="flex justify-between items-center py-2 {% if not loop.last %}border-b border-gray-100{% endif %}">
                   <div>
-                    <span class="text-sm font-medium text-gray-700">TVA {{ rate|number_format(1) }}%</span>
+                    <span class="text-sm font-medium text-gray-700">TVA 5.5%</span>
                     <div class="text-xs text-gray-500">Base HT: {{ data.subtotal|number_format(2, ',', ' ') }} €</div>
                   </div>
                   <div class="text-right">

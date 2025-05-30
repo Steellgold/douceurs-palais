@@ -45,7 +45,7 @@
     </div>
 
     <div class="text-center mb-6">
-      <h1 class="text-4xl font-playfair">{{ product.name }} · {{ product.price|number_format(2, '.', ',') }}€</h1>
+      <h1 class="text-4xl font-playfair">{{ product.name }} · {{ product.price|number_format(2, ',', ' ') }}€</h1>
 
       {% if product.isVegan %}
         <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-2">
