@@ -19,7 +19,7 @@
       }
 
       .bakery-info-window {
-          max-width: 300px;
+          max-width: 320px;
           padding: 10px;
       }
 
@@ -53,13 +53,69 @@
           margin: 8px 0;
       }
 
-      .search-center-marker {
+      .route-info {
+          background: #f8f9fa;
+          padding: 8px;
+          border-radius: 4px;
+          margin: 8px 0;
+          border-left: 3px solid #EDA239;
+      }
+
+      .route-info strong {
+          color: #EDA239;
+      }
+
+      .route-button {
           background: #EDA239;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          border: 3px solid white;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+          color: white;
+          border: none;
+          padding: 6px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 12px;
+          margin-top: 8px;
+      }
+
+      .route-button:hover {
+          background: #EFAF7D;
+      }
+
+      .route-button.hide {
+          background: #dc3545;
+      }
+
+      .route-controls {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          z-index: 1000;
+          background: white;
+          padding: 10px;
+          border-radius: 6px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+
+      .route-controls button {
+          background: #EDA239;
+          color: white;
+          border: none;
+          padding: 8px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 12px;
+          margin: 2px;
+      }
+
+      .route-controls button:hover {
+          background: #EFAF7D;
+      }
+
+      .route-controls button.secondary {
+          background: #6c757d;
+      }
+
+      .route-controls button.secondary:hover {
+          background: #5a6268;
       }
   </style>
 {% endblock %}
@@ -91,12 +147,16 @@
               </div>
             </div>
 
-            <!-- Carte des résultats -->
-            <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+            <!-- Carte des résultats avec trajets -->
+            <div class="bg-white rounded-lg shadow-md p-4 mb-8 relative">
+              <div class="route-controls">
+                <button id="show-all-routes" onclick="showAllRoutes()">Afficher tous les trajets</button>
+                <button id="hide-all-routes" onclick="hideAllRoutes()" class="secondary">Masquer tous les trajets</button>
+              </div>
               <div id="search-results-map"></div>
               <p class="text-xs text-gray-500 mt-2 text-center">
                 <i data-lucide="info" class="h-3 w-3 inline mr-1"></i>
-                Cliquez sur les marqueurs pour plus d'informations
+                Cliquez sur les marqueurs pour voir les trajets et plus d'informations
               </p>
             </div>
 
@@ -210,8 +270,16 @@
 
   {% if searchPerformed and bakeries|length > 0 %}
     <script>
+      let map;
+      let directionsService;
+      let searchLocation;
+      let searchPosition;
+      let directionsRenderers = {};
+      let bakeryMarkers = {};
+      let infoWindows = {};
+
       function initSearchResultsMap() {
-        const searchLocation = '{{ location|e('js') }}' || '{{ postalCode|e('js') }} {{ city|e('js') }}';
+        searchLocation = '{{ location|e('js') }}' || '{{ postalCode|e('js') }} {{ city|e('js') }}';
 
         const bakeries = [
           {% for bakery in bakeries %}
@@ -232,21 +300,23 @@
         ];
 
         const geocoder = new google.maps.Geocoder();
+        directionsService = new google.maps.DirectionsService();
 
         geocoder.geocode({ 'address': searchLocation + ', France' }, (results, status) => {
           let mapCenter = { lat: 47.652, lng: 7.155 };
 
           if (status === 'OK') {
             mapCenter = results[0].geometry.location;
+            searchPosition = mapCenter;
           }
 
-          const map = new google.maps.Map(document.getElementById("search-results-map"), {
-            zoom: 16,
+          map = new google.maps.Map(document.getElementById("search-results-map"), {
+            zoom: 13,
             center: mapCenter,
             mapTypeControl: true,
-            styles: [{ "elementType": "labels" }]
           });
 
+          // Marqueur de position de recherche
           if (status === 'OK') {
             new google.maps.Marker({
               position: mapCenter,
@@ -258,11 +328,12 @@
                 fillOpacity: 0.8,
                 strokeWeight: 3,
                 strokeColor: '#FFFFFF',
-                scale: 6
+                scale: 8
               }
             });
           }
 
+          // Création des marqueurs pour chaque boulangerie
           bakeries.forEach(bakery => {
             const fullAddress = `${bakery.address}, ${bakery.postalCode} ${bakery.city}, France`;
 
@@ -278,31 +349,61 @@
                     fillOpacity: 1,
                     strokeWeight: 2,
                     strokeColor: '#FFFFFF',
-                    scale: 8
+                    scale: 10
                   }
                 });
 
+                bakeryMarkers[bakery.id] = marker;
+
+                // Création du renderer pour les directions
+                directionsRenderers[bakery.id] = new google.maps.DirectionsRenderer({
+                  map: null, // Initialement masqué
+                  suppressMarkers: true, // On garde nos marqueurs personnalisés
+                  polylineOptions: {
+                    strokeColor: '#EDA239',
+                    strokeWeight: 4,
+                    strokeOpacity: 0.8
+                  }
+                });
+
+                // Calcul initial de la route (pour obtenir la distance/durée)
+                if (searchPosition) {
+                  calculateRoute(bakery.id, searchPosition, results[0].geometry.location, false);
+                }
+
                 const infoContent = `
-                <div class="bakery-info-window">
-                  <h3>${bakery.name}</h3>
-                  <div class="rating">
-                    <span style="color: #FFC107;">★</span>
-                    <span>${bakery.rating}/5</span>
+                  <div class="bakery-info-window">
+                    <h3>${bakery.name}</h3>
+                    <div class="rating">
+                      <span style="color: #FFC107;">★</span>
+                      <span>${bakery.rating}/5</span>
+                    </div>
+                    <p><strong>Adresse:</strong> ${bakery.address}</p>
+                    <p><strong>Ville:</strong> ${bakery.city}</p>
+                    ${bakery.phone ? `<p><strong>Téléphone:</strong> ${bakery.phone}</p>` : ''}
+                    <p><strong>Produits:</strong> ${bakery.productCount}</p>
+                    <div id="route-info-${bakery.id}" class="route-info" style="display: none;">
+                      <strong>Trajet:</strong>
+                      <div id="route-details-${bakery.id}">Calcul en cours...</div>
+                    </div>
+                    <p style="margin: 8px 0;">${bakery.description}...</p>
+                    <button class="route-button" onclick="toggleRoute('${bakery.id}')" id="route-btn-${bakery.id}">
+                      Afficher le trajet
+                    </button>
+                    <br>
+                    <a href="/b/${bakery.slug}" target="_blank">Voir la boutique →</a>
                   </div>
-                  <p><strong>Adresse:</strong> ${bakery.address}</p>
-                  <p><strong>Ville:</strong> ${bakery.city}</p>
-                  ${bakery.phone ? `<p><strong>Téléphone:</strong> ${bakery.phone}</p>` : ''}
-                  <p><strong>Produits:</strong> ${bakery.productCount}</p>
-                  <p style="margin: 8px 0;">${bakery.description}...</p>
-                  <a href="/b/${bakery.slug}" target="_blank">Voir la boutique →</a>
-                </div>
-              `;
+                `;
 
                 const infoWindow = new google.maps.InfoWindow({
                   content: infoContent
                 });
 
+                infoWindows[bakery.id] = infoWindow;
+
                 marker.addListener('click', () => {
+                  // Fermer les autres info windows
+                  Object.values(infoWindows).forEach(iw => iw.close());
                   infoWindow.open(map, marker);
                 });
               }
@@ -311,7 +412,82 @@
         });
       }
 
+      function calculateRoute(bakeryId, origin, destination, display = false) {
+        const request = {
+          origin: origin,
+          destination: destination,
+          travelMode: google.maps.TravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false
+        };
+
+        directionsService.route(request, (result, status) => {
+          if (status === 'OK') {
+            if (display) {
+              directionsRenderers[bakeryId].setMap(map);
+              directionsRenderers[bakeryId].setDirections(result);
+            }
+
+            // Mettre à jour les informations de trajet
+            const route = result.routes[0];
+            const leg = route.legs[0];
+            const distance = leg.distance.text;
+            const duration = leg.duration.text;
+
+            const routeDetailsDiv = document.getElementById(`route-details-${bakeryId}`);
+            if (routeDetailsDiv) {
+              routeDetailsDiv.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                  <span>📍 ${distance}</span>
+                  <span>⏱️ ${duration}</span>
+                </div>
+              `;
+              document.getElementById(`route-info-${bakeryId}`).style.display = 'block';
+            }
+          }
+        });
+      }
+
+      function toggleRoute(bakeryId) {
+        const renderer = directionsRenderers[bakeryId];
+        const button = document.getElementById(`route-btn-${bakeryId}`);
+
+        if (renderer.getMap()) {
+          // Cacher la route
+          renderer.setMap(null);
+          button.textContent = 'Afficher le trajet';
+          button.classList.remove('hide');
+        } else {
+          // Afficher la route
+          if (searchPosition && bakeryMarkers[bakeryId]) {
+            calculateRoute(bakeryId, searchPosition, bakeryMarkers[bakeryId].getPosition(), true);
+            button.textContent = 'Masquer le trajet';
+            button.classList.add('hide');
+          }
+        }
+      }
+
+      function showAllRoutes() {
+        Object.keys(directionsRenderers).forEach(bakeryId => {
+          if (!directionsRenderers[bakeryId].getMap()) {
+            toggleRoute(bakeryId);
+          }
+        });
+      }
+
+      function hideAllRoutes() {
+        Object.keys(directionsRenderers).forEach(bakeryId => {
+          if (directionsRenderers[bakeryId].getMap()) {
+            toggleRoute(bakeryId);
+          }
+        });
+      }
+
       window.initSearchResultsMap = initSearchResultsMap;
+      window.toggleRoute = toggleRoute;
+      window.showAllRoutes = showAllRoutes;
+      window.hideAllRoutes = hideAllRoutes;
     </script>
 
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA31TY77JjCtZ49ZwrGL1N3ePzrNFJ6KY0&callback=initSearchResultsMap"></script>
